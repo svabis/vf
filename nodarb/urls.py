@@ -12,7 +12,13 @@ urlpatterns = [
     # url(r'^$', 'main.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-#    url(r'^', include('nodarb.urls')),
+    url(r'^tren/(?P<nid>\w+|\w+\-\w+|\w+\-\w+\-\w+)/', 'nodarb.views.tren'), # treneris choise
+
+#    url(r'^tren/(?P<nid>\w+|\w+\-\w+|\w+\-\w+\-\w+)/any/', 'nodarb.views.any'), # any trainer
+#    url(r'^tren/(?P<nid>\w+|\w+\-\w+|\w+\-\w+\-\w+)/(?P<tid>\w+|\w+\-\w+|\w+\-\w+)/', 'nodarb.views.any'), # specific trainer
+
+
+    url(r'^', 'nodarb.views.home'),
 
 ]
 

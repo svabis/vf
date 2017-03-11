@@ -9,7 +9,7 @@ class Nodarb_tips(models.Model):
 
     nos = models.CharField( max_length = 100 )
     slug = models.SlugField( unique = True )
-    apraksts = models.TextField( default = '' )
+    apraksts = models.TextField( default = 'apraksts' )
 
     def __unicode__(self):
         return u'%s' % (self.nos)
@@ -22,7 +22,7 @@ class Treneris(models.Model):
 
     vards = models.CharField( max_length = 100 )
     slug = models.SlugField( unique = True )
-    apraksts = models.TextField( default = '' )
+    apraksts = models.TextField( default = 'apraksts' )
 
     def __unicode__(self):
         return u'%s' % (self.vards)
@@ -33,11 +33,11 @@ class Tren_nodarb(models.Model):
         verbose_name = 'Relacija'
         db_table = "tren_nodarb"
 
-    nodarb = models.ForeignKey( Nodarb_tips )
-    treneris = models.ForeignKey( Treneris )
+    nodarb = models.ForeignKey( Nodarb_tips, related_name='n' )
+    treneris = models.ForeignKey( Treneris, related_name='t' )
 
     def __unicode__(self):
-        return u'%s' % (self.nodarb + treneris)
+        return u'%s' % (self.nodarb)
 
 TELPA_CHOISE = (
     ('L', 'lielā zāle'),

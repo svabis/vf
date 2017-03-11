@@ -18,7 +18,7 @@ class Command(BaseCommand):
         new_date = datetime.datetime.now().replace(hour=7, minute=30, second=0) + datetime.timedelta(days=2)
         print new_date
 
-        new_item = Grafiks()
+        new_item = Grafiks(sakums=new_date, )
 
         date = datetime.datetime(2009, 10, 5, 18, 00)
 

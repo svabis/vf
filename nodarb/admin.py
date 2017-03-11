@@ -3,10 +3,12 @@ from nodarb.models import *
 
 
 class Nodarb_tipsAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('nos',),}
     list_display = ['nos', 'slug', 'apraksts']
 
 
 class TrenerisAdmin(admin.ModelAdmin):
+    prepopulated_fields = {'slug': ('vards',),}
     list_display = ['vards', 'slug', 'apraksts']
 
 

@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+{% block style %}{% endblock %}
+
+{% block content %}
+
+<a href="/">Atpakaļ</a><br><br>
+
+{% if any %}
+<a href="/{{ nodarb_slug }}/any/">Jebkurš brīvais</a><br><br>
+{% endif %}
+
+{% for t in treneri %}
+<a href="/{{ nodarb_slug }}/{{ t.slug }}/">{{ t.vards }}</a><br>
+{% endfor %}
+
+{% endblock %}
