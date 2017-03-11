@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'nodarb',
     'klienti',
+    'grafiks',
 #    'pieraksts',
 )
 
