@@ -20,6 +20,6 @@ urlpatterns = [
     url(r'^admin12345/', include(admin.site.urls)),
 
 # SMART HOUSE
-    url(r'^', include('nodarb.urls')),
+    url(r'^', include('pieraksts.urls')),
 
 ]

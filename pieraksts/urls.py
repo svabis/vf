@@ -12,13 +12,13 @@ urlpatterns = [
     # url(r'^$', 'main.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^tren/(?P<nid>\w+|\w+\-\w+|\w+\-\w+\-\w+)/', 'nodarb.views.tren'), # treneris choise
+    url(r'^tren/(?P<n_id>\w+|\w+\-\w+|\w+\-\w+\-\w+)/', 'pieraksts.views.tren'), # treneris choise
 
-#    url(r'^tren/(?P<nid>\w+|\w+\-\w+|\w+\-\w+\-\w+)/any/', 'nodarb.views.any'), # any trainer
-#    url(r'^tren/(?P<nid>\w+|\w+\-\w+|\w+\-\w+\-\w+)/(?P<tid>\w+|\w+\-\w+|\w+\-\w+)/', 'nodarb.views.any'), # specific trainer
+#    url(r'^tren/(?P<n_id>\w+|\w+\-\w+|\w+\-\w+\-\w+)/any/', 'pieraksts.views.any'), # any trainer
+#    url(r'^tren/(?P<n_id>\w+|\w+\-\w+|\w+\-\w+\-\w+)/(?P<t_id>\w+|\w+\-\w+|\w+\-\w+)/', 'pieraksts.views.specific'), # specific trainer
 
 
-    url(r'^', 'nodarb.views.home'),
+    url(r'^', 'pieraksts.views.home'),
 
 ]
 

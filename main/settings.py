@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'nodarb',
     'klienti',
     'grafiks',
-#    'pieraksts',
+    'pieraksts',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -57,8 +57,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-                '/home/vfab/template',
-                '/home/vfab/nodarb/template',
+                '/home/vfab/templates',
+                '/home/vfab/pieraksts/templates',
 #                '/home/web/login/template',
 #                '/home/web/jobs/template',
 #                '/home/web/smhouse/template',
