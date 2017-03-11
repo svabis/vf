@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+{% block javascript %}
+<style>
+//iframe {
+//    box-sizing: border-box;
+//}
+iframe {
+	float: left;
+	border: 1px solid white;
+
+//	margin-top: 0px;
+//	margin-bottom: 0px;
+//	margin-left: none;
+//	margin-right: none;
+
+// scrolling
+	overflow: none;
+
+	width: 640px;
+	height: 480px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+{% for cam in kameras %}
+<!-- <div class="embed-responsive embed-responsive-4by3"> -->
+<iframe src="{{ cam.kamera_url}}" marginheight="0" marginwidth="0" scrolling="no" sandbox></iframe>
+<!-- </div> -->
+{% endfor %}
+<!-- <iframe id="cam2" src="http://servax.zapto.org/video/cam2" marginheight="0" marginwidth="0" scrolling="no" sandbox></iframe> -->
+
+{% endblock %}

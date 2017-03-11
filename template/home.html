@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1>Laipni lūgti projektā <strong>Svabwilla</strong></h1>
+{% if not username.username %}<h4 class="text-danger"><strong>Lai piekļūtu citām projekta sadaļām ir nepieciešama autorizācija</strong></h4>
+<h4 class="text-danger"><strong>Demo versijā ir pieejama sadaļa '<a href='/jobs/' class="text-danger">Darbu saraksti</a>'</strong></h4>{% endif %}
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Projekta mērķis ir atvieglot un automatizēt dzīvi. </p>
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Mūsdienās cilvēki mājas jēdzienā ietver arvien vairāk, tai skaitā inovatīvus risinājumus kas atvieglo dzīvi, padarot ērtākus vairākus ikdienas darbus. Šeit kā piemēru var salīdzināt akmens laikmeta “māju”, jeb alu un pagājušā gadsimta “māju” kā atsevišķu celtni ar dalījumu telpās un ar apkuri kas tiek risināta krāsns, jeb kamīna salīdzinājumā ar alas ugunskuru.</p>
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Mūsdienās mājas plānojumam ir tikpat liela nozīme, piemēram, interneta pieslēguma risinājumam, vai arī iespējai atvērt un aizvērt vārtus, kā arī garāžu no pults. Jāmin ir arī tas ka mūsdienās cilvēks cenšas jau projektēšanas stadijā iestrādāt energotaupīgus risinājumus, piemēram, siltinājums, apkure, apgaismojums.</p>
+<p class="text-justify">&nbsp;&nbsp;&nbsp;Gudrā māja ir dzīvokļa vai mājas automatizācijas virziens, ar kura palīdzību ir iespējams attālināti vadīt siltumapgādes sistēmu, elektrosistēmu vai atsevišķus elementus (garāžas vārti, dārza laistīšanas sistēma, ventilācijas vadība). Katrs no virzieniem ietver kopumu ar ierīcēm vai programmām, kas palīdz attālināti plānot vai regulēt kādu no mājas elementiem. Jaunākās tehnoloģijas gudrās mājas ir iespējams vadīt ar viedtālruņu vai interneta mākoņrisinājumu palīdzību.</p>
+{% endblock %}
+
+{% block style %}
+.text-justify { text-align: justify; }
+{% endblock %}
