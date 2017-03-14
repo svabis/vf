@@ -1,0 +1,13 @@
+{% extends 'main.html' %}
+{% block style %}{% endblock %}
+
+
+{% block content %}
+
+<a href="/tren/{{ nodarb_slug }}/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br><br>
+
+{% for g in grafiks %}
+<a href="/pieraksts/{{ g.id }}/">{{ g }} | {{ g.sakums|date:"H:i d/m/Y" }} | {{ g.treneris }} | {{ g.telpa }} | {{ g.vietas }}</a><br>
+{% endfor %}
+
+{% endblock %}

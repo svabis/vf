@@ -3,14 +3,14 @@
 
 {% block content %}
 
-<a href="/">Atpakaļ</a><br><br>
+<a href="/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br><br>
 
 {% if any %}
-<a href="/{{ nodarb_slug }}/any/">Jebkurš brīvais</a><br><br>
+<a href="/select/{{ nodarb_slug }}/any/">Jebkurš brīvais</a><br><br>
 {% endif %}
 
 {% for t in treneri %}
-<a href="/{{ nodarb_slug }}/{{ t.slug }}/">{{ t.vards }}</a><br>
+<a href="/select/{{ nodarb_slug }}/{{ t.slug }}/">{{ t.vards }}</a><br>
 {% endfor %}
 
 {% endblock %}

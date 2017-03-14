@@ -7,8 +7,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import get_template
 from django.template import Context, RequestContext		# RequestContext <-- get user from request
 
+from django.core.context_processors import csrf	# csrf token
+
 from nodarb.models import *
-from grafiks.models import Grafiks
+from grafiks.models import Grafiks, Planotajs
 
 # !!! Nodarbibas izvele !!!
 def home(request):
@@ -36,6 +38,47 @@ def tren(request, n_id):
 
 
 # !!! ANY trainer !!!
-def any(request, n_id, t_id):
+def any(request, n_id):
     args = {}
+
+    args['title'] = getattr(Nodarb_tips.objects.get( slug=n_id ), 'nos') # Nodarb_tips nosaukums
+    args['nodarb_slug'] = n_id
+
+    args['grafiks'] = Grafiks.objects.filter( nodarbiba = Nodarb_tips.objects.get( slug=n_id ) )
     return render_to_response( 'select.html', args )
+
+
+# !!! SPECIFIC trainer !!!
+def specific(request, n_id, t_id):
+    args = {}
+
+    args['title'] = getattr(Nodarb_tips.objects.get( slug=n_id ), 'nos') # Nodarb_tips nosaukums
+    args['nodarb_slug'] = n_id
+
+    args['grafiks'] = Grafiks.objects.filter( nodarbiba=Nodarb_tips.objects.get( slug=n_id ), treneris=Treneris.objects.get( slug=t_id ) )
+    return render_to_response( 'select.html', args )
+
+
+# !!! Pieraksts !!!
+def pieraksts(request, g_id):
+    args = {}
+    args['g_id'] = str(g_id)
+    args['nodarb_slug'] = Grafiks.objects.get( id=g_id ).nodarbiba.slug
+    args['title'] = Grafiks.objects.get( id=g_id ).nodarbiba.nos + '  | ' + Grafiks.objects.get( id=g_id ).treneris.vards
+    args['laiks'] = Grafiks.objects.get( id=g_id ).sakums
+
+#    args['title'] = getattr(Grafiks.objects.get( id=g_id )) # grafika ieraksts
+#    args['grafiks'] = Grafiks.objects.filter( nodarbiba=Nodarb_tips.objects.get( slug=g_id ), treneris=Treneris.objects.get( slug=t_id ) )
+
+    args.update(csrf(request)) # ADD CSRF TOKEN
+
+    if request.POST:
+        user = request.POST.get('user', '')     # usermname <= get variable from Form (name="user"), if not leave blank
+        email = request.POST.get('email', '')     # user_email <= get variable from Form (name="emial"), if not leave blank
+        tel = request.POST.get('tel', '')
+
+        return redirect('/')
+
+    else:
+        return render_to_response( 'pieraksts.html', args )
+

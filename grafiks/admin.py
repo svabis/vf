@@ -5,6 +5,9 @@ class PlanotajsAdmin(admin.ModelAdmin):
     list_display = ['nodarbiba', 'treneris', 'sakums', 'telpa', 'vietas']
 #    list_filter = ['nodarb', 'treneris']
 
+class GrafiksAdmin(admin.ModelAdmin):
+    list_display = ['nodarbiba', 'treneris', 'sakums', 'telpa', 'vietas']
 
-admin.site.register(Grafiks)
+
+admin.site.register(Grafiks, GrafiksAdmin)
 admin.site.register(Planotajs, PlanotajsAdmin)

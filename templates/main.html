@@ -3,23 +3,26 @@
 <html lang="LV-LV">
 <head>
 <title>{{ title }}</title>
-        <meta charset="UTF-8">
-        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.css' %}">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+ <meta charset="UTF-8">
+ <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.css' %}">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
 {% block javascript %}{% endblock %}
-<style>
-{% block style %}{% endblock %}
-//ul.pagination li a:hover:not(.active) {background-color: #ddd;}
-.navbar-menu { font-size: 120%; }
-</style>
+<style>{% block style %}{% endblock %}</style>
 </head>
+
 <body>
-<br><br>
-{{ title }}
-<br><br>
+<div class="col-xl-4 col-lg-5 col-md-5 col-sm-6 col-xs-8  col-lg-offset-3 col-md-offset-3 col-sm-offset-2 col-xs-offset-2">
+
+<h3><img src="http://cdn.gbooking.ru/images/companies_logo/1465394849474Screen%20Shot%202016-06-08%20at%2017.07.07.png"> "Veselības Fabrika" sporta klubs<br>
+<small>Latvija, Rīga, Brīvības gatve 214M, 3. kāpņu telpa, 2. stāvs, LV-1039</small></h3>
+
+<h2>{{ title }}</h2>
+
 {% block content %}{% endblock %}
+
+</div>
 </body>
 </html>
