@@ -106,6 +106,7 @@ def pieraksts(request, g_id):
                 new += 1
 
         if error == True:
+            args['error'] = True
             args['email_error'] = u'ERROR'
             return render_to_response( 'pieraksts.html', args )
 

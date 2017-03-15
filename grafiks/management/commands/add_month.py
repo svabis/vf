@@ -21,43 +21,43 @@ class Command(BaseCommand):
                 if int(p.diena) == day[weekno]:
                     sakums = today + timedelta(days=d, hours=p.laiks.hour, minutes=p.laiks.minute)
                     tz = pytz.timezone('EET') # Timezone info
-                    new_sakums = sakums.replace(tzinfo=tz)
+                    new_sakums = sakums #.replace(tzinfo=tz)
                     new_graf = Grafiks(sakums=new_sakums, ilgums=p.ilgums, nodarbiba=p.nodarbiba, treneris=p.treneris, telpa=p.telpa, vietas=p.vietas)
                     new_graf.save()
                 if int(p.diena) == day[weekno+1]:
                     sakums = today + timedelta(days=d + 1, hours=p.laiks.hour, minutes=p.laiks.minute)
                     tz = pytz.timezone('EET') # Timezone info
-                    new_sakums = sakums.replace(tzinfo=tz)
+                    new_sakums = sakums #.replace(tzinfo=tz)
                     new_graf = Grafiks(sakums=new_sakums, ilgums=p.ilgums, nodarbiba=p.nodarbiba, treneris=p.treneris, telpa=p.telpa, vietas=p.vietas)
                     new_graf.save()
                 if int(p.diena) == day[weekno+2]:
                     sakums = today + timedelta(days=d + 2, hours=p.laiks.hour, minutes=p.laiks.minute)
                     tz = pytz.timezone('EET') # Timezone info
-                    new_sakums = sakums.replace(tzinfo=tz)
+                    new_sakums = sakums #.replace(tzinfo=tz)
                     new_graf = Grafiks(sakums=new_sakums, ilgums=p.ilgums, nodarbiba=p.nodarbiba, treneris=p.treneris, telpa=p.telpa, vietas=p.vietas)
                     new_graf.save()
                 if int(p.diena) == day[weekno+3]:
                     sakums = today + timedelta(days=d + 3, hours=p.laiks.hour, minutes=p.laiks.minute)
                     tz = pytz.timezone('EET') # Timezone info
-                    new_sakums = sakums.replace(tzinfo=tz)
+                    new_sakums = sakums #.replace(tzinfo=tz)
                     new_graf = Grafiks(sakums=new_sakums, ilgums=p.ilgums, nodarbiba=p.nodarbiba, treneris=p.treneris, telpa=p.telpa, vietas=p.vietas)
                     new_graf.save()
                 if int(p.diena) == day[weekno+4]:
                     sakums = today + timedelta(days=d + 4, hours=p.laiks.hour, minutes=p.laiks.minute)
                     tz = pytz.timezone('EET') # Timezone info
-                    new_sakums = sakums.replace(tzinfo=tz)
+                    new_sakums = sakums #.replace(tzinfo=tz)
                     new_graf = Grafiks(sakums=new_sakums, ilgums=p.ilgums, nodarbiba=p.nodarbiba, treneris=p.treneris, telpa=p.telpa, vietas=p.vietas)
                     new_graf.save()
                 if int(p.diena) == day[weekno+5]:
                     sakums = today + timedelta(days=d + 5, hours=p.laiks.hour, minutes=p.laiks.minute)
                     tz = pytz.timezone('EET') # Timezone info
-                    new_sakums = sakums.replace(tzinfo=tz)
+                    new_sakums = sakums #.replace(tzinfo=tz)
                     new_graf = Grafiks(sakums=new_sakums, ilgums=p.ilgums, nodarbiba=p.nodarbiba, treneris=p.treneris, telpa=p.telpa, vietas=p.vietas)
                     new_graf.save()
                 if int(p.diena) == day[weekno+6]:
                     sakums = today + timedelta(days=d + 6, hours=p.laiks.hour, minutes=p.laiks.minute)
                     tz = pytz.timezone('EET') # Timezone info
-                    new_sakums = sakums.replace(tzinfo=tz)
+                    new_sakums = sakums #.replace(tzinfo=tz)
                     new_graf = Grafiks(sakums=new_sakums, ilgums=p.ilgums, nodarbiba=p.nodarbiba, treneris=p.treneris, telpa=p.telpa, vietas=p.vietas)
                     new_graf.save()
 
