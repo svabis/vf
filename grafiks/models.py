@@ -8,7 +8,7 @@ class Grafiks(models.Model):
         db_table = "grafiks"
 
     sakums = models.DateTimeField()
-#    ilgums = 
+    ilgums = models.IntegerField()
     nodarbiba = models.ForeignKey( Nodarb_tips ) # Nodarbiba
     treneris = models.ForeignKey( Treneris ) # Treneris
     telpa = models.ForeignKey( Telpa ) # Telpa
@@ -23,7 +23,7 @@ class Planotajs(models.Model):
         db_table = "planotajs"
 
     sakums = models.DateTimeField()
-#    ilgums =
+    ilgums = models.IntegerField( default = 55 )
     nodarbiba = models.ForeignKey( Nodarb_tips ) # Nodarbiba
     treneris = models.ForeignKey( Treneris ) # Treneris
     telpa = models.ForeignKey( Telpa ) # Telpa

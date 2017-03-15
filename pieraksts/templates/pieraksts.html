@@ -12,7 +12,7 @@
 {% csrf_token %}
 	<div class="form-group">
 		<label for"name">Vārds Uzvārds</label>
-		<input type="text" name="user" id="user" class="form-control" autofocus="autofocus" value="{{name}}">
+		<input type="text" name="name" id="name" class="form-control" autofocus="autofocus" value="{{name}}">
 	</div>
         <div class="form-group">
                 <label for"email">kontakta e-pasts</label>
@@ -23,13 +23,11 @@
                 <input type="text" name="tel" id="tel" class="form-control" value="{{tel}}">
         </div>
 
-{% if error %}
 <div class="alert alert-danger" role="alert">
 {% if name_error %}<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Kļūda:</span> {{ nane_error }}<br>{% endif %}
 {% if email_error %}<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Kļūda:</span> {{ email_error }}<br>{% endif %}
 {% if passw_error %}<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Kļūda:</span> {{ tel_error }}<br>{% endif %}
 </div>
-{% endif %}
 	<div class="form-group" style="margin-top: 10px;">
 		<input class="btn btn-primary" type="submit" value="Pierakstīties">
 	</div>
