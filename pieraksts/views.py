@@ -14,6 +14,9 @@ from klienti.models import Klienti
 from grafiks.models import Grafiks, Planotajs
 
 import datetime
+from datetime import date
+today = date.today()
+
 
 # !!! Nodarbibas izvele !!!
 def home(request):
@@ -47,8 +50,7 @@ def any(request, n_id):
     args['title'] = getattr(Nodarb_tips.objects.get( slug=n_id ), 'nos') # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
 
-#    args['grafiks'] = Planotajs.objects.filter( nodarbiba = Nodarb_tips.objects.get( slug=n_id ) )
-    args['grafiks'] = Grafiks.objects.filter( nodarbiba = Nodarb_tips.objects.get( slug=n_id ) )
+    args['grafiks'] = Grafiks.objects.filter( nodarbiba = Nodarb_tips.objects.get( slug=n_id ), sakums__gt=today ).order_by('sakums') # , sakums__startswith=today 
     return render_to_response( 'select.html', args )
 
 
@@ -59,8 +61,7 @@ def specific(request, n_id, t_id):
     args['title'] = getattr(Nodarb_tips.objects.get( slug=n_id ), 'nos') # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
 
-#    args['grafiks'] = Planotajs.objects.filter( nodarbiba=Nodarb_tips.objects.get( slug=n_id ), treneris=Treneris.objects.get( slug=t_id ) )
-    args['grafiks'] = Grafiks.objects.filter( nodarbiba=Nodarb_tips.objects.get( slug=n_id ), treneris=Treneris.objects.get( slug=t_id ) )
+    args['grafiks'] = Grafiks.objects.filter( nodarbiba=Nodarb_tips.objects.get( slug=n_id ), treneris=Treneris.objects.get( slug=t_id ), sakums__gt=today ).order_by('sakums')
     return render_to_response( 'select.html', args )
 
 
