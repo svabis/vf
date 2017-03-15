@@ -107,6 +107,7 @@ DATABASES = {
 LANGUAGE_CODE = 'LV-LV.UTF-8'
 
 TIME_ZONE = 'EET'
+#TIME_ZONE = 'Europe/Riga'
 
 USE_I18N = True
 

@@ -7,13 +7,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('grafiks', '0003_auto_20170311_1549'),
+        ('grafiks', '0001_initial'),
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='grafiks',
-            old_name='vieta',
-            new_name='vietas',
+        migrations.AddField(
+            model_name='planotajs',
+            name='diena',
+            field=models.IntegerField(default=0),
         ),
     ]
