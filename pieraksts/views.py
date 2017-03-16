@@ -13,6 +13,8 @@ from nodarb.models import *
 from klienti.models import Klienti
 from grafiks.models import Grafiks, Planotajs
 
+from pieraksts.forms import KlientsForm
+
 import datetime
 from datetime import date
 today = date.today()
@@ -72,6 +74,8 @@ def pieraksts(request, g_id):
     args['nodarb_slug'] = Grafiks.objects.get( id=g_id ).nodarbiba.slug
     args['title'] = Grafiks.objects.get( id=g_id ).nodarbiba.nos + '  | ' + Grafiks.objects.get( id=g_id ).treneris.vards
     args['laiks'] = Grafiks.objects.get( id=g_id ).sakums
+
+    args['form'] = KlientsForm
 
 #    args['title'] = getattr(Grafiks.objects.get( id=g_id )) # grafika ieraksts
 #    args['grafiks'] = Grafiks.objects.filter( nodarbiba=Nodarb_tips.objects.get( slug=g_id ), treneris=Treneris.objects.get( slug=t_id ) )
