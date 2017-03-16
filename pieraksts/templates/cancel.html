@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+{% block style %}{% endblock %}
+
+{% block content %}
+
+<h2>Vai tiešām vēlaties atcelt pierakstu uz:</h2>
+<h3>{{ data.nodarbiba.sakums|date:"d/m/Y H:i" }} | {{ data.nodarbiba }}</h3>
+<h3>Treneris: {{ data.nodarbiba.treneris }}</h3>
+
+<!-- <a href="/tren/{{ nodarb_slug }}/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpaka  </a><br><br> -->
+
+<div class="form-group" style="margin-top: 10px;">
+     <a href="/atcelts/{{ id }}/"><input class="btn btn-primary" value="Jā"></a>
+     <input class="btn btn-primary" value="Nē">
+</div>
+{% endblock %}
+

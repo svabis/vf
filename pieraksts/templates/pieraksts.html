@@ -8,6 +8,18 @@
 <a href="/tren/{{ nodarb_slug }}/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br><br>
 
 <form action="/pieraksts/{{ g_id }}/" method=POST>
+{% if msg %}
+        <div class="alert alert-success" role="alert">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                <strong> {{ msg }}</strong>
+        </div>
+{% endif %}
+{% if error %}
+        <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+                <strong> {{ error_msg }}</strong>
+        </div>
+{% endif %}
 {% csrf_token %}{{ form }}
 	<div class="form-group" style="margin-top: 10px;">
 		<input class="btn btn-primary" type="submit" value="Pierakstīties">

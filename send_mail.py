@@ -27,5 +27,6 @@ def send_email(recipient, subject, body):
         print "failed to send mail"
 
 
-send_email('fizmats@inbox.lv', 'Mail Subject', 'Teksts')
-send_email('lspjurmala2013@gmail.com', 'Mail Subject', 'Teksts')
+#send_email('fizmats@inbox.lv', 'Mail Subject', 'Teksts')
+#send_email('lspjurmala2013@gmail.com', 'Mail Subject', 'Teksts')
+send_email('kristine@vfabrika.lv', 'Mail Subject', 'Teksts')

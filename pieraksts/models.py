@@ -4,22 +4,28 @@ from django.utils import timezone
 from klienti.models import Klienti
 from grafiks.models import Grafiks
 
-#import uuid
+import uuid
 
-#def rand_code():
-#    return str(uuid.uuid4())
 
-# !!! Klienti !!!
+# !!! Pieraksti !!!
 class Pieraksti(models.Model):
     class Meta():
-#        verbose_name = 'Pieraksti'
+        verbose_name = 'Pieraksti'
         db_table = "pieraksti"
 
     pieraksta_laiks = models.DateTimeField( default = timezone.now )
     klients = models.ForeignKey( Klienti )
-    nodarbiba = models.ForeignKey( Grafiks )
-#    atteikuma_kods = models.SlugField( unique = True, default=rand_code() )
+    nodarbiba = models.ForeignKey( Grafiks, related_name='nod'  )
+    atteikuma_kods = models.SlugField( unique=True, default=uuid.uuid4 )
 
-#    def __unicode__(self):
-#        return u'%s' % (self.nodarbiba)
+
+# !!! Atteikumi !!!
+class Atteikumi(models.Model):
+    class Meta():
+        verbose_name = 'Atteikumi'
+        db_table = "atteikumi"
+
+    ateikuma_laiks = models.DateTimeField( default = timezone.now )
+    klients = models.ForeignKey( Klienti )
+    nodarbiba = models.ForeignKey( Grafiks, related_name='ateikt' )
 

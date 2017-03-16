@@ -1,0 +1,33 @@
+{% load staticfiles %}{% load tz %}
+<!DOCTYPE html>
+<html lang="LV-LV">
+<head>
+<title>{{ title }}</title>
+ <meta charset="UTF-8">
+ <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.css' %}">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+{% block javascript %}{% endblock %}
+<style>{% block style %}{% endblock %}</style>
+</head>
+
+<body>
+<div class="col-xl-offset-1 col-lg-offset-1 col-md-offset-1">
+
+<h1>Reģistratūras sadaļa</h1>
+
+<!-- <h3><img src="http://cdn.gbooking.ru/images/companies_logo/1465394849474Screen%20Shot%202016-06-08%20at%2017.07.07.png"> "Vesel  bas Fabrika" sporta klubs<br> -->
+<!-- <small>Latvija, R  ga, Br  v  bas gatve 214M, 3. k ^ p ^ u telpa, 2. st ^ vs, LV-1039</small></h3> -->
+
+<h2>{{ title }}</h2>
+{% if subtitle %}<h3>{{ subtitle|date:"d/m/Y H:i" }}</h3>{% endif %}
+
+
+{% block content %}{% endblock %}
+
+</div>
+</body>
+</html>
+

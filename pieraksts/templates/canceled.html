@@ -1,0 +1,13 @@
+{% extends 'main.html' %}
+{% block style %}{% endblock %}
+
+{% block content %}
+
+<h2>Nodarbība atcelta</h2>
+<h3>{{ data.nodarbiba.sakums|date:"d/m/Y H:i" }} | {{ data.nodarbiba }}</h3>
+<h3>Treneris: {{ data.nodarbiba.treneris }}</h3>
+
+<a href="/">Uz sākumu</a>
+
+{% endblock %}
+

@@ -14,6 +14,7 @@ from klienti.models import Klienti
 from grafiks.models import Grafiks, Planotajs
 
 from pieraksts.forms import KlientsForm
+from pieraksts.models import *
 
 import datetime
 from datetime import date
@@ -74,58 +75,110 @@ def pieraksts(request, g_id):
     args['nodarb_slug'] = Grafiks.objects.get( id=g_id ).nodarbiba.slug
     args['title'] = Grafiks.objects.get( id=g_id ).nodarbiba.nos + '  | ' + Grafiks.objects.get( id=g_id ).treneris.vards
     args['laiks'] = Grafiks.objects.get( id=g_id ).sakums
-
-    args['form'] = KlientsForm
-
-#    args['title'] = getattr(Grafiks.objects.get( id=g_id )) # grafika ieraksts
-#    args['grafiks'] = Grafiks.objects.filter( nodarbiba=Nodarb_tips.objects.get( slug=g_id ), treneris=Treneris.objects.get( slug=t_id ) )
-
+    form = KlientsForm
+    args['form'] = form
     args.update(csrf(request)) # ADD CSRF TOKEN
 
     if request.POST:
-        new_name = request.POST.get('name', '')     # usermname <= get variable from Form (name="user"), if not leave blank
-        new_email = request.POST.get('email', '')     # user_email <= get variable from Form (name="emial"), if not leave blank
-        new_tel = request.POST.get('tel', '')
+        form = KlientsForm( request.POST )
+        if form.is_valid():
+            new_name = form.cleaned_data['vards']
+            new_email = form.cleaned_data['e_pasts']
+            new_tel = form.cleaned_data['tel']
 
-        args['name'] = new_name
-        args['email'] = new_email
-        args['tel'] = new_tel
+            error = False
+            clients = Klienti.objects.all()
+            new = 0
+            for c in clients:
+                if (c.e_pasts == new_email and c.tel != new_tel) or (c.tel == new_tel and c.e_pasts != new_email):
+                   # EPASTS VAI TELEFONS JAU TIEK IZMANTOTS
+                    error = True
+                    args['error_msg'] = u' E-pasts vai Tālrunis jau ir reģistrēts citam klientam'
 
-        error = False
-        clients = Klienti.objects.all()
-        new = 0
-        for c in clients:
-            if (c.e_pasts == new_email and c.tel != new_tel) or (c.tel == new_tel and c.e_pasts != new_email):
-                # EPASTS SAKRIT TELEFONS NE
-                error = True
-#                pass
-#            if c.tel == new_tel and c.e_pasts != new_email:
-               # EPASTS neSAKRIT TELEFONS SAKRIT
-#                pass
-            if c.tel == new_tel and c.e_pasts == new_email:
-               # klients jau eksiste
-                c.pieteikuma_reizes += 1
-                c.pedejais_pieteikums = datetime.datetime.now()
-                c.save()
-                new += 1
+                if c.tel == new_tel and c.e_pasts == new_email and c.vards != new_name:
+                   # CITS KLIENTA VARDS
+                    error = True
+                    args['error_msg'] = u' Cits klienta vārds'
 
-        if error == True:
-            args['error'] = True
-            args['email_error'] = u'ERROR'
+                if c.tel == new_tel and c.e_pasts == new_email and c.vards == new_name:
+                   # klients jau eksiste
+                    if getattr(Grafiks.objects.get( id=g_id ), 'vietas') == 0: # IF VIETAS=0 --> ERROR
+                        error = True
+                        args['error_msg'] = u' Atvainojiet visas nodarbības vietas jau ir aizņemtas'
+                    else: # VIETAS > 0 --> Pieraksts
+                        c.pieteikuma_reizes += 1
+                        c.pedejais_pieteikums = datetime.datetime.now()
+                        c.save()
+                        new += 1
+
+                        nodarbiba = Grafiks.objects.get( id=g_id ) # VIETAS -1
+                        nodarbiba.vietas -= 1
+                        nodarbiba.save()
+
+                        pieraksts = Pieraksti(klients=c, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
+                        pieraksts.save()
+                      # Pieraksts sekmigs
+                        args['msg'] = u'pieraksts sekmīgs'
+
+            if new == 0:
+           # Jauns klients
+                if getattr(Grafiks.objects.get( id=g_id ), 'vietas') == 0: # IF VIETAS=0 --> ERROR
+                    error = True
+                    args['error_msg'] = u' Atvainojiet visas nodarbības vietas ir aizņemtas'
+                else: # VIETAS > 0 --> Pieraksts
+                    new_client = Klienti(vards=new_name, e_pasts=new_email, tel=new_tel, pieteikuma_reizes=1)
+                    new_client.save()
+
+                    nodarbiba = Grafiks.objects.get( id=g_id ) # VIETAS -1
+                    nodarbiba.vietas -= 1
+                    nodarbiba.save()
+
+                    pieraksts = Pieraksti(klients=new_client, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
+                    pieraksts.save()
+                    args['msg'] = u'pieraksts sekmīgs'
+                  # Pieraksts sekmigs
+                    return render_to_response( 'pieraksts.html', args )
+
+            if error == True:
+                args['error'] = True
+                args['form'] = form     # ERROR MESSAGE
+                return render_to_response( 'pieraksts.html', args )
+
+        else:
+            args['form'] = form	# ERROR MESSAGE
             return render_to_response( 'pieraksts.html', args )
+    return render_to_response( 'pieraksts.html', args )
 
-        if new == 0:
-               # Jauns klients
-                new_client = Klienti(vards=new_name, e_pasts=new_email, tel=new_tel, pieteikuma_reizes=1)
-                new_client.save()
 
-      # nodarbibu vietas minus 1
-        nodarbiba = Grafiks.objects.get( id=g_id )
-        nodarbiba.vietas -= 1
-        nodarbiba.save()
+# !!!!! ATCELT !!!!!
+def cancel(request, id):
+    try:
+        pieraksts = Pieraksti.objects.get( atteikuma_kods = id)
+    except ObjectDoesNotExist:	# not existing --> 404
+        raise Http404
+    args = {}
+    args['data'] = pieraksts
+    args['id'] = id
+    return render_to_response( 'cancel.html', args )
 
-        return redirect('/')
 
-    else:
-        return render_to_response( 'pieraksts.html', args )
+# !!!!! ATCELT-OK !!!!!
+def cancel_ok(request, id):
+    try:
+        pieraksts = Pieraksti.objects.get( atteikuma_kods = id)
+    except ObjectDoesNotExist:	# not existing bilde --> 404
+        raise Http404
+    args = {}
+    args['data'] = pieraksts
+# Grafiks.vietas +=1
+    pieraksts.nodarbiba.vietas += 1
+    pieraksts.nodarbiba.save()
+# ADD Ateikumi
+    atteikums = Atteikumi( klients=pieraksts.klients, nodarbiba=pieraksts.nodarbiba )
+    atteikums.save()
+# Klients.atteikumi -=1
 
+# DELETE PIERAKSTS
+    pieraksts.delete()
+
+    return render_to_response( 'canceled.html', args )

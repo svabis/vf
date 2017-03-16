@@ -1,0 +1,31 @@
+{% extends 'admin.html' %}
+{% block style %}{% endblock %}
+
+{% block content %}
+
+<a href="/grafiks/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br>
+
+<a href="/grafiks/cancel/{{ g_id }}/">Nodarbību atcēla</a><br>
+
+<div class="container">
+<table class="table table-hover table-striped table-condensed">
+<thead><tr>
+ <th>Pierakstīšanās laiks</th>
+ <th>Vārds Uzvārds</th>
+ <th>E-pasts</th>
+ <th>Tālrunis</th>
+ <th style="text-align:center;">Ieradās</th>
+</tr></thead>
+
+<tbody>
+{% for d in data %}
+<tr>
+ <td>{{ d.pieraksta_laiks|date:"d/m/Y H:i" }}</td>
+ <td>{{ d.klients }}</td>
+ <td>{{ d.klients.e_pasts }}</td>
+ <td>{{ d.klients.tel }}</td>
+ <td style="text-align:center;"><input type="checkbox" value="" class="disabled_checkbox"></td>
+</tr>
+{% endfor %}
+</tbody>
+{% endblock %}
