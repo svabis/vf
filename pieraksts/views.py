@@ -93,9 +93,9 @@ def pieraksts(request, g_id):
 
     args = {}
     args['g_id'] = str(g_id)
-    args['nodarb_slug'] = Grafiks.objects.get( id=g_id ).nodarbiba.slug
-    args['title'] = Grafiks.objects.get( id=g_id ).nodarbiba.nos + '  | ' + Grafiks.objects.get( id=g_id ).treneris.vards
-    args['laiks'] = Grafiks.objects.get( id=g_id ).sakums
+    args['nodarb_slug'] = nod.nodarbiba.slug
+    args['title'] = nod.nodarbiba.nos + '  | ' + Grafiks.objects.get( id=g_id ).treneris.vards
+    args['laiks'] = nod.sakums
     form = KlientsForm
     args['form'] = form
     args.update(csrf(request)) # ADD CSRF TOKEN
@@ -144,9 +144,10 @@ def pieraksts(request, g_id):
                         nodarbiba.save()
 
                         pieraksts = Pieraksti(klients=c, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
+                 # SEND ACCEPT MAIL WITH CANCEL CODE
+                        mail.send_email(new_email, nod.nodarbiba.nos, pieraksts.atteikuma_kods)
                         pieraksts.save()
-                      # Pieraksts sekmigs
-   # SEND ACCEPT MAIL WITH CANCEL CODE
+                 # Pieraksts sekmigs
                         args['msg'] = u'pieraksts sekmīgs'
 
             if new == 0:
@@ -163,10 +164,11 @@ def pieraksts(request, g_id):
                     nodarbiba.save()
 
                     pieraksts = Pieraksti(klients=new_client, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
+             # SEND ACCEPT MAIL WITH CANCEL CODE
+                    mail.send_email(new_email, nod.nodarbiba.nos, pieraksts.atteikuma_kods)
                     pieraksts.save()
-   # SEND ACCEPT MAIL WITH CANCEL CODE
+             # Pieraksts sekmigs
                     args['msg'] = u'pieraksts sekmīgs'
-                  # Pieraksts sekmigs
                     return render_to_response( 'pieraksts.html', args )
 
             if error == True:
