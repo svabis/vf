@@ -1,31 +1,25 @@
 # -*- coding: utf-8 -*-
-from django.forms import ModelForm
-from django.utils.translation import ugettext_lazy as _
 from django import forms
-
 from klienti.models import *
 
+# form error message override
+from django.forms import Field
+from django.utils.translation import ugettext_lazy
+Field.default_error_messages = {
+    'required': ugettext_lazy(u'šis lauks ir jāaizpilda obligāti'),
+}
 
-class KlientsForm(ModelForm):
-    class Meta:
-        model = Klienti
-        fields = ['vards', 'e_pasts', 'tel']
-        labels = {
-            'vards': ('Vārds Uzvārds'),
-            'tel': ('Tālrunis'),
-        }
+class KlientsForm(forms.Form):
+    vards = forms.RegexField( regex=r'^\D{3,15}\s\D+$', label = u'Vārds Uzvārds',
+        error_message = (u'Obligāti jāievada Vārds un Uzvārds'),
+        widget = forms.TextInput( attrs={'class': 'form-control', 'size': 30, 'title': 'Vārds Uzvārds'}))
 
-        error_messages = {
-            'vards': {
-                'max_length': _("This writer's name is too long."),
-                'required': _("Obligāti jāaizpilda"),
-            },
-            'tel': {
-                'required': _("Oblig ^ ti j ^ aizpilda"),
-            },
-        }
+    e_pasts = forms.EmailField( required=True, label = u'E-pasts',
+         widget = forms.EmailInput( attrs={'class': 'form-control', 'title': 'e-pasts'}))
 
-        widgets = { 'vards': forms.TextInput( attrs={'class': 'form-control', 'size': 30, 'title': 'Vārds Uzvārds', 'required': True}), 
-            'e_pasts': forms.EmailInput( attrs={'class': 'form-control', 'title': 'e-pasts', 'required': True}),
-            'tel': forms.TextInput( attrs={'class': 'form-control', 'title': 'tālrunis', 'required': True}),
-            }
+    tel = forms.RegexField( regex=r'^[2]\d{7}|[6]\d{7}$', max_length = 8, label = u'Tālrunis',
+         error_message = (u'Tālruņa nummuram ir jāsākas ar 2 vai 6, ciparu skaitam ir jābūt 8.'),
+         widget = forms.TextInput( attrs={'class': 'form-control', 'size': 8, 'title': 'tālrunis'}))
+
+    chk = forms.BooleanField( required = True, label ='', error_messages = {'required': ugettext_lazy(u'Jāpiekrīt Noteikumiem')},
+         widget = forms.CheckboxInput( attrs={'class':'form-control', 'align':'left'}))

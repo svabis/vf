@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 # !!! Klienti !!!
 class Klienti(models.Model):
@@ -14,6 +14,7 @@ class Klienti(models.Model):
     e_pasts = models.EmailField ()
     tel = models.CharField(max_length=8)
     pieteikuma_reizes = models.IntegerField()
+    atteikuma_reizes = models.IntegerField( default=0 )
 
     def __unicode__(self):
         return u'%s' % (self.vards)

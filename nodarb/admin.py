@@ -4,7 +4,7 @@ from nodarb.models import *
 
 class Nodarb_tipsAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('nos',),}
-    list_display = ['nos', 'slug', 'apraksts']
+    list_display = ['nos', 'redz', 'slug', 'apraksts']
 
 
 class TrenerisAdmin(admin.ModelAdmin):

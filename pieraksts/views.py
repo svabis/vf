@@ -18,14 +18,15 @@ from pieraksts.models import *
 
 import datetime
 from datetime import date
-today = date.today()
+#today = date.today() # sakot no --> shodiena
+today = datetime.datetime.now() # sakot no --> shodiena + pulkstens (tagad)
 
 
 # !!! Nodarbibas izvele !!!
 def home(request):
     args = {}
     args['title'] = 'Nodarbības'
-    args['nodarbibas'] = Nodarb_tips.objects.all() # visas nodarbibas
+    args['nodarbibas'] = Nodarb_tips.objects.filter( redz = True ) # Atlasa redzamas nodarbibas
     return render_to_response( 'nodarb.html', args )
 
 
@@ -89,6 +90,7 @@ def pieraksts(request, g_id):
             error = False
             clients = Klienti.objects.all()
             new = 0
+           # meklejam kljudas pieteikuma forma
             for c in clients:
                 if (c.e_pasts == new_email and c.tel != new_tel) or (c.tel == new_tel and c.e_pasts != new_email):
                    # EPASTS VAI TELEFONS JAU TIEK IZMANTOTS
@@ -100,6 +102,12 @@ def pieraksts(request, g_id):
                     error = True
                     args['error_msg'] = u' Cits klienta vārds'
 
+            if error == True:
+                args['error'] = True
+                args['form'] = form     # ERROR MESSAGE
+                return render_to_response( 'pieraksts.html', args )
+
+            for c in clients:
                 if c.tel == new_tel and c.e_pasts == new_email and c.vards == new_name:
                    # klients jau eksiste
                     if getattr(Grafiks.objects.get( id=g_id ), 'vietas') == 0: # IF VIETAS=0 --> ERROR
@@ -177,7 +185,8 @@ def cancel_ok(request, id):
     atteikums = Atteikumi( klients=pieraksts.klients, nodarbiba=pieraksts.nodarbiba )
     atteikums.save()
 # Klients.atteikumi -=1
-
+    pieraksts.klients.atteikuma_reizes +=1
+    pieraksts.klients.save()
 # DELETE PIERAKSTS
     pieraksts.delete()
 
