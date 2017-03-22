@@ -10,17 +10,17 @@
  <th>Nodarbība</th>
  <th>Treneris</th>
  <th>Zāle</th>
- <th>Brīvo vietu skait</th>
+ <th>Brīvo vietu skaits</th>
 </tr></thead>
 
 <tbody>
 {% for d in data %}
 <tr>
- <td><a href="/grafiks/nod/{{ d.id }}/">{{ d.sakums|date:"H:i" }}</a></td>
- <td><a href="/grafiks/nod/{{ d.id }}/">{{ d.nodarbiba }}</a></td>
- <td><a href="/grafiks/nod/{{ d.id }}/">{{ d.treneris }}</a></td>
- <td><a href="/grafiks/nod/{{ d.id }}/">{{ d.telpa }}</a></td>
- <td><a href="/grafiks/nod/{{ d.id }}/">{{ d.vietas }}</a></td>
+ <td><a href="/reception/nod/{{ d.id }}/">{{ d.sakums|date:"H:i" }}</a></td>
+ <td><a href="/reception/nod/{{ d.id }}/">{{ d.nodarbiba }}</a></td>
+ <td><a href="/reception/nod/{{ d.id }}/">{{ d.treneris }}</a></td>
+ <td><a href="/reception/nod/{{ d.id }}/">{{ d.telpa }}</a></td>
+ <td><a href="/reception/nod/{{ d.id }}/">{{ d.vietas }}</a></td>
 </tr>
 {% endfor %}
 </tbody>

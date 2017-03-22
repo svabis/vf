@@ -19,8 +19,8 @@ urlpatterns = [
 # ADMIN
     url(r'^admin12345/', include(admin.site.urls)),
 
-# SMART HOUSE
-    url(r'^grafiks/', include('grafiks.urls')),
+# RECEPTION
+    url(r'^reception/', include('grafiks.urls')),
     url(r'^', include('pieraksts.urls')),
 
 ]

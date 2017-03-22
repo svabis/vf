@@ -22,7 +22,7 @@ from datetime import date
 today = datetime.datetime.now() # sakot no --> shodiena + pulkstens (tagad)
 
 
-# !!! Nodarbibas izvele !!!
+# !!! Visas nodarbibas !!!
 def home(request):
     args = {}
     args['title'] = 'Nodarbības'
@@ -30,10 +30,15 @@ def home(request):
     return render_to_response( 'nodarb.html', args )
 
 
-# !!! Trenera izvele !!!
+# !!! Nodarbibas izvele !!!
 def tren(request, n_id):
+    try:
+        nod = Nodarb_tips.objects.get( slug=n_id ) # Nodarbiba
+    except ObjectDoesNotExist:  # not existing --> 404
+        raise Http404
+
     args = {}
-    treneri_rel = Nodarb_tips.objects.get( slug=n_id ).n.all() #nodarbiba(slug) ... n-relacija ... all() ... visi objekti
+    treneri_rel = nod.n.all() #nodarbiba(slug) ... n-relacija ... all() ... visi objekti
     treneri = []
     for t in treneri_rel:
        treneri.append(getattr( t, 'treneris') ) # relaciju objektu parametrs "Treneris"
@@ -41,36 +46,53 @@ def tren(request, n_id):
     if len(treneri) > 1:
         args['any'] = True # ja vairaki tad "jebkursh brivais"
 
-    args['title'] = getattr(Nodarb_tips.objects.get( slug=n_id ), 'nos') # Nodarb_tips nosaukums
+    args['title'] = getattr( nod, 'nos') # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
-    args['treneri'] = treneri
+    args['treneri'] = treneri # Treneru saraksts
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!                DEFAULT PRINT "Jebkursh brivais" TIMESHEET                       !!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     return render_to_response( 'treneri.html', args )
+
+
+
 
 
 # !!! ANY trainer !!!
 def any(request, n_id):
+    try:
+        n = Nodarb_tips.objects.get( slug=n_id ) # Nodarbiba
+    except ObjectDoesNotExist:  # not existing --> 404
+        raise Http404
     args = {}
-
-    args['title'] = getattr(Nodarb_tips.objects.get( slug=n_id ), 'nos') # Nodarb_tips nosaukums
+    args['title'] = getattr( n, 'nos') # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
-
-    args['grafiks'] = Grafiks.objects.filter( nodarbiba = Nodarb_tips.objects.get( slug=n_id ), sakums__gt=today ).order_by('sakums') # , sakums__startswith=today 
+    args['grafiks'] = Grafiks.objects.filter( nodarbiba = n, sakums__gt = today ).order_by('sakums')
     return render_to_response( 'select.html', args )
-
 
 # !!! SPECIFIC trainer !!!
 def specific(request, n_id, t_id):
+    try:
+        n = Nodarb_tips.objects.get( slug=n_id ) # Nodarbiba
+        t = Treneris.objects.get( slug=t_id ) # Treneris
+    except ObjectDoesNotExist:  # not existing --> 404
+        raise Http404
     args = {}
-
-    args['title'] = getattr(Nodarb_tips.objects.get( slug=n_id ), 'nos') # Nodarb_tips nosaukums
+    args['title'] = getattr( n, 'nos') # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
-
-    args['grafiks'] = Grafiks.objects.filter( nodarbiba=Nodarb_tips.objects.get( slug=n_id ), treneris=Treneris.objects.get( slug=t_id ), sakums__gt=today ).order_by('sakums')
+    args['grafiks'] = Grafiks.objects.filter( nodarbiba = n, treneris = t, sakums__gt = today ).order_by('sakums')
     return render_to_response( 'select.html', args )
 
 
 # !!! Pieraksts !!!
 def pieraksts(request, g_id):
+    try:
+        nod = Grafiks.objects.get( id=g_id )
+    except ObjectDoesNotExist:  # not existing --> 404
+        raise Http404
+
     args = {}
     args['g_id'] = str(g_id)
     args['nodarb_slug'] = Grafiks.objects.get( id=g_id ).nodarbiba.slug
@@ -162,7 +184,7 @@ def pieraksts(request, g_id):
 def cancel(request, id):
     try:
         pieraksts = Pieraksti.objects.get( atteikuma_kods = id)
-    except ObjectDoesNotExist:	# not existing --> 404
+    except ObjectDoesNotExist:	# not existing code --> 404
         raise Http404
     args = {}
     args['data'] = pieraksts
@@ -174,7 +196,7 @@ def cancel(request, id):
 def cancel_ok(request, id):
     try:
         pieraksts = Pieraksti.objects.get( atteikuma_kods = id)
-    except ObjectDoesNotExist:	# not existing bilde --> 404
+    except ObjectDoesNotExist:	# not existing code --> 404
         raise Http404
     args = {}
     args['data'] = pieraksts
@@ -189,5 +211,4 @@ def cancel_ok(request, id):
     pieraksts.klients.save()
 # DELETE PIERAKSTS
     pieraksts.delete()
-
     return render_to_response( 'canceled.html', args )

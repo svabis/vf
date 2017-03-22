@@ -1,0 +1,25 @@
+{% extends 'admin.html' %}
+{% block logsys %}
+<form action="/reception/login/" method=POST>
+    <div class="col-md-5 col-md-offset-3">
+        <div class="form-group">
+                {% csrf_token %}
+                <label for"username">Lietotājs</label>
+                <input type="text" name="username" id="username" class="form-control" autofocus="autofocus">
+        </div>
+        <div class="form-group">
+                <label for="password">Parole</label>
+                <input type="password" name="password" id="password" class="form-control">
+        </div>
+{% if login_error %}
+        <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Kļūda:</span> {{ login_error }}
+        </div>
+{% endif %}
+        <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="Ielogoties">
+        </div>
+    </div>
+</form>
+{% endblock %}

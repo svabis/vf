@@ -10,24 +10,45 @@
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
 {% block javascript %}{% endblock %}
-<style>{% block style %}{% endblock %}</style>
+<style>
+body { padding-top: 70px; margin: 0; }
+.navbar-menu { font-size: 120%; }
+{% block style %}{% endblock %}</style>
 </head>
 
 <body>
-<div class="col-xl-offset-1 col-lg-offset-1 col-md-offset-1">
-
-<h1>Reģistratūras sadaļa</h1>
-
-<!-- <h3><img src="http://cdn.gbooking.ru/images/companies_logo/1465394849474Screen%20Shot%202016-06-08%20at%2017.07.07.png"> "Vesel  bas Fabrika" sporta klubs<br> -->
-<!-- <small>Latvija, R  ga, Br  v  bas gatve 214M, 3. k ^ p ^ u telpa, 2. st ^ vs, LV-1039</small></h3> -->
-
+<div class="container-fluid"><div class="row"><div class="col-sm-3 col-lg-2 col-md-3">
+<!-- LEFT MENU BAR START -->
+<nav class="navbar navbar-default navbar-fixed-side">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle sidebar-toggle" data-toggle="collapse" data-target="#sideNavbar">
+    <span>Lapas izvēlne </span>
+    <span class="glyphicon glyphicon-check"></span>
+</button>
+</div>
+<div class="collapse navbar-collapse" id="sideNavbar">
+ <ul class="nav navbar-nav navbar-menu flex-column">
+  <li><a href="/reception/"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> &nbsp;šodienas nodarbības</a></li>
+  <li><a href="/reception/plan/"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> &nbsp;plānotājs</a></li>
+<!--  <li><a href="/arhivs/"><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span> &nbsp;Video Arhīvs</a></li> -->
+<!--  <li><a href="/sm_house/"><span class="glyphicon glyphicon-signal" aria-hidden="true"></span> &nbsp;Smart House</a></li> -->
+<!--  <li><a href="/jobs/"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> &nbsp;Darbu saraksti</a></li> -->
+ </ul>
+</div>
+</nav>
+<!-- LEFT MENU BAR END -->
+</div>
+<!-- PAGE CONTENT START -->
+<div class="col-sm-9 col-lg-10 col-md-9">
 <h2>{{ title }}</h2>
 {% if subtitle %}<h3>{{ subtitle|date:"d/m/Y H:i" }}</h3>{% endif %}
-
-
 {% block content %}{% endblock %}
+{% block logsys %}{% endblock %}
 
 </div>
+<!-- PAGE CONTENT END -->
+</div></div>
+
 </body>
 </html>
 

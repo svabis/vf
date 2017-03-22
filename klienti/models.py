@@ -12,8 +12,8 @@ class Klienti(models.Model):
     pedejais_pieteikums = models.DateTimeField( default = timezone.now )
     vards = models.CharField( max_length = 50, default = '' )
     e_pasts = models.EmailField ()
-    tel = models.CharField(max_length=8)
-    pieteikuma_reizes = models.IntegerField()
+    tel = models.CharField( max_length=8 )
+    pieteikuma_reizes = models.IntegerField( default=1 )
     atteikuma_reizes = models.IntegerField( default=0 )
 
     def __unicode__(self):
