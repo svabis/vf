@@ -58,8 +58,6 @@ def tren(request, n_id):
 
 
 
-
-
 # !!! ANY trainer !!!
 def any(request, n_id):
     try:

@@ -15,8 +15,9 @@ from django.core.context_processors import csrf
 from pieraksts.models import *
 from grafiks.models import Grafiks
 
-from datetime import date
-today = date.today()
+import datetime
+#from datetime import date
+today = datetime.date.today()
 
 
 # !!!!! LOGIN !!!!!
@@ -83,12 +84,52 @@ def cancel_list(request, g_id):
 
 # ========================================================================================================
 
-# !!!!! SUPERUSER NODARBIBAS ATCELSHANA !!!!!
-def nod_list(request):
+# !!!!! SUPERUSER NODARBIBAS ATCELSHANA NEDELAS IZVELE !!!!!
+def graf_list(request):
     username = auth.get_user(request)
     if username.is_superuser:
         args = {}
-        args['nodarbibas'] = Grafiks.objects.filter(sakums__gt=today).order_by('sakums')
+        weeks = []
+        weeks.append(today)
+
+        next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
+        for _ in range (0,4): # add 4 weeks in row
+            weeks.append(next)
+            next = next + datetime.timedelta(days=7)
+
+        args['week'] = weeks
+        return render_to_response ( 'nod_plan.html', args )
+    return redirect('/reception/login/')
+
+
+# !!!!! SUPERUSER NODARBIBAS ATCELSHANA NEDELAS IZVELE !!!!!
+def week_list(request, w_id):
+    username = auth.get_user(request)
+    if username.is_superuser:
+        args = {}
+        weeks = []
+        weeks.append(today)
+        next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
+        for _ in range (0,4): # add 4 weeks in row
+            weeks.append(next)
+            next = next + datetime.timedelta(days=7)
+
+       # check if full week
+        if int(w_id) == 0:
+            days = 7 - int( today.weekday())
+        else:
+            days = 7
+
+        grafiks = []
+        for d in range (0,days): # add 7 days in row
+            try:
+                gr = Grafiks.objects.filter(sakums__startswith=( weeks[int(w_id)] + datetime.timedelta( days=d ))).order_by('sakums')
+                grafiks.append(gr)
+            except: # if day is empty
+                pass
+#                gr = []
+
+        args['data'] = grafiks
         return render_to_response ( 'nod_plan.html', args )
     return redirect('/reception/login/')
 
