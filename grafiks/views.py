@@ -41,6 +41,7 @@ def login(request):
         else:   # actions if activated hyperlink to login Form
                 return render_to_response ( 'login.html', args )
 
+# ========================================================================================================
 
 # !!!!! VISAS DIENAS NODARBIBAS !!!!!
 def main(request):
@@ -79,4 +80,15 @@ def cancel_list(request, g_id):
     args['data'] = klienti
     args['g_id'] = g_id
     return render_to_response( 'cancel_data.html', args )
+
+# ========================================================================================================
+
+# !!!!! SUPERUSER NODARBIBAS ATCELSHANA !!!!!
+def nod_list(request):
+    username = auth.get_user(request)
+    if username.is_superuser:
+        args = {}
+        args['nodarbibas'] = Grafiks.objects.filter(sakums__gt=today).order_by('sakums')
+        return render_to_response ( 'nod_plan.html', args )
+    return redirect('/reception/login/')
 

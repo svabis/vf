@@ -16,9 +16,9 @@ from grafiks.models import Grafiks, Planotajs
 from pieraksts.forms import KlientsForm
 from pieraksts.models import *
 
+from main import mail
+
 import datetime
-from datetime import date
-#today = date.today() # sakot no --> shodiena
 today = datetime.datetime.now() # sakot no --> shodiena + pulkstens (tagad)
 
 
@@ -148,6 +148,7 @@ def pieraksts(request, g_id):
                         pieraksts = Pieraksti(klients=c, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
                         pieraksts.save()
                       # Pieraksts sekmigs
+   # SEND ACCEPT MAIL WITH CANCEL CODE
                         args['msg'] = u'pieraksts sekmīgs'
 
             if new == 0:
@@ -165,6 +166,7 @@ def pieraksts(request, g_id):
 
                     pieraksts = Pieraksti(klients=new_client, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
                     pieraksts.save()
+   # SEND ACCEPT MAIL WITH CANCEL CODE
                     args['msg'] = u'pieraksts sekmīgs'
                   # Pieraksts sekmigs
                     return render_to_response( 'pieraksts.html', args )
