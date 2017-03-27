@@ -42,6 +42,11 @@ def login(request):
         else:   # actions if activated hyperlink to login Form
                 return render_to_response ( 'login.html', args )
 
+# !!!!! LOG OUT !!!!!
+def logout(request):
+    auth.logout(request)
+    return redirect('/reception/')
+
 # ========================================================================================================
 
 # !!!!! VISAS DIENAS NODARBIBAS !!!!!

@@ -18,8 +18,8 @@ urlpatterns = [
     url(r'^pieraksts/(?P<g_id>\d+)/$', 'pieraksts.views.pieraksts'), # pieraksts
 
 
-    url(r'^select/(?P<n_id>\w+|\w+\-\w+|\w+\-\w+\-\w+)/any/$', 'pieraksts.views.any'), # any trainer
-    url(r'^select/(?P<n_id>\w+|\w+\-\w+|\w+\-\w+\-\w+)/(?P<t_id>\w+|\w+\-\w+|\w+\-\w+)/$', 'pieraksts.views.specific'), # specific trainer
+    url(r'^select/(?P<n_id>\w+|\w+\-\w+|\w+\-\w+\-\w+)/any/$', 'pieraksts.views.any', name='any'), # any trainer
+    url(r'^select/(?P<n_id>\w+|\w+\-\w+|\w+\-\w+\-\w+)/(?P<t_id>\w+|\w+\-\w+|\w+\-\w+)/$', 'pieraksts.views.specific', name='specific'), # specific trainer
 
 
     url(r'^', 'pieraksts.views.home'),

@@ -128,3 +128,11 @@ STATICFILES_DIRS = (
     '/home/web/static/',
     '/var/www/static/',
 )
+
+#STATIC_ROOT = '/home/svabis/web/static/'
+#STATIC_ROOT = '/kuvalda/static/'
+STATIC_URL = '/static/'
+
+#MEDIA_ROOT = '/home/svabis/web/media/'
+MEDIA_ROOT = '/home/vfab/media/'
+MEDIA_URL = '/media/'

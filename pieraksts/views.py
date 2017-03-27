@@ -29,6 +29,18 @@ def home(request):
     args['nodarbibas'] = Nodarb_tips.objects.filter( redz = True ) # Atlasa redzamas nodarbibas
     return render_to_response( 'nodarb.html', args )
 
+# !!!!! TRENERU LIST !!!!!
+def trener_list( n_id ):
+    nod = Nodarb_tips.objects.get( slug=n_id ) # Nodarbiba
+    treneri_rel = nod.n.all() #nodarbiba(slug) ... n-relacija ... all() ... visi objekti
+    treneri = []
+
+    if treneri_rel.count() > 1:
+       treneri.append('any')
+    for t in treneri_rel:
+       treneri.append(getattr( t, 'treneris') ) # relaciju objektu parametrs "Treneris"
+
+    return treneri
 
 # !!! Nodarbibas izvele !!!
 def tren(request, n_id):
@@ -37,25 +49,14 @@ def tren(request, n_id):
     except ObjectDoesNotExist:  # not existing --> 404
         raise Http404
 
-    args = {}
-    treneri_rel = nod.n.all() #nodarbiba(slug) ... n-relacija ... all() ... visi objekti
-    treneri = []
-    for t in treneri_rel:
-       treneri.append(getattr( t, 'treneris') ) # relaciju objektu parametrs "Treneris"
+    if len(trener_list( n_id )) > 1:
+         return redirect( 'any', n_id=n_id) # ===> ANY TRAINER
 
-    if len(treneri) > 1:
-        args['any'] = True # ja vairaki tad "jebkursh brivais"
-
-    args['title'] = getattr( nod, 'nos') # Nodarb_tips nosaukums
-    args['nodarb_slug'] = n_id
-    args['treneri'] = treneri # Treneru saraksts
-
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# !!!                DEFAULT PRINT "Jebkursh brivais" TIMESHEET                       !!!
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    return render_to_response( 'treneri.html', args )
-
+#    args = {}
+#    args['title'] = getattr( nod, 'nos') # Nodarb_tips nosaukums
+#    args['nodarb_slug'] = n_id
+#    args['treneri'] = treneri # Treneru saraksts
+    return redirect( 'specific', n_id=n_id, t_id=trener_list(n_id)[0].slug ) # ===> SPECIFIC TRAINER
 
 
 # !!! ANY trainer !!!
@@ -67,6 +68,7 @@ def any(request, n_id):
     args = {}
     args['title'] = getattr( n, 'nos') # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
+    args['treneri'] = trener_list( n_id )
     args['grafiks'] = Grafiks.objects.filter( nodarbiba = n, sakums__gt = today ).order_by('sakums')
     return render_to_response( 'select.html', args )
 
@@ -80,6 +82,7 @@ def specific(request, n_id, t_id):
     args = {}
     args['title'] = getattr( n, 'nos') # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
+    args['treneri'] = trener_list( n_id )
     args['grafiks'] = Grafiks.objects.filter( nodarbiba = n, treneris = t, sakums__gt = today ).order_by('sakums')
     return render_to_response( 'select.html', args )
 

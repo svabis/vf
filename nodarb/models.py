@@ -24,6 +24,7 @@ class Treneris(models.Model):
     vards = models.CharField( max_length = 100 )
     slug = models.SlugField( unique = True )
     apraksts = models.TextField( default = 'apraksts' )
+    avatar = models.ImageField( blank = True, null=True, upload_to = "treneri/" )
 
     def __unicode__(self):
         return u'%s' % (self.vards)

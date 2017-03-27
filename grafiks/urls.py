@@ -14,6 +14,7 @@ urlpatterns = [
 
 # Login
     url(r'^login/', 'grafiks.views.login'),
+    url(r'^logout/', 'grafiks.views.logout'),
 
 # Grafika izmainjas
     url(r'^plan/(?P<w_id>\d+)/', 'grafiks.views.week_list'),
