@@ -3,26 +3,50 @@
 
 {% block content %}
 
-<h3>{{ laiks|date:"H:i d/m/Y" }}</h3>
+<div class="row">
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+  <a href="/tren/{{ nodarb_slug }}/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="font-size:2em; margin-top:20px;"></span></a>
+ </div>
+ <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+  <h2>{{ title }} - {{ laiks|date:"H:i - d/m/Y" }}</h2>
+ </div>
+</div>
 
-<a href="/tren/{{ nodarb_slug }}/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br><br>
+<div class="modal fade" id="Noteikumi" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
+ <center><h3>Online rezervācijas sistēmas lietošanas noteikumi.</h3></center>
+</div>
+<div class="modal-body">
+ <h4>Noteikumos lietotie termini </h4>
+ <p><strong>Uzņēmums</strong> – komersants, kas personām, kuras izrādījušas interesi par tā pakalpojumiem  nosūta atgādinājuma informāciju e-pasta veidā. </p>
+ <p><strong>Klients</strong> – Uzņēmuma klients – fiziska persona, kura izmantojot online rezervēšanas platformu elektroniskā formātā veic Uzņēmuma pakalpojumu rezervēšanu. </p>
+<hr>
+ <p>2. Pamatprincipi </p>
+ <p class="text-justify">2.1. Noteikumi nosaka Uzņēmuma un Klienta tiesības, pienākumus un atbildību. </p>
+ <p class="text-justify">2.2. Klients veicot online rezervēšanas platformā Uzņēmuma piedāvāto pakalpojuma rezervāciju, pierakstoties uz nodarbībām, ievada platformas atbilstošā laukā savu Vārdu, Uzvārdu, tālruņa numuru un unikālu e-pasta adresi. Papildus tam Klients veic atzīmi platformas piedāvātajā laukā, ar to izsakot piekrišanu, ka uz viņa ievadīto Telefona numuru tiks sūtīti SMS paziņojumi saistībā ar izmaiņām Uzņēmuma pakalpojumos. Uz norādīto e-pasta adresi Klients saņem informāciju par nodarbību, uz kuru ir veicis reģistrēšanos kā arī saiti, uz kuras nospiežot, iespējams atcelt reģistrāciju.</p>
+ <p class="text-justify">2.3. Veicot Noteikumu 2.punktā norādītās darbības informācija par Klientu tiek ievadīta Uzņēmuma datu bāzē, un Uzņēmums ir tiesīgs Klientam sūtīt SMS paziņojumus saistībā ar Uzņēmuma pakalpojumiem.</p>
+ <p class="text-justify">2.4. Uzņēmumam ir tiesības vienpusēji izdarīt grozījumus vai papildinājumus Noteikumos, tos publicējot online rezervēšanas platformā.</p>
+</div>
+<div class="modal-footer">
+ <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
+</div></div></div></div>
 
 <form action="/pieraksts/{{ g_id }}/" method=POST>
 {% if msg %}
-        <div class="alert alert-success" role="alert">
-                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                <strong> {{ msg }}</strong>
-        </div>
+<div class="alert alert-success" role="alert">
+ <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+ <strong> {{ msg }}</strong>
+</div>
 {% endif %}
 {% if error %}
-        <div class="alert alert-danger" role="alert">
-                <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
-                <strong> {{ error_msg }}</strong>
-        </div>
+<div class="alert alert-danger" role="alert">
+ <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+ <strong> {{ error_msg }}</strong>
+</div>
 {% endif %}
 {% csrf_token %}{{ form }}
-	<div class="form-group" style="margin-top: 10px;">
-		<input class="btn btn-primary" type="submit" value="Pierakstīties">
-	</div>
+<div class="form-group" style="margin-top: 10px;">
+ <input class="btn btn-primary" type="submit" value="Pierakstīties">
+ <button type="button" class="btn btn" data-toggle="modal" data-target="#Noteikumi">Noteikumi</button></a>
+</div>
 </form>
 {% endblock %}

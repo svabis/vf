@@ -1,0 +1,20 @@
+{% extends 'main.html' %}
+{% load staticfiles %}
+{% block style %}{% endblock %}
+
+{% block content %}
+<div class="row">
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+  <a href="/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="font-size:2em; margin-top:20px;"></span></a>
+ </div>
+ <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+  <h2>Pieraksts ir sekmīgi izdevies</h2>
+ </div>
+</div>
+<div class="container">
+ <h3>Nodarbība:<small> {{ pieraksts.nodarbiba }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ pieraksts.nodarbiba.sakums|date:"d/m/Y H:i" }}</small></h3>
+ <h4>Vārds Uzvārds:<small> {{ vards }}</small></h4>
+ <h4>E-pasts:<small> {{ epasts }}</small></h4>
+ <h4>Tālrunis:<small> {{ telefons }}</small></h4>
+</div>
+{% endblock %}

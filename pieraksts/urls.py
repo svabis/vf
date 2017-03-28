@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^select/(?P<n_id>\w+|\w+\-\w+|\w+\-\w+\-\w+)/(?P<t_id>\w+|\w+\-\w+|\w+\-\w+)/$', 'pieraksts.views.specific', name='specific'), # specific trainer
 
 
-    url(r'^', 'pieraksts.views.home'),
+    url(r'^', 'pieraksts.views.home', name='main'),
 
 ]
 

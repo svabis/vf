@@ -21,4 +21,4 @@ class KlientsForm(forms.Form):
          widget = forms.TextInput( attrs={'class': 'form-control', 'size': 15, 'title': 'tālrunis'}))
 
     chk = forms.BooleanField( required = True, label ='', error_messages = {'required': ugettext_lazy(u'Jāpiekrīt Noteikumiem')},
-         widget = forms.CheckboxInput( attrs={'class':'form-control', 'align':'left'}))
+         widget = forms.CheckboxInput( attrs={'class':'noteikumi'}))
