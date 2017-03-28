@@ -58,7 +58,6 @@ def home(request):
     args['nodarbibas'] = Nodarb_tips.objects.filter( redz = True ).order_by('nos') # Atlasa redzamas nodarbibas
     return render_to_response( 'nodarb.html', args )
 
-
 # !!! Nodarbibas izvele !!!
 def tren(request, n_id):
     try:
@@ -83,6 +82,7 @@ def any(request, n_id):
     args['nodarb_slug'] = n_id
     args['treneri'] = trener_list( n_id )
     args['grafiks'] = Grafiks.objects.filter( nodarbiba = n, sakums__gt = today ).order_by('sakums')
+    args['back'] = False
     return render_to_response( 'select.html', args )
 
 # !!! SPECIFIC trainer !!!
@@ -97,6 +97,7 @@ def specific(request, n_id, t_id):
     args['nodarb_slug'] = n_id
     args['treneri'] = trener_list( n_id )
     args['grafiks'] = Grafiks.objects.filter( nodarbiba = n, treneris = t, sakums__gt = today ).order_by('sakums')
+    args['back'] = False
     return render_to_response( 'select.html', args )
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -112,13 +113,15 @@ def pieraksts(request, g_id):
     except ObjectDoesNotExist:  # not existing --> 404
         return redirect ('main')
 
+    form = KlientsForm
+
     args = {}
     args['g_id'] = str(g_id)
     args['nodarb_slug'] = nod.nodarbiba.slug
     args['title'] = nod.nodarbiba.nos + ' - ' + nod.treneris.vards
     args['laiks'] = nod.sakums
-    form = KlientsForm
     args['form'] = form
+    args['back'] = True
     args.update(csrf(request)) # ADD CSRF TOKEN
 
     if request.POST:
@@ -171,7 +174,7 @@ def pieraksts(request, g_id):
                         mail.send_email(new_email, nod.nodarbiba.nos, pieraksts.atteikuma_kods)
                         pieraksts.save()
                  # Pieraksts sekmigs
-                        args['pieraksts'] = pieraksts
+                        args['back'] = False
                         return render_to_response( 'success.html', args )
 
             if error == True:
@@ -197,7 +200,7 @@ def pieraksts(request, g_id):
                     mail.send_email(new_email, nod.nodarbiba.nos, pieraksts.atteikuma_kods)
                     pieraksts.save()
              # Pieraksts sekmigs
-                    args['pieraksts'] = pieraksts
+                    args['back'] = False
                     return render_to_response( 'success.html', args )
 
             if error == True:
