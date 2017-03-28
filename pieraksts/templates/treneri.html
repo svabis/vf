@@ -21,16 +21,16 @@ p{ padding:0px; margin:0px; text-align: left; }
 
 {% block content %}
 <div class="row">
- <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black">
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
   <a href="/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="font-size:2em; margin-top:20px;"></span></a>
  </div>
- <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10" style="border:1px solid black">
+ <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
   <h2>{{ title }}</h2>
  </div>
 </div>
 
 <div class="row">
- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="border:1px solid black">
+ <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
 
 {% for t in treneri %}
 <div id="tren">
@@ -48,7 +48,7 @@ p{ padding:0px; margin:0px; text-align: left; }
 {% endfor %}
 
  </div>
- <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="border:1px solid black">
+ <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
 {% block select %}{% endblock %}
  </div>
 </div>

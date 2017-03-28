@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'klienti',
     'grafiks',
     'pieraksts',
+    'django_cleanup',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -130,7 +131,7 @@ STATICFILES_DIRS = (
 )
 
 #STATIC_ROOT = '/home/svabis/web/static/'
-#STATIC_ROOT = '/kuvalda/static/'
+#STATIC_ROOT = '/home/vfab/static/'
 STATIC_URL = '/static/'
 
 #MEDIA_ROOT = '/home/svabis/web/media/'

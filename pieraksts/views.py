@@ -21,14 +21,6 @@ from main import mail
 import datetime
 today = datetime.datetime.now() # sakot no --> shodiena + pulkstens (tagad)
 
-
-# !!! Visas nodarbibas !!!
-def home(request):
-    args = {}
-    args['title'] = 'Nodarbības'
-    args['nodarbibas'] = Nodarb_tips.objects.filter( redz = True ) # Atlasa redzamas nodarbibas
-    return render_to_response( 'nodarb.html', args )
-
 # !!!!! TRENERU LIST !!!!!
 def trener_list( n_id ):
     nod = Nodarb_tips.objects.get( slug=n_id ) # Nodarbiba
@@ -39,8 +31,32 @@ def trener_list( n_id ):
        treneri.append('any')
     for t in treneri_rel:
        treneri.append(getattr( t, 'treneris') ) # relaciju objektu parametrs "Treneris"
-
     return treneri
+
+# !!!!! NODARBIBAS LAIKU OVERLAP CHEKER !!!!!
+def nod_check(n_id, k_id):
+# ritina cauri Klients.Pieraksti
+# katram njem [start, start + timedelta(min=nodarb.ilgums)]
+
+# 1. parbauda vai n_id.start ieklaujas laika kadam --> False
+# 2. parbauda vai (n_id.start + timedelta(min=nodarb.ilgums) ieklaujas --> False
+# 3. n_id sakas pirms un beidzas pec parbaudama --> False
+
+# ELSE --> True
+
+    if False:
+        return False
+    return True
+
+# =================================================================================================================
+
+# !!! Visas nodarbibas !!!
+def home(request):
+    args = {}
+    args['title'] = 'Nodarbības'
+    args['nodarbibas'] = Nodarb_tips.objects.filter( redz = True ).order_by('nos') # Atlasa redzamas nodarbibas
+    return render_to_response( 'nodarb.html', args )
+
 
 # !!! Nodarbibas izvele !!!
 def tren(request, n_id):
@@ -51,13 +67,9 @@ def tren(request, n_id):
 
     if len(trener_list( n_id )) > 1:
          return redirect( 'any', n_id=n_id) # ===> ANY TRAINER
-
-#    args = {}
-#    args['title'] = getattr( nod, 'nos') # Nodarb_tips nosaukums
-#    args['nodarb_slug'] = n_id
-#    args['treneri'] = treneri # Treneru saraksts
     return redirect( 'specific', n_id=n_id, t_id=trener_list(n_id)[0].slug ) # ===> SPECIFIC TRAINER
 
+# =================================================================================================================
 
 # !!! ANY trainer !!!
 def any(request, n_id):
@@ -86,6 +98,11 @@ def specific(request, n_id, t_id):
     args['grafiks'] = Grafiks.objects.filter( nodarbiba = n, treneris = t, sakums__gt = today ).order_by('sakums')
     return render_to_response( 'select.html', args )
 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!      INSERT BRAIN HERE       !!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# =================================================================================================================
 
 # !!! Pieraksts !!!
 def pieraksts(request, g_id):
@@ -136,7 +153,10 @@ def pieraksts(request, g_id):
                     if getattr(Grafiks.objects.get( id=g_id ), 'vietas') == 0: # IF VIETAS=0 --> ERROR
                         error = True
                         args['error_msg'] = u' Atvainojiet visas nodarbības vietas jau ir aizņemtas'
-                    else: # VIETAS > 0 --> Pieraksts
+                    if nod_check(g_id, c) == False: # False --> jau ir pieraksts uz sho laiku
+                        error = True
+                        args['error_msg'] = u' Jūs uz šo laiku jau esat pierakstījies'
+                    if error == False: # VIETAS > 0, PIERAKSTI NEPARKLAJAS --> Pieraksts
                         c.pieteikuma_reizes += 1
                         c.pedejais_pieteikums = datetime.datetime.now()
                         c.save()
@@ -152,6 +172,11 @@ def pieraksts(request, g_id):
                         pieraksts.save()
                  # Pieraksts sekmigs
                         args['msg'] = u'pieraksts sekmīgs'
+
+            if error == True:
+                args['error'] = True
+                args['form'] = form     # ERROR MESSAGE
+                return render_to_response( 'pieraksts.html', args )
 
             if new == 0:
            # Jauns klients
@@ -184,6 +209,7 @@ def pieraksts(request, g_id):
             return render_to_response( 'pieraksts.html', args )
     return render_to_response( 'pieraksts.html', args )
 
+# =================================================================================================================
 
 # !!!!! ATCELT !!!!!
 def cancel(request, id):

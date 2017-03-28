@@ -51,14 +51,30 @@ def logout(request):
 
 # !!!!! VISAS DIENAS NODARBIBAS !!!!!
 def main(request):
-    if auth.get_user(request).get_username() == '': # IF NO USER --> 
+    if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
-    sodien = Grafiks.objects.filter(sakums__startswith=today).order_by('sakums')
-    args = {}
-    args['title'] = today
-    args['data'] = sodien
-    return render_to_response( 'day_data.html', args )
+    return redirect ('day_list', d_id=7)
 
+
+def day_list(request, d_id):
+    if auth.get_user(request).get_username() == '': # IF NO USER -->
+        return redirect ("/reception/login/")
+
+    dienas = [-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7] # DIENAS 0 --> SHODIENA
+    datumi = []
+
+    datums = today + datetime.timedelta( days=dienas[int(d_id)] ) # datums
+    dienas_nodarb = Grafiks.objects.filter(sakums__startswith=datums).order_by('sakums') # datuma nodarbibas
+    args = {}
+
+    for d in range(0,15):
+        datumi.append(today + datetime.timedelta( days=dienas[d] ))
+
+    args['title'] = datums
+    args['shodiena'] = today
+    args['data'] = dienas_nodarb
+    args['datumi'] = datumi
+    return render_to_response( 'day_data.html', args )
 
 # !!!!! KONKRETA DIENAS NODARBIBA !!!!!
 def nod_list(request, g_id):

@@ -11,6 +11,7 @@ urlpatterns = [
 # Nodarbibas
     url(r'^nod/(?P<g_id>\d+)/', 'grafiks.views.nod_list'),
     url(r'^cancel/(?P<g_id>\d+)/', 'grafiks.views.cancel_list'),
+    url(r'^day/(?P<d_id>\d+)/', 'grafiks.views.day_list', name='day_list'),
 
 # Login
     url(r'^login/', 'grafiks.views.login'),
