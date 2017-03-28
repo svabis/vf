@@ -1,8 +1,9 @@
 {% extends 'admin.html' %}
-{% block style %}{% endblock %}
+{% block style %}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
+{% endblock %}
 
 {% block content %}
-
 {% if week %}
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
@@ -16,11 +17,21 @@
 </tr>
 {% endfor %}
 </tbody>
-
 {% else %}
 
-<a href="/reception/plan/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br>
 
+{% for dat in data %}{% for d in dat %}
+<div class="modal fade" id="Graf{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
+ <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:1.5em;"></span>
+ <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
+<div class="modal-body"><h4>{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h4><h4>{{ d.sakums|date:"d/M/Y H:i" }}</h4></div>
+<div class="modal-footer">
+ <a href="/reception/plan/{{ w_id }}/cancel/{{ d.id }}/"><button type="button" class="btn btn-danger">Atcelt nodarbību</button></a>
+ <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
+</div></div></div></div>
+{% endfor %}{% endfor %}
+
+<a href="/reception/plan/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br>
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
 <thead><tr>
@@ -36,13 +47,13 @@
 <tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="7"></td></tr>
 {% for d in dat %}
 <tr>
- <td><input type="checkbox" value="{{ forloop.counter0 }}" id="d{{ forloop.counter0 }}" onclick=""></td>
+ <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Graf{{ d.id }}">Atcelt nodarbību</button></td>
  <td>{{ d.sakums|date:"d/m" }}</td>
- <td><a href="/reception/nod/{{ d.id }}/">{{ d.sakums|date:"H:i" }}</a></td>
- <td><a href="/reception/nod/{{ d.id }}/">{{ d.nodarbiba }}</a></td>
- <td><a href="/reception/nod/{{ d.id }}/">{{ d.treneris }}</a></td>
- <td><a href="/reception/nod/{{ d.id }}/">{{ d.telpa }}</a></td>
- <td><a href="/reception/nod/{{ d.id }}/">{{ d.vietas }}</a></td>
+ <td>{{ d.sakums|date:"H:i" }}</td>
+ <td>{{ d.nodarbiba }}</td>
+ <td>{{ d.treneris }}</td>
+ <td>{{ d.telpa }}</td>
+ <td>{{ d.vietas }}</td>
 </tr>
 {% endfor %}{% endfor %}{% endif %}
 </tbody>

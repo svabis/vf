@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT,}),
 
 # ADMIN
-    url(r'^admin12345/', include(admin.site.urls)),
+    url(r'^adminlucy12345/', include(admin.site.urls)),
 
 # RECEPTION
     url(r'^reception/', include('grafiks.urls')),

@@ -2,6 +2,7 @@
 {% block style %}
 .nav-tabs > li > a{ color: #000; background-color:#eee; }
 .nav-tabs > li > a:hover{ background-color: #ccc !important; color:#fff; }
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
 {% endblock %}
 
 {% block content_header %}
@@ -10,7 +11,7 @@
 {% if d == title %}<li class="active">{% else %}<li>{% endif %}
 
 {% if d == shodiena and d != title %}
-<a href="/reception/day/{{ forloop.counter0 }}/" style="background-color:#00ff00;">{{ d|date:"d/m" }}</a></li>{% else %}
+<a href="/reception/day/{{ forloop.counter0 }}/" style="background-color:#aaa;">{{ d|date:"d/m" }}</a></li>{% else %}
 <a href="/reception/day/{{ forloop.counter0 }}/">{{ d|date:"d/m" }}</a></li>{% endif %}{% endfor %}
 </ul></div></div>
 {% endblock %}

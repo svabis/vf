@@ -16,6 +16,7 @@ body { padding-top: 70px; margin: 0; }
 {% block style %}{% endblock %}</style>
 </head>
 
+{% if super %}
 <body>
 <div class="container-fluid"><div class="row"><div class="col-sm-3 col-lg-2 col-md-3">
 <!-- LEFT MENU BAR START -->
@@ -28,8 +29,9 @@ body { padding-top: 70px; margin: 0; }
 </div>
 <div class="collapse navbar-collapse" id="sideNavbar">
  <ul class="nav navbar-nav navbar-menu flex-column">
-  <li><a href="/reception/"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> &nbsp;Šodienas nodarbības</a></li>
-  <li><a href="/reception/plan/"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> &nbsp;Nodarbības (admin)</a></li>
+  <li><a href="/reception/"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> &nbsp;Nodarbību pieraksti</a></li>
+  <li><a href="/reception/plan/"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> &nbsp;Nodarbību dzēšana</a></li>
+  <li><a href="/reception/add/"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> &nbsp;Pievienot nodarbību</a></li>
   <li><a href="/reception/logout/"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> &nbsp;Iziet no sistēmas</a></li>
 <!--  <li><a href="/sm_house/"><span class="glyphicon glyphicon-signal" aria-hidden="true"></span> &nbsp;Smart House</a></li> -->
 <!--  <li><a href="/jobs/"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> &nbsp;Darbu saraksti</a></li> -->
@@ -40,6 +42,10 @@ body { padding-top: 70px; margin: 0; }
 </div>
 <!-- PAGE CONTENT START -->
 <div class="col-sm-9 col-lg-10 col-md-9">
+{% else %}
+<div class="container">
+{% endif %}
+
 <h2>{{ title }}</h2>
 {% if subtitle %}<h3>{{ subtitle|date:"d/m/Y H:i" }}</h3>{% endif %}
 
@@ -48,8 +54,11 @@ body { padding-top: 70px; margin: 0; }
 {% block logsys %}{% endblock %}
 
 </div>
+
+{% if super %}
 <!-- PAGE CONTENT END -->
 </div></div>
+{% endif %}
 
 </body>
 </html>

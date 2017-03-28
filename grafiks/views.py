@@ -15,8 +15,9 @@ from django.core.context_processors import csrf
 from pieraksts.models import *
 from grafiks.models import Grafiks
 
+from main import mail
+
 import datetime
-#from datetime import date
 today = datetime.date.today()
 
 
@@ -33,6 +34,7 @@ def login(request):
 
                 if user is not None:    # auth return None if this user does not exit, if not then:
                         auth.login( request, user )     # authorizate user from Form
+                        args['super'] = True
 		        return redirect ("/reception/")
 
                 else:   # if user does not exist:
@@ -59,13 +61,15 @@ def main(request):
 def day_list(request, d_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
+    args = {}
+    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+        args['super'] = True
 
     dienas = [-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7] # DIENAS 0 --> SHODIENA
     datumi = []
 
     datums = today + datetime.timedelta( days=dienas[int(d_id)] ) # datums
     dienas_nodarb = Grafiks.objects.filter(sakums__startswith=datums).order_by('sakums') # datuma nodarbibas
-    args = {}
 
     for d in range(0,15):
         datumi.append(today + datetime.timedelta( days=dienas[d] ))
@@ -81,13 +85,16 @@ def nod_list(request, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
+    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+        args['super'] = True
+
     args['title'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
     args['subtitle'] = getattr(Grafiks.objects.get( id=g_id ), 'sakums')
 
     klienti = Grafiks.objects.get(id=g_id).nod.all()
     args['data'] = klienti
     args['g_id'] = g_id
-    return render_to_response( 'kli_data.html', args )
+    return render_to_response( 'day_kli_data.html', args )
 
 
 # !!!!! NODARBIBAS ATEIKUMI !!!!!
@@ -95,13 +102,16 @@ def cancel_list(request, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
+    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+        args['super'] = True
+
     args['title'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
     args['subtitle'] = getattr(Grafiks.objects.get( id=g_id ), 'sakums')
 
     klienti = Grafiks.objects.get(id=g_id).ateikt.all()
     args['data'] = klienti
     args['g_id'] = g_id
-    return render_to_response( 'cancel_data.html', args )
+    return render_to_response( 'day_cancel_data.html', args )
 
 # ========================================================================================================
 
@@ -110,6 +120,7 @@ def graf_list(request):
     username = auth.get_user(request)
     if username.is_superuser:
         args = {}
+        args['super'] = True
         weeks = []
         weeks.append(today)
 
@@ -128,6 +139,7 @@ def week_list(request, w_id):
     username = auth.get_user(request)
     if username.is_superuser:
         args = {}
+        args['super'] = True
         weeks = []
         weeks.append(today)
         next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
@@ -149,8 +161,38 @@ def week_list(request, w_id):
             except: # if day is empty
                 pass
 #                gr = []
-
+        args['w_id'] = w_id
         args['data'] = grafiks
         return render_to_response ( 'nod_plan.html', args )
     return redirect('/reception/login/')
 
+def graf_cancel(request, w_id, g_id):
+    username = auth.get_user(request)
+    if username.is_superuser:
+        args = {}
+        args['super'] = True
+        nodarb = Grafiks.objects.get(id=g_id)
+        klienti = nodarb.nod.all()
+        for k in klienti:
+            try:
+# EMAIL
+                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos)
+                #SEND MAIL
+            except:
+                pass
+
+        nodarb.delete()
+        return redirect ( 'nod_plan', w_id=w_id )
+    return redirect('/reception/login/')
+
+# ========================================================================================================
+
+# !!!!! SUPERUSER PIEVIENOT GRAFIKAM JAUNU NODARBIBU !!!!!
+def graf_add(request):
+    username = auth.get_user(request)
+    if username.is_superuser:
+        args = {}
+        args['super'] = True
+
+        return True
+    return redirect('/reception/login/')

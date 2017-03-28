@@ -38,9 +38,10 @@ def nod_check(n_id, k_id):
 # ritina cauri Klients.Pieraksti
 # katram njem [start, start + timedelta(min=nodarb.ilgums)]
 
-# 1. parbauda vai n_id.start ieklaujas laika kadam --> False
-# 2. parbauda vai (n_id.start + timedelta(min=nodarb.ilgums) ieklaujas --> False
-# 3. n_id sakas pirms un beidzas pec parbaudama --> False
+# 1. parbauda vai jau nav pieraksts uz sho --> False
+# 2. parbauda vai n_id.start ieklaujas laika kadam --> False
+# 3. parbauda vai (n_id.start + timedelta(min=nodarb.ilgums) ieklaujas --> False
+# 4. n_id sakas pirms un beidzas pec parbaudama --> False
 
 # ELSE --> True
 
