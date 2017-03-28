@@ -4,11 +4,14 @@
 {% block content %}
 
 <div class="row">
- <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-  <a href="/tren/{{ nodarb_slug }}/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="font-size:2em; margin-top:20px;"></span></a>
+ <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1" style="border:1px solid black;">
+  <a href="/tren/{{ nodarb_slug }}/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true" style="font-size:2em; margin-top:5px;"></span></a>
  </div>
- <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
-  <h2>{{ title }} - {{ laiks|date:"H:i - d/m/Y" }}</h2>
+ <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="border:1px solid black;">
+  <h2 style="margin-top:5px;">{{ title }}</h2>
+ </div>
+ <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5" style="border:1px solid black;">
+  <h2 style="margin-top:5px;">{{ laiks|date:"H:i d/m/Y" }}</h2>
  </div>
 </div>
 
@@ -30,6 +33,10 @@
  <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
 </div></div></div></div>
 
+<div class="row" style="border:1px solid black;">
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;"></div>
+ <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="border:1px solid black;">
+
 <form action="/pieraksts/{{ g_id }}/" method=POST>
 {% if msg %}
 <div class="alert alert-success" role="alert">
@@ -49,4 +56,6 @@
  <button type="button" class="btn btn" data-toggle="modal" data-target="#Noteikumi">Noteikumi</button></a>
 </div>
 </form>
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;"></div>
+</div>
 {% endblock %}
