@@ -4,25 +4,16 @@
 {% block style %}
 span{ position:absolute; width:100%; height:100%; top:0; left: 0; z-index: 1; background-image: url( {% static 'empty.png' %} ); }
 p{ padding:0px; margin:0px; text-align: left; }
+#tren{ position: relative; width: 100%; height:65px; padding: 0px 0px 0px 65px; margin: 1px 0px 0px 0px; border: 1px solid black; background-color:#ccc; float:left; overflow:hidden; }
 
-#tren{
- position: relative;
- width: 108%; height:65px;
- padding: 0px 0px 0px 65px;
- margin: 1px 0px 0px -10px;
- border: 1px solid black;
- background-color:#ccc;
- float:left;
- overflow:hidden;
-}
+#nodarb{ position: relative; width: 100%; height:60px; padding: 0px 0px 0px 0px; margin: 0px 0px 0px 0px; border: 1px solid black; background-color:#ddd; float:left; overflow:hidden; }
 
 #avatar{ position:absolute; width:60px; height:60px; left:2px; bottom:2px; z-index:0; }
 {% endblock %}
 
 {% block content %}
-<div class="row">
- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="border:1px solid black;">
 
+<div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding:0px 5px 0px 5px;">
 {% for t in treneri %}
 <div id="tren">
 {% if t == "any" %}
@@ -37,25 +28,27 @@ p{ padding:0px; margin:0px; text-align: left; }
 {% endif%}
 </div>
 {% endfor %}
-
- </div>
- <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8" style="border:1px solid black;">
-  <div class="row">
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="border:1px solid black;"><span class="glyphicon glyphicon-arrow-left" style="text-align:left;" aria-hidden="true"></span></div>
-    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="border:1px solid black;"><span class="glyphicon glyphicon-arrow-right" style="text-align:right;"aria-hidden="true"></span></div>
-  </div>
-  <div class="row">
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">P</div>
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">O</div>
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">T</div>
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">C</div>
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">Pk</div>
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">S</div>
-  </div>
-  <div class="row">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border:1px solid black;">{% block select %}{% endblock %}</div>
-  </div>
- </div>
 </div>
 
+<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+ <div class="row">
+   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+    <a href="#"><span class="glyphicon glyphicon-arrow-left" style="text-align:left; font-size:1.5em; color:#444;" aria-hidden="true"></span></a>
+   </div>
+   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2  col-lg-offset-8 col-md-offset-8 col-sm-offset-8 col-xs-offset-8">
+    <a href="#"><span class="glyphicon glyphicon-arrow-right" style="text-align:right; font-size:1.5em; color:#444;"aria-hidden="true"></span></a>
+   </div>
+ </div>
+ <div class="row">
+   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">P</div>
+   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">O</div>
+   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">T</div>
+   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">C</div>
+   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">Pk</div>
+   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">S</div>
+ </div>
+ <div class="row">
+   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border:1px solid black;">{% block select %}{% endblock %}</div>
+ </div>
+</div>
 {% endblock %}

@@ -2,6 +2,34 @@
 
 {% block select %}
 
+<div class="row">
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">
+DIENA
+
+ </div>
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">
+DIENA
+
+ </div>
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">
+DIENA
+
+ </div>
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">
+DIENA
+
+ </div>
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">
+DIENA
+
+ </div>
+ <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">
+DIENA
+
+ </div>
+</div>
+
+
 {% for g in grafiks %}
 <a href="/pieraksts/{{ g.id }}/">{{ g }} | {{ g.sakums|date:"H:i d/m/Y" }} | {{ g.treneris }} | {{ g.telpa }} | {{ g.vietas }}</a><br>
 {% endfor %}

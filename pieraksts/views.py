@@ -122,6 +122,7 @@ def pieraksts(request, g_id):
     args['laiks'] = nod.sakums
     args['form'] = form
     args['back'] = True
+    args['time'] =True
     args.update(csrf(request)) # ADD CSRF TOKEN
 
     if request.POST:
