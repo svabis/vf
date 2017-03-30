@@ -10,11 +10,11 @@
  <p><strong>Uzņēmums</strong> – komersants, kas personām, kuras izrādījušas interesi par tā pakalpojumiem  nosūta atgādinājuma informāciju e-pasta veidā. </p>
  <p><strong>Klients</strong> – Uzņēmuma klients – fiziska persona, kura izmantojot online rezervēšanas platformu elektroniskā formātā veic Uzņēmuma pakalpojumu rezervēšanu. </p>
 <hr>
- <p>2. Pamatprincipi </p>
- <p class="text-justify">2.1. Noteikumi nosaka Uzņēmuma un Klienta tiesības, pienākumus un atbildību. </p>
- <p class="text-justify">2.2. Klients veicot online rezervēšanas platformā Uzņēmuma piedāvāto pakalpojuma rezervāciju, pierakstoties uz nodarbībām, ievada platformas atbilstošā laukā savu Vārdu, Uzvārdu, tālruņa numuru un unikālu e-pasta adresi. Papildus tam Klients veic atzīmi platformas piedāvātajā laukā, ar to izsakot piekrišanu, ka uz viņa ievadīto Telefona numuru tiks sūtīti SMS paziņojumi saistībā ar izmaiņām Uzņēmuma pakalpojumos. Uz norādīto e-pasta adresi Klients saņem informāciju par nodarbību, uz kuru ir veicis reģistrēšanos kā arī saiti, uz kuras nospiežot, iespējams atcelt reģistrāciju.</p>
- <p class="text-justify">2.3. Veicot Noteikumu 2.punktā norādītās darbības informācija par Klientu tiek ievadīta Uzņēmuma datu bāzē, un Uzņēmums ir tiesīgs Klientam sūtīt SMS paziņojumus saistībā ar Uzņēmuma pakalpojumiem.</p>
- <p class="text-justify">2.4. Uzņēmumam ir tiesības vienpusēji izdarīt grozījumus vai papildinājumus Noteikumos, tos publicējot online rezervēšanas platformā.</p>
+ <p>1. Pamatprincipi </p>
+ <p class="text-justify">1.1. Noteikumi nosaka Uzņēmuma un Klienta tiesības, pienākumus un atbildību. </p>
+ <p class="text-justify">1.2. Klients veicot online rezervēšanas platformā Uzņēmuma piedāvāto pakalpojuma rezervāciju, pierakstoties uz nodarbībām, ievada platformas atbilstošā laukā savu Vārdu, Uzvārdu, tālruņa numuru un unikālu e-pasta adresi. Papildus tam Klients veic atzīmi platformas piedāvātajā laukā, ar to izsakot piekrišanu, ka uz viņa ievadīto Telefona numuru tiks sūtīti SMS paziņojumi saistībā ar izmaiņām Uzņēmuma pakalpojumos. Uz norādīto e-pasta adresi Klients saņem informāciju par nodarbību, uz kuru ir veicis reģistrēšanos kā arī saiti, uz kuras nospiežot, iespējams atcelt reģistrāciju.</p>
+ <p class="text-justify">1.3. Veicot Noteikumu 2.punktā norādītās darbības informācija par Klientu tiek ievadīta Uzņēmuma datu bāzē, un Uzņēmums ir tiesīgs Klientam sūtīt SMS paziņojumus saistībā ar Uzņēmuma pakalpojumiem.</p>
+ <p class="text-justify">1.4. Uzņēmumam ir tiesības vienpusēji izdarīt grozījumus vai papildinājumus Noteikumos, tos publicējot online rezervēšanas platformā.</p>
 </div>
 <div class="modal-footer">
  <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
@@ -53,11 +53,11 @@
   {{ form.tel }}
  </div>
  <div class="checkbox">
-  <label style="margin-left:10px;">{{ form.chk }} Piekrist noteikumiem</label><a href="#" data-toggle="modal" data-target="#Noteikumi" style="color:black;"><b> Noteikumi</b></a>
+  <label style="margin-left:10px;">{{ form.chk }} Piekrist noteikumiem</label>&nbsp;&nbsp;<a href="#" data-toggle="modal" data-target="#Noteikumi" style="color:black; text-decoration: underline;"><b>Noteikumi</b></a>
   {{ form.chk.errors }}
  </div>
- <div class="form-group" style="margin-top: 10px;">
-  <input class="btn btn-primary" type="submit" value="Pierakstīties">
+ <div class="form-group text-right" style="margin-top: 10px;">
+  <input class="btn btn-danger" type="submit" value="Pierakstīties">
  </div>
 </form>
 </div>

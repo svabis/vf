@@ -12,7 +12,6 @@ p{ padding:0px; margin:0px; text-align: left; }
 {% endblock %}
 
 {% block content %}
-
 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4" style="padding:0px 5px 0px 5px;">
 {% for t in treneri %}
 <div id="tren">
@@ -31,24 +30,6 @@ p{ padding:0px; margin:0px; text-align: left; }
 </div>
 
 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
- <div class="row">
-   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-    <a href="#"><span class="glyphicon glyphicon-arrow-left" style="text-align:left; font-size:1.5em; color:#444;" aria-hidden="true"></span></a>
-   </div>
-   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2  col-lg-offset-8 col-md-offset-8 col-sm-offset-8 col-xs-offset-8">
-    <a href="#"><span class="glyphicon glyphicon-arrow-right" style="text-align:right; font-size:1.5em; color:#444;"aria-hidden="true"></span></a>
-   </div>
- </div>
- <div class="row">
-   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">P</div>
-   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">O</div>
-   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">T</div>
-   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">C</div>
-   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">Pk</div>
-   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="border:1px solid black;">S</div>
- </div>
- <div class="row">
-   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="border:1px solid black;">{% block select %}{% endblock %}</div>
- </div>
+ <div class="row">{% block select %}{% endblock %}</div>
 </div>
 {% endblock %}
