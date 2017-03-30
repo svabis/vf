@@ -30,7 +30,8 @@ class Grafiks(models.Model):
     vietas = models.IntegerField()
 
     def __unicode__(self):
-        return self.nodarbiba.nos
+        laiks = self.sakums + timedelta(hours=3)
+        return laiks.strftime("%d/%m/%Y %H:%M") +' '+ self.nodarbiba.nos
 
 # !!! Planotajs !!!
 class Planotajs(models.Model):
