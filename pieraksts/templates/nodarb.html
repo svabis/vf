@@ -12,9 +12,9 @@ p{ padding:0px; margin:0px; text-align: left; }
 
 {% for n in nodarbibas %}
 <div class="modal fade" id="Nodarb{{ forloop.counter0 }}" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog"><div class="modal-content" data-dismiss="modal"><div class="modal-header">
- <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-</div><div class="modal-body">
+<div class="modal-dialog"><div class="modal-content" data-dismiss="modal">
+<div class="modal-body">
+ <h3 style="margin-top:5px;"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></h3>
  <h4>{{ n.apraksts }}</h4>
 </div></div></div></div>
 {% endfor %}
