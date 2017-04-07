@@ -14,7 +14,7 @@ def send_email(recipient, nodarb, timedate, code_uuid):
     # Define these once; use them twice!
     strFrom = 'info@vfabrika.lv'
     strTo = recipient
-    time = str(timedate)
+    time = timedate.strftime("%d/%m/%Y %H:%M")
     code = 'http://servax.zapto.org:8000/atcelt/' + str(code_uuid) + '/'
 
 # Create the root message and fill in the from, to, and subject headers
@@ -64,7 +64,7 @@ def send_cancel(recipient, datums, nos):
     # Define these once; use them twice!
     strFrom = 'info@vfabrika.lv'
     strTo = recipient
-    time = str(datums)
+    time = datums.strftime("%d/%m/%Y %H:%M")
 #    code = 'http://servax.zapto.org:8000/atcelt/' + str(code_uuid) + '/'
 
 # Create the root message and fill in the from, to, and subject headers
