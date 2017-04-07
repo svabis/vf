@@ -31,7 +31,8 @@ class Grafiks(models.Model):
 
     def __unicode__(self):
         laiks = self.sakums + timedelta(hours=3)
-        return laiks.strftime("%d/%m/%Y %H:%M") +' '+ self.nodarbiba.nos
+#        return laiks.strftime("%d/%m/%Y %H:%M") +' '+ self.nodarbiba.nos
+        return self.nodarbiba.nos
 
 # !!! Planotajs !!!
 class Planotajs(models.Model):

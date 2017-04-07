@@ -75,7 +75,7 @@ def day_list(request, d_id):
         datumi.append(today + datetime.timedelta( days=dienas[d] ))
 
     args['title'] = datums
-    args['shodiena'] = today
+    args['shodiena'] = datetime.date.today()
     args['data'] = dienas_nodarb
     args['datumi'] = datumi
     return render_to_response( 'day_data.html', args )
@@ -175,9 +175,8 @@ def graf_cancel(request, w_id, g_id):
         klienti = nodarb.nod.all()
         for k in klienti:
             try:
-# EMAIL
-                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos)
-                #SEND MAIL
+                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
+# !!!!! INSERT DELETE PIERAKSTS !!!!!
             except:
                 pass
 
