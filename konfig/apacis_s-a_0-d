@@ -1,0 +1,35 @@
+<VirtualHost *:80>
+	ServerAdmin fizmats@inbox.lv
+	DocumentRoot /web/
+
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+# sudo a2enmod wsgi
+	WSGIScriptAlias / /web/main/wsgi.py
+
+# sudo a2enmod proxy_http
+	ProxyPreserveHost On
+	ProxyPass /video/cam1	http://172.16.5.102/cgi/mjpg/mjpg.cgi
+	ProxyPass /video/cam2	http://172.16.5.103/cgi/mjpg/mjpg.cgi
+	ProxyPass /pine64	http://172.16.2.40/
+
+# sudo a2enmod headers
+	<Location /video/cam1>
+# YWRtaW46YWRtaW4=	<==	base64 encoded admin:admin
+		RequestHeader set Authorization "Basic YWRtaW46YWRtaW4="
+	</Location>
+        <Location /video/cam2>
+		RequestHeader set Authorization "Basic YWRtaW46YWRtaW4="
+        </Location>
+
+</VirtualHost>
+
+WSGIPythonPath /web/
+
+<Directory "/web">
+	<Files wsgi.py>
+		Require all granted
+	</Files>
+</Directory>
+

@@ -191,10 +191,14 @@ def graf_cancel(request, w_id, g_id):
 def graf_add(request):
     username = auth.get_user(request)
     if username.is_superuser:
-        args = {}
-        args.update(csrf(request))      # ADD CSRF TOKEN
-        args['super'] = True
-        args['form'] = PlanotajsForm
+        if request.POST:	# FORM IS FILLED
+            pass
+
+        else:
+            args = {}
+            args.update(csrf(request))      # ADD CSRF TOKEN
+            args['super'] = True
+            args['form'] = PlanotajsForm
 
         return render_to_response('add_plan.html', args)
     return redirect('/reception/login/')
