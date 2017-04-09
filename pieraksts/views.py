@@ -33,6 +33,7 @@ def trener_list( n_id ):
        treneri.append(getattr( t, 'treneris') ) # relaciju objektu parametrs "Treneris"
     return treneri
 
+
 # !!!!! NODARBIBAS LAIKU OVERLAP CHEKER !!!!!
 def nod_check(n_id, k_id):
 # ritina cauri Klients.Pieraksti
@@ -81,7 +82,19 @@ def any(request, n_id):
     args['title'] = getattr( n, 'nos') # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
     args['treneri'] = trener_list( n_id )
-    args['grafiks'] = Grafiks.objects.filter( nodarbiba = n, sakums__gt = today ).order_by('sakums')
+
+    grafiks_data = []
+    start_time = datetime.datetime(today.year, today.month, today.day)
+    end_time = today.replace(hour=23, minute=59, second=59)
+    for day in range(0,30):
+#        try:
+            gr = Grafiks.objects.filter(nodarbiba = n, sakums__range=( start_time + datetime.timedelta( days=day) , end_time + datetime.timedelta( days=day ))).order_by('sakums')
+            if gr.count() != 0:
+                grafiks_data.append(gr)
+#        except ObjectDoesNotExist: # if day is empty
+#            pass
+    args['grafiks'] = grafiks_data
+
     args['back'] = False
     return render_to_response( 'select.html', args )
 
@@ -96,13 +109,26 @@ def specific(request, n_id, t_id):
     args['title'] = getattr( n, 'nos') # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
     args['treneri'] = trener_list( n_id )
-    args['grafiks'] = Grafiks.objects.filter( nodarbiba = n, treneris = t, sakums__gt = today ).order_by('sakums')
+
+    grafiks_data = []
+    start_time = datetime.datetime(today.year, today.month, today.day)
+    end_time = today.replace(hour=23, minute=59, second=59)
+    for day in range(0,30):
+#        try:
+            gr = Grafiks.objects.filter(nodarbiba = n, treneris = t, sakums__range=( start_time + datetime.timedelta( days=day) , end_time + datetime.timedelta( days=day ))).order_by('sakums')
+            if gr.count() != 0:
+                grafiks_data.append(gr)
+#        except ObjectDoesNotExist: # if day is empty
+#            pass
+    args['grafiks'] = grafiks_data
+
     args['back'] = False
     return render_to_response( 'select.html', args )
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # !!!      INSERT BRAIN HERE       !!!
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 # =================================================================================================================
 

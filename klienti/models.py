@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from phonenumber_field.modelfields import PhoneNumberField
+#from phonenumber_field.modelfields import PhoneNumberField
 
 # !!! Klienti !!!
 class Klienti(models.Model):

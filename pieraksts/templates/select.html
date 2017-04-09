@@ -56,8 +56,13 @@
 </div>
 <div class="row" style="padding-top:22px;"></div>
 
-{% for g in grafiks %}
+{{ print }}<br>
+{{ print2 }}<br>
+{% for gra in grafiks %}
+{% for g in gra %}
 <a href="/pieraksts/{{ g.id }}/">{{ g }} | {{ g.sakums|date:"H:i d/m/Y" }} | {{ g.treneris }} | {{ g.telpa }} | {{ g.vietas }}</a><br>
+{% endfor %}
+<br><br>
 {% endfor %}
 
 {% endblock %}

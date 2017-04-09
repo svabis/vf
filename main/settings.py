@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -20,8 +19,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '+t%cc5jq-rg+=#9%(qzer83=dwv1$u@oplo*1@+cmc3_^*-ag4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-#DEBUG = False
+#DEBUG = True
+DEBUG = False
 
 #TEMPLATE_DEBUG = True
 
@@ -58,11 +57,12 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-                '/home/vfab/templates',
-                '/home/vfab/pieraksts/templates',
-#                '/home/web/login/template',
-#                '/home/web/jobs/template',
-#                '/home/web/smhouse/template',
+#                '/pieraksts_web/templates',
+#                '/pieraksts_web/pieraksts/templates',
+#                '/pieraksts_web/grafiks/templates',
+                '/home/svabis/pieraksts_web/templates',
+                '/home/svabis/pieraksts_web/pieraksts/templates',
+                '/home/svabis/pieraksts_web/grafiks/templates',
                 ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -84,22 +84,13 @@ WSGI_APPLICATION = 'main.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vfabrika',
-#        'USER': 'django',
-        'USER': 'root',
-#        'PASSWORD': 'Dj2ng0',
-        'PASSWORD': 'Lauma',
+        'NAME': 'pieraksts',
+        'USER': 'pieraksts',
+        'PASSWORD': 'VFabrika2017',
         'HOST': 'localhost',
         'PORT': '3306',
     }
 }
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
-#}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -116,22 +107,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
-    '/home/web/static/',
-    '/var/www/static/',
+    '/pieraksts_web/static/',
+    '/home/svabis/pieraksts_web/static/',
 )
 
-#STATIC_ROOT = '/home/svabis/web/static/'
-#STATIC_ROOT = '/home/vfab/static/'
-#STATIC_ROOT = "/var/www/static/"
+STATIC_ROOT = "/pieraksts_web/static/"
 STATIC_URL = '/static/'
 
-#MEDIA_ROOT = '/home/svabis/web/media/'
-MEDIA_ROOT = '/home/vfab/media/'
+MEDIA_ROOT = '/pieraksts_web/media/'
 MEDIA_URL = '/media/'
