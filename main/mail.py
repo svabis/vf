@@ -8,13 +8,18 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.MIMEImage import MIMEImage
 
+import pytz	# to set timezone
 
 # !!!!! PIETEIKUMA APSTIPRINAJUMS !!!!!
 def send_email(recipient, nodarb, timedate, code_uuid):
     # Define these once; use them twice!
     strFrom = 'info@vfabrika.lv'
     strTo = recipient
-    time = timedate.strftime("%d/%m/%Y %H:%M")
+
+    tz = pytz.timezone('UTC')       # Timezone info
+    new_time = timedate.replace(tzinfo=tz)
+
+    time = new_time.strftime("%d/%m/%Y %H:%M")
     code = 'http://85.9.209.213/atcelt/' + str(code_uuid) + '/'
 
 # Create the root message and fill in the from, to, and subject headers
@@ -38,7 +43,7 @@ def send_email(recipient, nodarb, timedate, code_uuid):
     msgAlternative.attach(msgText)
 
 # This example assumes the image is in the current directory
-    fp = open('vfabrika.png', 'rb')
+    fp = open('/pieraksts_web/static/logo.jpg', 'rb')
     msgImage = MIMEImage(fp.read())
     fp.close()
 
@@ -64,8 +69,11 @@ def send_cancel(recipient, datums, nos):
     # Define these once; use them twice!
     strFrom = 'info@vfabrika.lv'
     strTo = recipient
-    time = datums.strftime("%d/%m/%Y %H:%M")
-#    code = 'http://servax.zapto.org:8000/atcelt/' + str(code_uuid) + '/'
+
+    tz = pytz.timezone('UTC')       # Timezone info
+    new_time = datums.replace(tzinfo=tz)
+
+    time = new_time.strftime("%d/%m/%Y %H:%M")
 
 # Create the root message and fill in the from, to, and subject headers
     msgRoot = MIMEMultipart('related')
@@ -89,7 +97,7 @@ def send_cancel(recipient, datums, nos):
     msgAlternative.attach(msgText)
 
 # This example assumes the image is in the current directory
-    fp = open('vfabrika.png', 'rb')
+    fp = open('/pieraksts_web/static/logo.jpg', 'rb')
     msgImage = MIMEImage(fp.read())
     fp.close()
 

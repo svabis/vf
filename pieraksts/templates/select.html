@@ -8,16 +8,20 @@
 
 {% for gra in grafiks %}
    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3" style="padding-left:0px; padding-right:0px;">
-    <div style="border:1px solid black; margin:1px 1px 1px 1px;"><center>{{ gra.0.sakums|date:"d/m l" }}</center></div>
+    <div id="datums"  style="border:1px solid black; margin:1px 1px 1px 1px;"><center>{{ gra.0.sakums|date:"d/m l" }}</center></div>
 {% for g in gra %}
+
 <!-- if:
 	1- vietu daudz == div zaļš
 	2- viena vieta == div dzeltens
 	3- vietu nav == div sarkans, bez linka
  -->
-    <div style="border:1px solid black; margin:1px 1px 1px 1px;"><a href="/pieraksts/{{ g.id }}/">
+{% if g.vietas != 0 %}    <div id="nodarb_t"><a href="/pieraksts/{{ g.id }}/"><span></span></a>{% else %}    <div id="nodarb_p">{% endif %}
 
-     {{ g.sakums|date:"H:i" }}<!-- | {{ g.treneris }} | {{ g.vietas }}--></a>
+     {{ g.sakums|date:"H:i" }}
+
+<!-- | {{ g.treneris }} | {{ g.vietas }}-->
+
     </div>
 {% endfor %}
    </div>
