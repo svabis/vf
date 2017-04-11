@@ -15,7 +15,7 @@ def send_email(recipient, nodarb, timedate, code_uuid):
     strFrom = 'info@vfabrika.lv'
     strTo = recipient
     time = timedate.strftime("%d/%m/%Y %H:%M")
-    code = 'http://servax.zapto.org:8000/atcelt/' + str(code_uuid) + '/'
+    code = 'http://85.9.209.213/atcelt/' + str(code_uuid) + '/'
 
 # Create the root message and fill in the from, to, and subject headers
     msgRoot = MIMEMultipart('related')

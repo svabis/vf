@@ -86,14 +86,19 @@ def any(request, n_id):
     grafiks_data = []
     start_time = datetime.datetime(today.year, today.month, today.day)
     end_time = today.replace(hour=23, minute=59, second=59)
-    for day in range(0,30):
-#        try:
-            gr = Grafiks.objects.filter(nodarbiba = n, sakums__range=( start_time + datetime.timedelta( days=day) , end_time + datetime.timedelta( days=day ))).order_by('sakums')
-            if gr.count() != 0:
-                grafiks_data.append(gr)
-#        except ObjectDoesNotExist: # if day is empty
-#            pass
+
+    gr = Grafiks.objects.filter(nodarbiba = n, sakums__range=( datetime.datetime.now() , end_time)).order_by('sakums')
+    if gr.count() != 0:
+        grafiks_data.append(gr)
+
+    for day in range(1,30):
+        gr = Grafiks.objects.filter(nodarbiba = n, sakums__range=( start_time + datetime.timedelta( days=day) , end_time + datetime.timedelta( days=day ))).order_by('sakums')
+        if gr.count() != 0:
+            grafiks_data.append(gr)
     args['grafiks'] = grafiks_data
+
+    if (len(grafiks_data) % 4) == 0:
+        args['carousel_end'] = len(grafiks_data)
 
     args['back'] = False
     return render_to_response( 'select.html', args )
@@ -113,14 +118,19 @@ def specific(request, n_id, t_id):
     grafiks_data = []
     start_time = datetime.datetime(today.year, today.month, today.day)
     end_time = today.replace(hour=23, minute=59, second=59)
-    for day in range(0,30):
-#        try:
-            gr = Grafiks.objects.filter(nodarbiba = n, treneris = t, sakums__range=( start_time + datetime.timedelta( days=day) , end_time + datetime.timedelta( days=day ))).order_by('sakums')
-            if gr.count() != 0:
-                grafiks_data.append(gr)
-#        except ObjectDoesNotExist: # if day is empty
-#            pass
+
+    gr = Grafiks.objects.filter(nodarbiba = n, treneris = t, sakums__range=( datetime.datetime.now() , end_time)).order_by('sakums')
+    if gr.count() != 0:
+        grafiks_data.append(gr)
+
+    for day in range(1,30):
+        gr = Grafiks.objects.filter(nodarbiba = n, treneris = t, sakums__range=( start_time + datetime.timedelta( days=day) , end_time + datetime.timedelta( days=day ))).order_by('sakums')
+        if gr.count() != 0:
+            grafiks_data.append(gr)
     args['grafiks'] = grafiks_data
+
+    if (len(grafiks_data) % 4) == 0:
+        args['carousel_end'] = len(grafiks_data)
 
     args['back'] = False
     return render_to_response( 'select.html', args )
