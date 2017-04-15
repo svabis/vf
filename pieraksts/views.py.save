@@ -1,0 +1,146 @@
+# -*- coding: utf-8 -*-
+from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render_to_response, redirect	# response to template, redirect to another view
+from django.http.response import Http404	# ERRORR 404
+from django.core.exceptions import ObjectDoesNotExist
+
+from django.template.loader import get_template
+from django.template import Context, RequestContext		# RequestContext <-- get user from request
+
+from django.core.context_processors import csrf	# csrf token
+
+from nodarb.models import *
+from klienti.models import Klienti
+from grafiks.models import Grafiks, Planotajs
+
+from pieraksts.forms import KlientsForm
+from pieraksts.models import *
+
+from main import mail
+from slugify import slugify
+
+import datetime
+today = datetime.datetime.now() # sakot no --> shodiena + pulkstens (tagad)
+
+# !!!!! TRENERU LIST !!!!!
+def trener_list( n_id ):
+    nod = Nodarb_tips.objects.get( slug=n_id ) # Nodarbiba
+    treneri_rel = nod.n.all() #nodarbiba(slug) ... n-relacija ... all() ... visi objekti
+    treneri = []
+
+    if treneri_rel.count() > 1:
+       treneri.append('any')
+    for t in treneri_rel:
+       treneri.append(getattr( t, 'treneris') ) # relaciju objektu parametrs "Treneris"
+    return treneri
+
+
+# !!!!! NODARBIBAS LAIKU OVERLAP CHEKER !!!!!
+def nod_check(n_id, k_id):
+    result = True	# allow Pieraksts
+    n = Grafiks.objects.get( id=n_id )
+    nod_start = getattr( n, 'sakums')
+    nod_end = getattr( n, 'sakums') + datetime.timedelta(minutes=int(getattr( n, 'ilgums')))
+
+# 1. parbauda vai jau nav pieraksts uz sho --> False
+    pieraksti_today = Pieraksti.objects.filter( klients = k_id, nodarbiba = n )
+    if len(pieraksti_today) != 0:
+        result = False
+# 2. parbauda vai n_id.start ieklaujas laika kadam --> False
+
+# 3. parbauda vai (n_id.start + timedelta(min=nodarb.ilgums) ieklaujas --> False
+# 4. n_id sakas pirms un beidzas pec parbaudama --> False
+
+# ELSE --> True
+
+    if result:	# if False pieraksts --> DENIED
+        return True
+    return False # Pieraksts --> ALLOWED
+
+# =================================================================================================================
+
+# !!! Visas nodarbibas !!!
+def home(request):
+    args = {}
+    args['title'] = 'Nodarbības'
+    args['nodarbibas'] = Nodarb_tips.objects.filter( redz = True ).order_by('nos') # Atlasa redzamas nodarbibas
+    return render_to_response( 'nodarb.html', args )
+
+# !!! Nodarbibas izvele !!!
+def tren(request, n_id):
+    try:
+        nod = Nodarb_tips.objects.get( slug=n_id ) # Nodarbiba
+    except ObjectDoesNotExist:  # not existing --> 404
+        return redirect ('main')
+
+    if len(trener_list( n_id )) > 1:
+         return redirect( 'any', n_id=n_id) # ===> ANY TRAINER
+    return redirect( 'specific', n_id=n_id, t_id=trener_list(n_id)[0].slug ) # ===> SPECIFIC TRAINER
+
+# =================================================================================================================
+
+# !!! ANY trainer !!!
+def any(request, n_id):
+    try:
+        n = Nodarb_tips.objects.get( slug=n_id ) # Nodarbiba
+    except ObjectDoesNotExist:  # not existing --> 404
+        return redirect ('main')
+    args = {}
+    args['title'] = getattr( n, 'nos') # Nodarb_tips nosaukums
+    args['nodarb_slug'] = n_id
+    args['treneri'] = trener_list( n_id )
+
+    grafiks_data = []
+    start_time = datetime.datetime(today.year, today.month, today.day)
+    end_time = today.replace(hour=23, minute=59, second=59)
+
+    gr = Grafiks.objects.filter(nodarbiba = n, sakums__range=( datetime.datetime.now() , end_time)).order_by('sakums')
+    if gr.count() != 0:
+        grafiks_data.append(gr)
+
+    for day in range(1,30):
+        gr = Grafiks.objects.filter(nodarbiba = n, sakums__range=( start_time + datetime.timedelta( days=day) , end_time + datetime.timedelta( days=day ))).order_by('sakums')
+        if gr.count() != 0:
+            grafiks_data.append(gr)
+    args['grafiks'] = grafiks_data
+
+    if (len(grafiks_data) % 4) == 0:
+        args['carousel_end'] = len(grafiks_data)
+
+    args['back'] = False
+    return render_to_response( 'select.html', args )
+
+# !!! SPECIFIC trainer !!!
+def specific(request, n_id, t_id):
+    try:
+        n = Nodarb_tips.objects.get( slug=n_id ) # Nodarbiba
+        t = Treneris.objects.get( slug=t_id ) # Treneris
+    except ObjectDoesNotExist:  # not existing --> 404
+        return redirect ('main')
+    args = {}
+    args['title'] = getattr( n, 'nos') # Nodarb_tips nosaukums
+    args['nodarb_slug'] = n_id
+    args['treneri'] = trener_list( n_id )
+
+    grafiks_data = []
+    start_time = datetime.datetime(today.year, today.month, today.day)
+    end_time = today.replace(hour=23, minute=59, second=59)
+
+    gr = Grafiks.objects.filter(nodarbiba = n, treneris = t, sakums__range=( datetime.datetime.now() , end_time)).order_by('sakums')
+    if gr.count() != 0:
+        grafiks_data.append(gr)
+
+    for day in range(1,30):
+        gr = Grafiks.objects.filter(nodarbiba = n, treneris = t, sakums__range=( start_time + datetime.timedelta( days=day) , end_time + datetime.timedelta( days=day ))).order_by('sakums')
+        if gr.count() != 0:
+            grafiks_data.append(gr)
+    args['grafiks'] = grafiks_data
+
+    if (len(grafiks_data) % 4) == 0:
+        args['carousel_end'] = len(grafiks_data)
+
+    args['back'] = False
+    return render_to_response( 'select.html', args )
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!      INSERT BRAIN HERE       !!!

@@ -37,45 +37,25 @@ def trener_list( n_id ):
 
 # !!!!! NODARBIBAS LAIKU OVERLAP CHEKER !!!!!
 def nod_check(n_id, k_id):
-    result = False	# denied Pieraksts
+    result = True	# allow Pieraksts
     n = Grafiks.objects.get( id=n_id )
     nod_start = getattr( n, 'sakums')
     nod_end = getattr( n, 'sakums') + datetime.timedelta(minutes=int(getattr( n, 'ilgums')))
 
-# 1. parbauda vai jau nav pieraksts uz sho --> False = OK
-    try:
-        pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = n )
-    except Pieraksti.DoesNotExist:
-        result = True
-    except:
+# 1. parbauda vai jau nav pieraksts uz sho --> False
+    pieraksti_today = Pieraksti.objects.filter( klients = k_id, nodarbiba = n )
+    if len(pieraksti_today) != 0:
         result = False
-
-# 2. parbauda vai n_id.start ieklaujas laika kadam citam start --> False
-    count = 0
-    for nod in Grafiks.objects.filter( sakums__range = (nod_start, nod_end)):
-        try:
-            pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = nod )
-            count += 1
-        except Pieraksti.DoesNotExist:
-            pass
-        except:
-            count += 1
-            pass
-    if count != 0:
-        result = False
-    else:
-        result = True
-
-# Grafiks.objects.filter( sakums__range = (start, end))
-#[<Grafiks: TRX>, <Grafiks: TRX>, <Grafiks: TRX>]
+# 2. parbauda vai n_id.start ieklaujas laika kadam --> False
 
 # 3. parbauda vai (n_id.start + timedelta(min=nodarb.ilgums) ieklaujas --> False
 # 4. n_id sakas pirms un beidzas pec parbaudama --> False
 
-#    if True:
-    if result == True:	# if True Pieraksts --> ALLOWED
+# ELSE --> True
+
+    if result:	# if False pieraksts --> DENIED
         return True
-    return False # Pieraksts --> DENIED
+    return False # Pieraksts --> ALLOWED
 
 # =================================================================================================================
 
@@ -218,7 +198,7 @@ def pieraksts(request, g_id):
             for c in clients:
                 if c.e_pasts == new_email and c.vards == new_name:
                    # klients jau eksiste
-                    if getattr(Grafiks.objects.get( id=g_id ), 'vietas') < 1: # IF VIETAS=0 --> ERROR
+                    if getattr(Grafiks.objects.get( id=g_id ), 'vietas') == 0: # IF VIETAS=0 --> ERROR
                         error = True
                         args['error_msg'] = u' Atvainojiet visas nodarbības vietas jau ir aizņemtas'
                     if nod_check(g_id, c) == False: # False --> jau ir pieraksts uz sho laiku
@@ -250,7 +230,7 @@ def pieraksts(request, g_id):
 
             if new == 0:
            # Jauns klients
-                if getattr(Grafiks.objects.get( id=g_id ), 'vietas') < 1: # IF VIETAS=0 --> ERROR
+                if getattr(Grafiks.objects.get( id=g_id ), 'vietas') == 0: # IF VIETAS=0 --> ERROR
                     error = True
                     args['error_msg'] = u' Atvainojiet visas nodarbības vietas ir aizņemtas'
                 else: # VIETAS > 0 --> Pieraksts
