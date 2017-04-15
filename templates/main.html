@@ -9,9 +9,10 @@
  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
  <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
 {% block javascript %}{% endblock %}
 <style>
-body { background: black !important; }
+body{ -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; background: black !important; }
 {% block style %}{% endblock %}</style>
 </head>
 

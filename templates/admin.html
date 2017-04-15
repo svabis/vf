@@ -6,46 +6,37 @@
  <meta charset="UTF-8">
  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+ <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
- <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.js' %}"></script>
+ <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
 {% block javascript %}{% endblock %}
 <style>
-body { padding-top: 70px; margin: 0; }
-.navbar-menu { font-size: 120%; }
 {% block style %}{% endblock %}</style>
 </head>
-
-{% if super %}
 <body>
-<div class="container-fluid"><div class="row"><div class="col-sm-3 col-lg-2 col-md-3">
-<!-- LEFT MENU BAR START -->
-<nav class="navbar navbar-default navbar-fixed-side">
-<div class="navbar-header">
-<button type="button" class="navbar-toggle sidebar-toggle" data-toggle="collapse" data-target="#sideNavbar">
-    <span>Lapas izvēlne </span>
-    <span class="glyphicon glyphicon-check"></span>
-</button>
+
+<nav class="navbar-xs navbar-default">
+<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#topNavbar" aria-expanded="false">
+ <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
 </div>
-<div class="collapse navbar-collapse" id="sideNavbar">
- <ul class="nav navbar-nav navbar-menu flex-column">
+<div class="collapse navbar-collapse" id="topNavbar">
+
+ <ul class="nav navbar-nav navbar-xs">
   <li><a href="/reception/"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> &nbsp;Nodarbību pieraksti</a></li>
+{% if super %}
   <li><a href="/reception/plan/"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> &nbsp;Nodarbību dzēšana</a></li>
   <li><a href="/reception/add/"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> &nbsp;Pievienot nodarbību</a></li>
-  <li><a href="/reception/logout/"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> &nbsp;Iziet no sistēmas</a></li>
-<!--  <li><a href="/sm_house/"><span class="glyphicon glyphicon-signal" aria-hidden="true"></span> &nbsp;Smart House</a></li> -->
-<!--  <li><a href="/jobs/"><span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> &nbsp;Darbu saraksti</a></li> -->
+{% endif%}
  </ul>
-</div>
-</nav>
-<!-- LEFT MENU BAR END -->
-</div>
-<!-- PAGE CONTENT START -->
-<div class="col-sm-9 col-lg-10 col-md-9">
-{% else %}
-<div class="container">
-{% endif %}
 
+ <ul class="nav navbar-nav navbar-right">
+  <li><a href="#"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> &nbsp;RTFM</a></li>
+  <li><a href="/reception/logout/"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> &nbsp;Iziet no sistēmas</a></li>
+ </ul>
+
+</div></nav>
+
+<div class="container-fluid">
 <h2>{{ title }}</h2>
 {% if subtitle %}<h3>{{ subtitle|date:"d/m/Y H:i" }}</h3>{% endif %}
 
@@ -54,11 +45,6 @@ body { padding-top: 70px; margin: 0; }
 {% block logsys %}{% endblock %}
 
 </div>
-
-{% if super %}
-<!-- PAGE CONTENT END -->
-</div></div>
-{% endif %}
 
 </body>
 </html>

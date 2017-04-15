@@ -6,10 +6,10 @@ span{ position:absolute; width:100%; height:100%; top:0; left: 0; z-index: 1; ba
 p{ padding:0px; margin:0px; text-align: left; }
 #tren{ position: relative; width: 100%; height:65px; padding: 0px 0px 0px 65px; margin: 1px 0px 0px 0px; border: 1px solid black; background-color:#ccc; float:left; overflow:hidden; }
 #avatar{ position:absolute; width:60px; height:60px; left:2px; bottom:2px; z-index:0; }
-
-#datums{ position: relative; height:65px; padding: 2px 2px 2px 2px; margin: 1px 1px 1px 1px; border: 1px solid black; background-color:#888; overflow:hidden; border-radius: 5px; text-align: center;}
+#datums{ position: relative; height:65px; padding: 2px 2px 2px 2px; margin: 1px 1px 1px 1px; background-color:#888; overflow:hidden; border-radius: 5px; text-align: center; border:1px solid black; align-items: center;}
 #nodarb_t{ position: relative; height:40px; padding: 2px 2px 2px 2px; margin: 1px 1px 1px 1px; border: 1px solid black; background-color:#ddd; overflow:hidden; border-radius: 5px; text-align: center;}
 #nodarb_p{ position: relative; height:40px; padding: 2px 2px 2px 2px; margin: 1px 1px 1px 1px; border: 1px solid black; background-color:red; overflow:hidden; border-radius: 5px; text-align: center;}
+.carousel-control { width:10%; height:70px; top:0; }
 {% endblock %}
 
 {% block content %}
@@ -21,7 +21,9 @@ p{ padding:0px; margin:0px; text-align: left; }
  <p><strong>Jebkurš brīvais</strong></p>
  <img id="avatar" src="{% static 'any.jpg' %}">
 {% else %}
+{% if treneri.0 == "any" %}
  <a href="/select/{{ nodarb_slug }}/{{ t.slug }}/"><span></span></a>
+{% endif %}
 {% if t.avatar %} <img id="avatar" src="{{ t.avatar.url }}">{% endif %}
  <p><strong>{{ t.vards }}</strong></p>
  <p><small>{{ t.apraksts }}</small><p>

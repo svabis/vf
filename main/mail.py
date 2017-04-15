@@ -8,7 +8,9 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.MIMEImage import MIMEImage
 
-import pytz	# to set timezone
+from datetime import datetime
+from datetime import timedelta
+#import pytz	# to set timezone
 
 # !!!!! PIETEIKUMA APSTIPRINAJUMS !!!!!
 def send_email(recipient, nodarb, timedate, code_uuid):
@@ -16,10 +18,11 @@ def send_email(recipient, nodarb, timedate, code_uuid):
     strFrom = 'info@vfabrika.lv'
     strTo = recipient
 
-    tz = pytz.timezone('UTC')       # Timezone info
-    new_time = timedate.replace(tzinfo=tz)
+#    tz = pytz.timezone('EET')       # Timezone info
+    new_time = timedate + timedelta(hours=3)
+#    time = new_time.strftime("%d/%m/%Y %H:%M")
+    time = '%s/%s/%s %s:%s' % (new_time.day, new_time.month, new_time.year, new_time.hour, new_time.minute)
 
-    time = new_time.strftime("%d/%m/%Y %H:%M")
     code = 'http://85.9.209.213/atcelt/' + str(code_uuid) + '/'
 
 # Create the root message and fill in the from, to, and subject headers
@@ -70,8 +73,9 @@ def send_cancel(recipient, datums, nos):
     strFrom = 'info@vfabrika.lv'
     strTo = recipient
 
-    tz = pytz.timezone('UTC')       # Timezone info
-    new_time = datums.replace(tzinfo=tz)
+#    tz = pytz.timezone('UTC')       # Timezone info
+#    new_time = datums.replace(tzinfo=tz)
+    new_time = datums + timedelta(hours=3)
 
     time = new_time.strftime("%d/%m/%Y %H:%M")
 

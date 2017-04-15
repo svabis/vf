@@ -17,6 +17,7 @@ from pieraksts.forms import KlientsForm
 from pieraksts.models import *
 
 from main import mail
+from slugify import slugify
 
 import datetime
 today = datetime.datetime.now() # sakot no --> shodiena + pulkstens (tagad)
@@ -164,10 +165,12 @@ def pieraksts(request, g_id):
     if request.POST:
         form = KlientsForm( request.POST )
         if form.is_valid():
-            new_name = form.cleaned_data['vards']
+           # SLUGIFY "Vārds Uzvārds" --> "vards_uzvards"
+            new_name = slugify(form.cleaned_data['vards']).lower()
             new_email = form.cleaned_data['e_pasts']
             new_tel = form.cleaned_data['tel']
-            args['vards'] = new_name
+
+            args['vards'] = form.cleaned_data['vards']
             args['epasts'] = new_email
             args['telefons'] = new_tel
 
@@ -179,7 +182,7 @@ def pieraksts(request, g_id):
                 if c.e_pasts == new_email and c.vards != new_name:
                    # CITS KLIENTA VARDS
                     error = True
-                    args['error_msg'] = u' Cits klienta vārds'
+                    args['error_msg'] = u' Autorizācijas kļūda, nekorekts lietotāja vārds'
 
             if error == True:
                 args['error'] = True

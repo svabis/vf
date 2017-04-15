@@ -6,12 +6,16 @@
 {% endblock %}
 
 {% block content_header %}
-<div class="navbar-collapse"><div class="tabbable"><ul class="nav nav-tabs">
+<!-- <div class="navbar-collapse"><div class="tabbable"> -->
+<ul class="nav nav-tabs">
 {% for d in datumi %}
 {% if d == title %}<li class="active">{% else %}<li>{% endif %}
 
 {% if d == shodiena and d != title %}
 <a href="/reception/day/{{ forloop.counter0 }}/" style="background-color:#aaa;">{{ d|date:"d/m" }}</a></li>{% else %}
 <a href="/reception/day/{{ forloop.counter0 }}/">{{ d|date:"d/m" }}</a></li>{% endif %}{% endfor %}
-</ul></div></div>
+
+</ul>
+<!-- </div></div> -->
+
 {% endblock %}
