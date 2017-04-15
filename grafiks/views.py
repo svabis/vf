@@ -56,7 +56,7 @@ def logout(request):
 def main(request):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
-    return redirect ('day_list', d_id=7)
+    return redirect ('day_list', d_id=2)
 
 
 def day_list(request, d_id):
@@ -66,13 +66,13 @@ def day_list(request, d_id):
     if auth.get_user(request).is_superuser: # superuser --> Left menu available
         args['super'] = True
 
-    dienas = [-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7] # DIENAS 0 --> SHODIENA
+    dienas = [-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14] # DIENAS 0 --> SHODIENA
     datumi = []
 
     datums = today + datetime.timedelta( days=dienas[int(d_id)] ) # datums
     dienas_nodarb = Grafiks.objects.filter(sakums__startswith=datums).order_by('sakums') # datuma nodarbibas
 
-    for d in range(0,15):
+    for d in range(0,17):
         datumi.append(today + datetime.timedelta( days=dienas[d] ))
 
     args['title'] = datums

@@ -37,19 +37,25 @@ def trener_list( n_id ):
 
 # !!!!! NODARBIBAS LAIKU OVERLAP CHEKER !!!!!
 def nod_check(n_id, k_id):
-# ritina cauri Klients.Pieraksti
-# katram njem [start, start + timedelta(min=nodarb.ilgums)]
+    result = True	# allow Pieraksts
+    n = Grafiks.objects.get( id=n_id )
+    nod_start = getattr( n, 'sakums')
+    nod_end = getattr( n, 'sakums') + datetime.timedelta(minutes=int(getattr( n, 'ilgums')))
 
 # 1. parbauda vai jau nav pieraksts uz sho --> False
+    pieraksti_today = Pieraksti.objects.filter( klients = k_id, nodarbiba = n )
+    if len(pieraksti_today) != 0:
+        result = False
+
 # 2. parbauda vai n_id.start ieklaujas laika kadam --> False
 # 3. parbauda vai (n_id.start + timedelta(min=nodarb.ilgums) ieklaujas --> False
 # 4. n_id sakas pirms un beidzas pec parbaudama --> False
 
 # ELSE --> True
 
-    if False:
-        return False
-    return True
+    if result:	# if False pieraksts --> DENIED
+        return True
+    return False # Pieraksts --> ALLOWED
 
 # =================================================================================================================
 
