@@ -20,8 +20,8 @@ def send_email(recipient, nodarb, timedate, code_uuid):
 
 #    tz = pytz.timezone('EET')       # Timezone info
     new_time = timedate + timedelta(hours=3)
-#    time = new_time.strftime("%d/%m/%Y %H:%M")
-    time = '%s/%s/%s %s:%s' % (new_time.day, new_time.month, new_time.year, new_time.hour, new_time.minute)
+    time = new_time.strftime("%d/%m/%Y %H:%M")
+#    time = '%s/%s/%s %s:%s' % (new_time.day, new_time.month, new_time.year, new_time.hour, new_time.minute)
 
     code = 'http://85.9.209.213/atcelt/' + str(code_uuid) + '/'
 

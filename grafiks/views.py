@@ -175,12 +175,11 @@ def graf_cancel(request, w_id, g_id):
         nodarb = Grafiks.objects.get(id=g_id)
         klienti = nodarb.nod.all()
         for k in klienti:
-            if True:
-#            try:
+            try:
                 mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
 # !!!!! INSERT DELETE PIERAKSTS !!!!!
-#            except:
-#                pass
+            except:
+                pass
 
         nodarb.delete()
         return redirect ( 'nod_plan', w_id=w_id )

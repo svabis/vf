@@ -42,25 +42,41 @@ def nod_check(n_id, k_id):
     nod_start = getattr( n, 'sakums')
     nod_end = getattr( n, 'sakums') + datetime.timedelta(minutes=int(getattr( n, 'ilgums')))
 
+    nod_date = nod_start.date()
+    date_nod = Grafiks.objects.filter( sakums__startswith = nod_date ).order_by('sakums')
+
+    count = 0
+    for d in date_nod:
+        end = d.sakums + datetime.timedelta(minutes=int(d.ilgums))
+        Overlap = max(nod_start, d.sakums) < min(nod_end, end)
+        if Overlap == True:
+            try:
+                pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = d )
+                count += 1
+            except Pieraksti.DoesNotExist:
+                pass
+            except:
+                count += 1
+
 # 1. parbauda vai jau nav pieraksts uz sho --> False = OK
-    try:
-        pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = n )
-    except Pieraksti.DoesNotExist:
-        result = True
-    except:
-        result = False
+#    try:
+#        pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = n )
+#    except Pieraksti.DoesNotExist:
+#        result = True
+#    except:
+#        result = False
 
 # 2. parbauda vai n_id.start ieklaujas laika kadam citam start --> False
-    count = 0
-    for nod in Grafiks.objects.filter( sakums__range = (nod_start, nod_end)):
-        try:
-            pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = nod )
-            count += 1
-        except Pieraksti.DoesNotExist:
-            pass
-        except:
-            count += 1
-            pass
+#    count = 0
+#    for nod in Grafiks.objects.filter( sakums__range = (nod_start, nod_end)):
+#        try:
+#            pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = nod )
+#            count += 1
+#        except Pieraksti.DoesNotExist:
+#            pass
+#        except:
+#            count += 1
+#            pass
     if count != 0:
         result = False
     else:
