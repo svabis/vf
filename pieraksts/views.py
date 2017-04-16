@@ -321,7 +321,7 @@ def cancel_ok(request, id):
     pieraksts.nodarbiba.vietas += 1
     pieraksts.nodarbiba.save()
 # ADD Ateikumi
-    atteikums = Atteikumi( klients=pieraksts.klients, nodarbiba=pieraksts.nodarbiba )
+    atteikums = Atteikumi( pieraksta_laiks=pieraksts.pieraksta_laiks, klients=pieraksts.klients, nodarbiba=pieraksts.nodarbiba )
     atteikums.save()
 # Klients.atteikumi -=1
     pieraksts.klients.atteikuma_reizes +=1

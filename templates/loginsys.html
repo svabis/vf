@@ -1,0 +1,27 @@
+{% load staticfiles %}{% load tz %}
+<!DOCTYPE html>
+<html lang="LV-LV">
+<head>
+<title>{{ title }}</title>
+ <meta charset="UTF-8">
+ <link rel="shortcut icon" type="image/png" href="{% static 'vf-logo.png' %}"/>
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+{% block javascript %}{% endblock %}
+<style>
+{% block style %}{% endblock %}</style>
+</head>
+<body>
+
+<div class="container-fluid">
+<h2>{{ title }}</h2>
+
+{% block logsys %}{% endblock %}
+
+</div>
+
+</body>
+</html>
+

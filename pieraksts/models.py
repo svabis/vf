@@ -25,6 +25,7 @@ class Atteikumi(models.Model):
         verbose_name = 'Atteikumi'
         db_table = "atteikumi"
 
+    pieraksta_laiks = models.DateTimeField( default = timezone.now )
     ateikuma_laiks = models.DateTimeField( default = timezone.now )
     klients = models.ForeignKey( Klienti )
     nodarbiba = models.ForeignKey( Grafiks, related_name='ateikt' )

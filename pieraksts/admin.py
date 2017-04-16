@@ -6,7 +6,7 @@ class PierakstiAdmin(admin.ModelAdmin):
     list_display = ['pieraksta_laiks', 'klients', 'nodarbiba', 'atteikuma_kods']
 
 class AtteikumiAdmin(admin.ModelAdmin):
-    list_display = ['ateikuma_laiks', 'klients', 'nodarbiba']
+    list_display = ['pieraksta_laiks', 'ateikuma_laiks', 'klients', 'nodarbiba']
 
 
 admin.site.register(Pieraksti, PierakstiAdmin)

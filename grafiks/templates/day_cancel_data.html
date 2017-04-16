@@ -5,13 +5,14 @@
 
 {% block content %}
 
-<a href="/reception/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br>
+<a href="/reception/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br><br>
 
-<a href="/reception/nod/{{ g_id }}/">Pieteikumi uz nodarbību</a><br>
+<a href="/reception/nod/{{ g_id }}/"><button type="button" class="btn btn-success btn-xs">Pieteikumi uz nodarbību</button></a><br>
 
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
 <thead><tr>
+ <th>Pieraksta laiks</th>
  <th>Atcelšanas laiks</th>
  <th>Vārds Uzvārds</th>
  <th>E-pasts</th>
@@ -21,6 +22,7 @@
 <tbody>
 {% for d in data %}
 <tr>
+ <td>{{ d.pieraksta_laiks|date:"d/m/Y H:i" }}</td>
  <td>{{ d.ateikuma_laiks|date:"d/m/Y H:i" }}</td>
  <td>{{ d.klients }}</td>
  <td>{{ d.klients.e_pasts }}</td>

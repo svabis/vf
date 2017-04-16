@@ -1,6 +1,5 @@
 {% extends 'day_header.html' %}
 
-
 {% block content %}
 <div class="container-fluid">
 <table class="table table-hover table-striped table-condensed">
@@ -10,6 +9,7 @@
  <th>Treneris</th>
  <th>Zāle</th>
  <th>Vietas</th>
+ <th>Pieraksts</th>
 </tr></thead>
 
 <tbody>
@@ -20,6 +20,7 @@
  <td><a href="/reception/nod/{{ d.id }}/">{{ d.treneris }}</a></td>
  <td><a href="/reception/nod/{{ d.id }}/">{{ d.telpa }}</a></td>
  <td><a href="/reception/nod/{{ d.id }}/">{{ d.vietas }}</a></td>
+ <td><a href="{{ d.id }}"><button type="button" class="btn btn-default btn-xs">Pierakstīties</button></a></td>
 </tr>
 {% endfor %}
 </tbody>

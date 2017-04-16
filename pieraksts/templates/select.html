@@ -2,7 +2,7 @@
 
 {% block select %}
 <!-- <div id="myCarousel" class="carousel slide carousel-sync" data-interval="false" data-wrap="false" data-ride="carousel">-->
-<div id="carousel-b" class="carousel slide carousel-sync" data-wrap="false">
+<div id="carousel-b" class="carousel slide carousel-sync" data-wrap="false" data-interval="false">
  <div class="carousel-inner"> <!-- role="listbox"> -->
   <div class="item active">
 
@@ -37,20 +37,4 @@
 <div class="row" style="padding-top:22px;"></div>
 {% endblock %}
 
-{% block javascript %}
-<script>
-$('#carousel-b').bind('slid.bs.carousel', function (e)
-        {
-            var $this = $(this);
-            $this.children('.carousel-control').show();
-
-            if ($('.carousel-inner .item:last').hasClass('active'))
-            {
-                $this.children('.right.carousel-control').hide();
-            } else if ($('.carousel-inner .item:first').hasClass('active'))
-            {
-                $this.children('.left.carousel-control').hide();
-            }
-        });
-</script>
-{% endblock %}
+{% block javascript %}{% endblock %}
