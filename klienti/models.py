@@ -5,8 +5,8 @@ from django.utils import timezone
 # !!! Klienti !!!
 class Klienti(models.Model):
     class Meta():
-        verbose_name = 'Klienti'
         db_table = "klienti"
+#        app_label = 'Klienti'
 
     pirmais_pieteikums = models.DateTimeField( default = timezone.now )
     pedejais_pieteikums = models.DateTimeField( default = timezone.now )

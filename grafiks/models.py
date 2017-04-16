@@ -21,6 +21,7 @@ DAY_CHOISES = (
 class Grafiks(models.Model):
     class Meta():
         db_table = "grafiks"
+#        app_label = 'Grafiks'
 
     sakums = models.DateTimeField()
     ilgums = models.IntegerField()
@@ -38,6 +39,7 @@ class Grafiks(models.Model):
 class Planotajs(models.Model):
     class Meta():
         db_table = "planotajs"
+#        app_label = 'Planotajs'
 
 #    sakums = models.DateTimeField()
     diena = models.CharField( max_length = 1, default = 0, choices=DAY_CHOISES )
