@@ -8,9 +8,13 @@ urlpatterns = [
     # url(r'^$', 'main.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+# Reception Cancel
+    url(r'^cancel/(?P<g_id>\d+)/(?P<p_id>\d+)/$', 'grafiks.views.reception_cancel'),
+
+
 # Nodarbibas
-    url(r'^nod/(?P<g_id>\d+)/$', 'grafiks.views.nod_list'),
-    url(r'^cancel/(?P<g_id>\d+)/$', 'grafiks.views.cancel_list'),
+    url(r'^nod/(?P<d_id>\d+)/(?P<g_id>\d+)/$', 'grafiks.views.nod_list', name='nod_list'),
+    url(r'^canceled/(?P<d_id>\d+)/(?P<g_id>\d+)/$', 'grafiks.views.cancel_list'),
     url(r'^day/(?P<d_id>\d+)/$', 'grafiks.views.day_list', name='day_list'),
 
 # Login

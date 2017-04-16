@@ -10,13 +10,12 @@ from grafiks.models import Grafiks
 from pieraksts.models import *
 
 from slugify import slugify
+from django.core.exceptions import ObjectDoesNotExist
 
 # IMPORT DJANGO STUFF
 from django.core.files import File	# for file opening
 
 from django.core.management.base import BaseCommand, CommandError
-
-
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -33,35 +32,73 @@ class Command(BaseCommand):
 # l[3] = tel
 # l[4] = e-mail
 # l[5] = Nodarbība
+
             l[2] = slugify( l[2] ).lower()
+            error = 0
 
            # 26,04,2017,19,00
            # Y M D H M
             time = l[0] + '.' + l[1]
             time = (datetime.datetime.strptime( time, '%d.%m.%Y.%H:%M') + datetime.timedelta(hours=-3)).replace(tzinfo=tz)
 
-            nod = Nodarb_tips.objects.filter( nos = l[5] )
-            graf_nod = Grafiks.objects.get( sakums = time, nodarbiba = nod )
+            try:
+                nod = Nodarb_tips.objects.filter( nos = l[5] )
+                graf_nod = Grafiks.objects.get( sakums = time, nodarbiba = nod )
+            except:
+                error += 1
+                print 'ERROR'
+                print line
 
-            print str(graf_nod) + ' | ' + str(graf_nod.sakums) + ' | ' + str(graf_nod.treneris) + ' | ' + str(graf_nod.vietas)
+#            print str(graf_nod) + ' | ' + str(graf_nod.sakums) + ' | ' + str(graf_nod.treneris) + ' | ' + str(graf_nod.vietas)
 
             if graf_nod.vietas > 0:
                 new = 0
                 for c in clients:
                     if c.e_pasts == l[4] and c.vards == l[2]:
                        # klients jau eksiste
-                        c.pieteikuma_reizes += 1
-                        c.pedejais_pieteikums = datetime.datetime.now().replace(tzinfo=tz)
-                        c.tel = l[3]
-                        c.save()
-                        new += 1
 
-                        graf_nod.vietas -= 1
-                        graf_nod.save()
+# !!!!! NODARBIBAS LAIKU OVERLAP CHEKER !!!!!
+                        nod_start = getattr( graf_nod, 'sakums')
+                        nod_end = getattr( graf_nod, 'sakums') + datetime.timedelta(minutes=int(getattr( graf_nod, 'ilgums')))
 
-                        pieraksts = Pieraksti( klients = c, nodarbiba = graf_nod ) # PIETEIKUMS --> ACCEPT
-                        pieraksts.save()
-                 # Pieraksts sekmigs
+                        nod_date = nod_start.date()
+                        date_nod = Grafiks.objects.filter( sakums__startswith = nod_date ).order_by('sakums')
+
+                        count = 0
+                        for d in date_nod:
+                            end = d.sakums + datetime.timedelta(minutes=int(d.ilgums))
+                            Overlap = max(nod_start, d.sakums) < min(nod_end, end)
+                            if Overlap == True:
+                                try:
+                                    pieraksti_nodarb = Pieraksti.objects.get( klients = c, nodarbiba = d )
+                                    count += 1
+                                except Pieraksti.DoesNotExist:
+                                    pass
+                                except:
+                                    count += 1
+
+                        if count != 0:
+                            result = False
+                        else:
+                            result = True
+
+                        if result == True: # pieraksts nepārklājas
+
+                            c.pieteikuma_reizes += 1
+                            c.pedejais_pieteikums = datetime.datetime.now().replace(tzinfo=tz)
+                            c.tel = l[3]
+                            c.save()
+                            new += 1
+
+                            graf_nod.vietas -= 1
+                            graf_nod.save()
+
+                            pieraksts = Pieraksti( klients = c, nodarbiba = graf_nod ) # PIETEIKUMS --> ACCEPT
+                            pieraksts.save()
+                         # Pieraksts sekmigs
+ #                       else:
+ #                           print 'OVERLAP'
+ #                           print line
 
                 if new == 0:
                    # Jauns klients
@@ -75,5 +112,7 @@ class Command(BaseCommand):
                     pieraksts.save()
                    # Pieraksts sekmigs
 
-            else:
-                print 'Nodarbiba pilna'
+#            else:
+#                print 'Nodarbiba pilna'
+#                print line
+        print error

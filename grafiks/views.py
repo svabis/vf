@@ -59,6 +59,7 @@ def main(request):
     return redirect ('day_list', d_id=4)
 
 
+# !!!!! KONKRETA DIENA !!!!!
 def day_list(request, d_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
@@ -79,10 +80,11 @@ def day_list(request, d_id):
     args['shodiena'] = datetime.date.today()
     args['data'] = dienas_nodarb
     args['datumi'] = datumi
+    args['d_id'] = d_id
     return render_to_response( 'day_data.html', args )
 
 # !!!!! KONKRETA DIENAS NODARBIBA !!!!!
-def nod_list(request, g_id):
+def nod_list(request, d_id, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
@@ -95,11 +97,12 @@ def nod_list(request, g_id):
     klienti = Grafiks.objects.get(id=g_id).nod.all()
     args['data'] = klienti
     args['g_id'] = g_id
+    args['d_id'] = d_id
     return render_to_response( 'day_kli_data.html', args )
 
 
 # !!!!! NODARBIBAS ATEIKUMI !!!!!
-def cancel_list(request, g_id):
+def cancel_list(request, d_id, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
@@ -112,7 +115,30 @@ def cancel_list(request, g_id):
     klienti = Grafiks.objects.get(id=g_id).ateikt.all()
     args['data'] = klienti
     args['g_id'] = g_id
+    args['d_id'] = d_id
     return render_to_response( 'day_cancel_data.html', args )
+
+# ===================================================
+
+# !!!!! RECEPTION CANCEL !!!!!
+def reception_cancel(request, g_id, p_id):
+    if auth.get_user(request).get_username() == '': # IF NO USER -->
+        return redirect ("/reception/login/")
+
+#    nodarb = Grafiks.objects.get(id=g_id)
+    pieraksts = Pieraksti.objects.get(id=p_id)
+# ADD VIETAS uznodarbību
+    pieraksts.nodarbiba.vietas += 1
+    pieraksts.nodarbiba.save()
+# Create Atteikums object
+    atteikums = Atteikumi( pieraksta_laiks=pieraksts.pieraksta_laiks, klients=pieraksts.klients, nodarbiba=pieraksts.nodarbiba )
+    atteikums.save()
+# Klients.atteikumi -=1
+    pieraksts.klients.atteikuma_reizes +=1
+    pieraksts.klients.save()
+# DELETE PIERAKSTS
+    pieraksts.delete()
+    return redirect( 'nod_list', g_id=g_id )
 
 # ========================================================================================================
 
@@ -198,3 +224,4 @@ def graf_add(request):
 
         return render_to_response('add_plan.html', args)
     return redirect('/reception/login/')
+

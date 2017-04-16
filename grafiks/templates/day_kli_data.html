@@ -5,9 +5,9 @@
 
 {% block content %}
 
-<a href="/reception/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br><br>
+<a href="/reception/day/{{ d_id }}/"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</a><br><br>
 
-<a href="/reception/cancel/{{ g_id }}/"><button type="button" class="btn btn-danger btn-xs">Nodarbību atcēla</button></a><br>
+<a href="/reception/canceled/{{ d_id }}/{{ g_id }}/"><button type="button" class="btn btn-danger btn-xs">Nodarbību atcēla</button></a><br>
 
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
@@ -23,7 +23,7 @@
 <tbody>
 {% for d in data %}
 <tr>
- <td><a href="#"><button type="button" class="btn btn-default btn-xs">Atcelt Pierakstu</button></a></td>
+ <td><a href="/reception/cancel/{{ g_id }}/{{ d.id }}/"><button type="button" class="btn btn-default btn-xs">Atcelt Pierakstu</button></a></td>
  <td>{{ d.pieraksta_laiks|date:"d/m/Y H:i" }}</td>
  <td>{{ d.klients }}</td>
  <td>{{ d.klients.e_pasts }}</td>
