@@ -1,7 +1,8 @@
 {% extends 'day_header.html' %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container-fluid" style="margin-top: 20px;"></div>
+<div class="container">
 <table class="table table-hover table-striped table-condensed">
 <thead><tr>
  <th>Nodarbības laiks</th>
@@ -20,8 +21,9 @@
  <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.treneris }}</a></td>
  <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.telpa }}</a></td>
  <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.vietas }}</a></td>
- <td><a href="/reception/cancel/{{ g_id }}/{{ d.id }}/"><button type="button" class="btn btn-default btn-xs">Pierakstīties</button></a></td>
+ <td>{% if d.vietas != 0 %}<a href="/reception/pierakstities/{{ d_id }}/{{ d.id }}/"><button type="button" class="btn btn-success btn-xs">Pierakstīties</button></a>{% endif %}</td>
 </tr>
 {% endfor %}
 </tbody>
+</div>
 {% endblock %}

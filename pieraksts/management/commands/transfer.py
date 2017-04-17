@@ -10,7 +10,6 @@ from grafiks.models import Grafiks
 from pieraksts.models import *
 
 from slugify import slugify
-from django.core.exceptions import ObjectDoesNotExist
 
 # IMPORT DJANGO STUFF
 from django.core.files import File	# for file opening
@@ -19,45 +18,31 @@ from django.core.management.base import BaseCommand, CommandError
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        db = '/home/svabis/pieraksts.txt'
-        tz = pytz.timezone('UTC')
+       db = '/home/svabis/import.txt'
+       tz = pytz.timezone('UTC')
+       lines = [line.rstrip('\n') for line in open(db)]
 
-        lines = [line.rstrip('\n') for line in open(db)]
-        for line in lines:
-            clients = Klienti.objects.all()
-            l = line.split(';')
+#       if True:
+#           line = lines[0]
+       for line in lines:
+           clients = Klienti.objects.all()
+           l = line.split(';')
+           l[2] = slugify( l[2] ).lower()
+           error = 0
 
-# l[0]+l[1] = time
-# l[2] = Vārds Uzvārds
-# l[3] = tel
-# l[4] = e-mail
-# l[5] = Nodarbība
+           time = l[0] + '.' + l[1]
+           time = (datetime.datetime.strptime( time, '%d.%m.%Y.%H:%M') + datetime.timedelta(hours=-3)).replace(tzinfo=tz)
 
-            l[2] = slugify( l[2] ).lower()
-            error = 0
+           try:
+             nod = Nodarb_tips.objects.filter( nos = l[5] )
+             graf_nod = Grafiks.objects.get( sakums = time, nodarbiba = nod )
+#             print str(graf_nod) + ' | ' + str(graf_nod.sakums) + ' | ' + str(graf_nod.treneris) + ' | ' + str(graf_nod.vietas)
 
-           # 26,04,2017,19,00
-           # Y M D H M
-            time = l[0] + '.' + l[1]
-            time = (datetime.datetime.strptime( time, '%d.%m.%Y.%H:%M') + datetime.timedelta(hours=-3)).replace(tzinfo=tz)
-
-            try:
-                nod = Nodarb_tips.objects.filter( nos = l[5] )
-                graf_nod = Grafiks.objects.get( sakums = time, nodarbiba = nod )
-            except:
-                error += 1
-                print 'ERROR'
-                print line
-
-#            print str(graf_nod) + ' | ' + str(graf_nod.sakums) + ' | ' + str(graf_nod.treneris) + ' | ' + str(graf_nod.vietas)
-
-            if graf_nod.vietas > 0:
+             if graf_nod.vietas > 0:
                 new = 0
                 for c in clients:
                     if c.e_pasts == l[4] and c.vards == l[2]:
                        # klients jau eksiste
-
-# !!!!! NODARBIBAS LAIKU OVERLAP CHEKER !!!!!
                         nod_start = getattr( graf_nod, 'sakums')
                         nod_end = getattr( graf_nod, 'sakums') + datetime.timedelta(minutes=int(getattr( graf_nod, 'ilgums')))
 
@@ -95,24 +80,24 @@ class Command(BaseCommand):
 
                             pieraksts = Pieraksti( klients = c, nodarbiba = graf_nod ) # PIETEIKUMS --> ACCEPT
                             pieraksts.save()
-                         # Pieraksts sekmigs
- #                       else:
- #                           print 'OVERLAP'
- #                           print line
+                        # Pieraksts sekmigs
+#                       else:
+#                           print 'OVERLAP'
+#                           print line
 
                 if new == 0:
-                   # Jauns klients
-                    new_client = Klienti( vards = l[2], e_pasts = l[4], tel=l[3], pieteikuma_reizes = 1 )
-                    new_client.save()
+                  # Jauns klients
+                   new_client = Klienti( vards = l[2], e_pasts = l[4], tel=l[3], pieteikuma_reizes = 1 )
+                   new_client.save()
 
-                    graf_nod.vietas -= 1
-                    graf_nod.save()
+                   graf_nod.vietas -= 1
+                   graf_nod.save()
 
-                    pieraksts = Pieraksti( klients= new_client, nodarbiba = graf_nod ) # PIETEIKUMS --> ACCEPT
-                    pieraksts.save()
-                   # Pieraksts sekmigs
+                   pieraksts = Pieraksti( klients= new_client, nodarbiba = graf_nod ) # PIETEIKUMS --> ACCEPT
+                   pieraksts.save()
+                  # Pieraksts sekmigs
 
-#            else:
-#                print 'Nodarbiba pilna'
-#                print line
-        print error
+           except:
+               error += 1
+               print 'ERROR'
+               print line

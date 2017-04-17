@@ -1,0 +1,18 @@
+# DJANGO MAIN SETTINGS & mail.py (script)
+	main
+
+# DJANGO APP's
+	grafiks - grafiks, planotajs objects | reception web part
+	pieraksts - pieraksti, atteikumi objects | pieraksts web part
+
+	klienti - klienti objects
+	nodarb - nodarbibas, treneri, telpas, relacijas objects
+
+# DJANGO FOLDERS
+	media		MEDIA FILES treneri.images e.t.c.
+	static		STATIC FILES bootstrap, images e.t.c
+	templates	MAIN TEMPLATE FOLDER
+
+manage.py - python django runfile
+serv - run develop server on 8000 port shortcut
+

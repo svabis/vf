@@ -16,10 +16,41 @@ from pieraksts.models import *
 from grafiks.models import Grafiks
 from grafiks.forms import PlanotajsForm
 
+from pieraksts.forms import KlientsReceptionForm
+
+from slugify import slugify
 from main import mail
 
 import datetime
 today = datetime.date.today()
+
+# !!!!! NODARBIBAS LAIKU OVERLAP CHEKER !!!!!
+def nod_check(n_id, k_id):
+    result = False	# denied Pieraksts
+    n = Grafiks.objects.get( id=n_id )
+    nod_start = getattr( n, 'sakums')
+    nod_end = getattr( n, 'sakums') + datetime.timedelta(minutes=int(getattr( n, 'ilgums')))
+
+    nod_date = nod_start.date()
+    date_nod = Grafiks.objects.filter( sakums__startswith = nod_date ).order_by('sakums')
+
+    count = 0
+    for d in date_nod:
+        end = d.sakums + datetime.timedelta(minutes=int(d.ilgums))
+        Overlap = max(nod_start, d.sakums) < min(nod_end, end)
+        if Overlap == True:
+            try:
+                pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = d )
+                count += 1
+            except Pieraksti.DoesNotExist:
+                pass
+            except:
+                count += 1
+
+    if count != 0:
+        return False # Pieraksts --> DENIED
+    else:
+        return True
 
 
 # !!!!! LOGIN !!!!!
@@ -120,25 +151,147 @@ def cancel_list(request, d_id, g_id):
 
 # ===================================================
 
+# !!!!! KONKRETA DIENAS NODARBIBAS PRINT !!!!!
+def print_nod(request, d_id, g_id):
+    if auth.get_user(request).get_username() == '': # IF NO USER -->
+        return redirect ("/reception/login/")
+    args = {}
+
+    args['title'] = datetime.datetime.now()
+    args['title2'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
+    args['subtitle'] = getattr(Grafiks.objects.get( id=g_id ), 'sakums')
+    args['treneris'] = getattr(Grafiks.objects.get( id=g_id ), 'treneris')
+
+    klienti = Grafiks.objects.get(id=g_id).nod.all()
+    args['data'] = klienti
+    return render_to_response( 'day_kli_print.html', args )
+
+# ===================================================
+
 # !!!!! RECEPTION CANCEL !!!!!
-def reception_cancel(request, g_id, p_id):
+def reception_cancel(request, d_id, g_id, p_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
 
-#    nodarb = Grafiks.objects.get(id=g_id)
-    pieraksts = Pieraksti.objects.get(id=p_id)
+    try:
+        pieraksts = Pieraksti.objects.get(id=p_id)
 # ADD VIETAS uznodarbību
-    pieraksts.nodarbiba.vietas += 1
-    pieraksts.nodarbiba.save()
+        pieraksts.nodarbiba.vietas += 1
+        pieraksts.nodarbiba.save()
 # Create Atteikums object
-    atteikums = Atteikumi( pieraksta_laiks=pieraksts.pieraksta_laiks, klients=pieraksts.klients, nodarbiba=pieraksts.nodarbiba )
-    atteikums.save()
+        atteikums = Atteikumi( pieraksta_laiks=pieraksts.pieraksta_laiks, klients=pieraksts.klients, nodarbiba=pieraksts.nodarbiba )
+        atteikums.save()
 # Klients.atteikumi -=1
-    pieraksts.klients.atteikuma_reizes +=1
-    pieraksts.klients.save()
+        pieraksts.klients.atteikuma_reizes +=1
+        pieraksts.klients.save()
 # DELETE PIERAKSTS
-    pieraksts.delete()
-    return redirect( 'nod_list', g_id=g_id )
+        pieraksts.delete()
+    except:
+        pass
+    return redirect( 'nod_list', d_id=d_id, g_id=g_id )
+
+
+# !!!!! RECEPTION PIERAKSTS !!!!!
+def reception_pieraksts(request, d_id, n_id):
+    if auth.get_user(request).get_username() == '': # IF NO USER -->
+        return redirect ("/reception/login/")
+    try:
+        nod = Grafiks.objects.get( id=n_id )
+    except ObjectDoesNotExist:  # not existing --> 404
+        return redirect ('day_list', d_id=d_id)
+
+    form = KlientsReceptionForm
+
+    args = {}
+    args['d_id'] = d_id
+    args['n_id'] = n_id
+    args['title'] = nod.nodarbiba.nos + ' - ' + nod.treneris.vards
+    args['subtitle'] = getattr(Grafiks.objects.get( id=n_id ), 'sakums')
+    args['form'] = form
+    args.update(csrf(request)) # ADD CSRF TOKEN
+
+    if request.POST:
+        form = KlientsReceptionForm( request.POST )
+        if form.is_valid():
+           # SLUGIFY "Vārds Uzvārds" --> "vards_uzvards"
+            new_name = slugify(form.cleaned_data['vards']).lower()
+            new_email = form.cleaned_data['e_pasts']
+            new_tel = form.cleaned_data['tel']
+
+            args['vards'] = form.cleaned_data['vards']
+            args['epasts'] = new_email
+            args['telefons'] = new_tel
+
+            error = False
+            clients = Klienti.objects.all()
+            new = 0
+           # meklejam kljudas pieteikuma forma
+            for c in clients:
+                if c.tel == new_tel and c.vards != new_name:
+                   # CITS KLIENTA VARDS
+                    error = True
+                    args['error_msg'] = u' Autorizācijas kļūda, klienta tālrunim atbilst cits tālruņa nummurs'
+
+            if error == True:
+                args['error'] = True
+                args['form'] = form     # ERROR MESSAGE
+                return render_to_response( 'rec_pierakst.html', args )
+
+            for c in clients:
+                if c.tel == new_tel and c.vards == new_name:
+                   # klients jau eksiste
+                    if getattr(Grafiks.objects.get( id=n_id ), 'vietas') < 1: # IF VIETAS=0 --> ERROR
+                        error = True
+                        args['error_msg'] = u' Atvainojiet visas nodarbības vietas jau ir aizņemtas'
+                    if nod_check(n_id, c) == False: # False --> jau ir pieraksts uz sho laiku
+                        error = True
+                        args['error_msg'] = u' Uz šo laiku klients jau ir pierakstījies'
+                    if error == False: # VIETAS > 0, PIERAKSTI NEPARKLAJAS --> Pieraksts
+                        c.pieteikuma_reizes += 1
+                        c.pedejais_pieteikums = datetime.datetime.now()
+#                        c.tel = new_tel # UPDATE tel nr ierakstu
+                        c.save()
+                        new += 1
+
+                        nodarbiba = Grafiks.objects.get( id=n_id ) # VIETAS -1
+                        nodarbiba.vietas -= 1
+                        nodarbiba.save()
+
+                        pieraksts = Pieraksti(klients=c, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
+                        pieraksts.save()
+                 # Pieraksts sekmigs
+                        return redirect ('day_list', d_id=d_id)
+
+            if error == True:
+                args['error'] = True
+                args['form'] = form     # ERROR MESSAGE
+                return render_to_response( 'rec_pierakst.html', args )
+
+            if new == 0:
+               # Jauns klients
+                if getattr(Grafiks.objects.get( id=n_id ), 'vietas') < 1: # IF VIETAS=0 --> ERROR
+                    error = True
+                    args['error_msg'] = u' Atvainojiet visas nodarbības vietas ir aizņemtas'
+                else: # VIETAS > 0 --> Pieraksts
+                    new_client = Klienti(vards=new_name, e_pasts=new_email, tel=new_tel, pieteikuma_reizes=1)
+                    new_client.save()
+
+                    nodarbiba = Grafiks.objects.get( id=n_id ) # VIETAS -1
+                    nodarbiba.vietas -= 1
+                    nodarbiba.save()
+
+                    pieraksts = Pieraksti(klients=new_client, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
+                    pieraksts.save()
+             # Pieraksts sekmigs
+                    return redirect ('day_list', d_id=d_id)
+
+            if error == True:
+                args['error'] = True
+                args['form'] = form     # ERROR MESSAGE
+                return render_to_response( 'rec_pierakst.html', args )
+        return render_to_response( 'rec_pierakst.html', args )
+    return render_to_response( 'rec_pierakst.html', args )
+
 
 # ========================================================================================================
 

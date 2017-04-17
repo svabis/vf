@@ -1,0 +1,31 @@
+{% extends 'print.html' %}
+{% block style %}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+<h2><strong>{{ title2 }} | {{ treneris }} | {{ subtitle|date:"d/m/Y H:i" }}</strong></h2>
+<table class="table table-hover table-striped table-condensed">
+<thead><tr>
+ <th><h3 style="margin-top: 0px; margin-bottom: 0px;">Nr.pk.</h3></th>
+ <th><h3 style="margin-top: 0px; margin-bottom: 0px;">Vārds Uzvārds</h3></th>
+ <th><h3 style="margin-top: 0px; margin-bottom: 0px;">Tālrunis</h3></th>
+ <th style="text-align:center;"><h3 style="margin-top: 0px; margin-bottom: 0px;">Ieradās</h3></th>
+</tr></thead>
+
+<tbody>
+{% for d in data %}
+<tr>
+ <td><h4 style="margin-top: 0px; margin-bottom: 0px;">{{ forloop.counter }}</h4></td>
+ <td><h4 style="margin-top: 0px; margin-bottom: 0px;">{{ d.klients }}</h4></td>
+ <td><h4 style="margin-top: 0px; margin-bottom: 0px;">{{ d.klients.tel }}</h4></td>
+ <td style="text-align:center;"><h4 style="margin-top: 0px; margin-bottom: 0px;"><input type="checkbox" value="" class="disabled_checkbox"></h4></td>
+</tr>
+{% endfor %}
+</tbody>
+
+</div>
+
+{% endblock %}

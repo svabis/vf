@@ -9,12 +9,17 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
 # Reception Cancel
-    url(r'^cancel/(?P<g_id>\d+)/(?P<p_id>\d+)/$', 'grafiks.views.reception_cancel'),
+    url(r'^cancel/(?P<d_id>\d+)/(?P<g_id>\d+)/(?P<p_id>\d+)/$', 'grafiks.views.reception_cancel'),
 
+# Reception Cancel
+    url(r'^pierakstities/(?P<d_id>\d+)/(?P<n_id>\d+)/$', 'grafiks.views.reception_pieraksts'),
+
+# Reception
+    url(r'^print_nod/(?P<d_id>\d+)/(?P<g_id>\d+)/$', 'grafiks.views.print_nod'),
 
 # Nodarbibas
     url(r'^nod/(?P<d_id>\d+)/(?P<g_id>\d+)/$', 'grafiks.views.nod_list', name='nod_list'),
-    url(r'^canceled/(?P<d_id>\d+)/(?P<g_id>\d+)/$', 'grafiks.views.cancel_list'),
+    url(r'^atteikumi/(?P<d_id>\d+)/(?P<g_id>\d+)/$', 'grafiks.views.cancel_list'),
     url(r'^day/(?P<d_id>\d+)/$', 'grafiks.views.day_list', name='day_list'),
 
 # Login

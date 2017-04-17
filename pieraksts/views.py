@@ -58,40 +58,11 @@ def nod_check(n_id, k_id):
             except:
                 count += 1
 
-# 1. parbauda vai jau nav pieraksts uz sho --> False = OK
-#    try:
-#        pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = n )
-#    except Pieraksti.DoesNotExist:
-#        result = True
-#    except:
-#        result = False
-
-# 2. parbauda vai n_id.start ieklaujas laika kadam citam start --> False
-#    count = 0
-#    for nod in Grafiks.objects.filter( sakums__range = (nod_start, nod_end)):
-#        try:
-#            pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = nod )
-#            count += 1
-#        except Pieraksti.DoesNotExist:
-#            pass
-#        except:
-#            count += 1
-#            pass
     if count != 0:
-        result = False
+        return False # Pieraksts --> DENIED
     else:
-        result = True
-
-# Grafiks.objects.filter( sakums__range = (start, end))
-#[<Grafiks: TRX>, <Grafiks: TRX>, <Grafiks: TRX>]
-
-# 3. parbauda vai (n_id.start + timedelta(min=nodarb.ilgums) ieklaujas --> False
-# 4. n_id sakas pirms un beidzas pec parbaudama --> False
-
-#    if True:
-    if result == True:	# if True Pieraksts --> ALLOWED
         return True
-    return False # Pieraksts --> DENIED
+
 
 # =================================================================================================================
 
