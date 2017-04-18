@@ -21,7 +21,10 @@
  <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.treneris }}</a></td>
  <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.telpa }}</a></td>
  <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.vietas }}</a></td>
- <td>{% if d.vietas != 0 %}<a href="/reception/pierakstities/{{ d_id }}/{{ d.id }}/"><button type="button" class="btn btn-success btn-xs">Pierakstīties</button></a>{% endif %}</td>
+ <td>
+  {% if d.vietas != 0 %}<a href="/reception/pierakstities/{{ d_id }}/{{ d.id }}/"><button type="button" class="btn btn-success btn-xs">Pierakstīties</button></a>{% endif %}
+  {% if d.vietas < 1 and super == True %}<a href="/reception/pierakstities/{{ d_id }}/{{ d.id }}/"><button type="button" class="btn btn-danger btn-xs">Pierakstīties</button></a>{% endif %}
+ </td>
 </tr>
 {% endfor %}
 </tbody>

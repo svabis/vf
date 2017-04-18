@@ -12,6 +12,7 @@
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
 <thead><tr>
+ <th>Nr.pk.</th>
  <th>Pieraksta laiks</th>
  <th>Atcelšanas laiks</th>
  <th>Vārds Uzvārds</th>
@@ -22,6 +23,7 @@
 <tbody>
 {% for d in data %}
 <tr>
+ <td>{{ forloop.counter }}</td>
  <td>{{ d.pieraksta_laiks|date:"d/m/Y H:i" }}</td>
  <td>{{ d.ateikuma_laiks|date:"d/m/Y H:i" }}</td>
  <td>{{ d.klients }}</td>

@@ -13,7 +13,11 @@ class KlientsForm(forms.Form):
     e_pasts = forms.EmailField( required=True,
          widget = forms.EmailInput( attrs={'class': 'form-control', 'title': 'e-pasts'}))
 
-    tel = forms.RegexField( regex=r'^[+]\d+|\d+', max_length = 15, required=True,
+# + skaiļi
+# + 3 skaitļi atstarpe skaitļi
+# 2 + 7 skaitļi
+# 6 + 7 skaitļi
+    tel = forms.RegexField( regex=r'^[+]\d{3}\d+|^[+]\d{3}\s\d+|^[2]\d{7}$|^[6]\d{7}$', max_length = 15, required=True,
          error_message = (u'Ievadiet korektu Tālruņa numuru'),
          widget = forms.TextInput( attrs={'class': 'form-control', 'size': 15, 'title': 'tālrunis'}))
 
@@ -30,6 +34,9 @@ class KlientsReceptionForm(forms.Form):
     e_pasts = forms.EmailField( required=False,
          widget = forms.EmailInput( attrs={'class': 'form-control', 'title': 'e-pasts'}))
 
-    tel = forms.RegexField( regex=r'^[+]\d{14}|\d{15}|$', max_length = 15, required=True,
+# + skaiļi
+# 2 + 7 skaitļi
+# 6 + 7 skaitļi
+    tel = forms.RegexField( regex=r'^[+]\d+|^[2]\d{7}$|^[6]\d{7}$', max_length = 15, required=True,
          error_message = (u'Tālruņa nummuram ir jāsākas ar 2 vai 6, ciparu skaitam ir jābūt 8.'),
          widget = forms.TextInput( attrs={'class': 'form-control', 'size': 15, 'title': 'tālrunis'}))

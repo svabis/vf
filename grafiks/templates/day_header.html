@@ -1,7 +1,7 @@
 {% extends 'admin.html' %}
 {% block style %}
-.nav-tabs > li > a{ color: #000; background-color:#eee; border:solid #ccc 1px; }
-.nav-tabs > li > a:hover{ background-color: #ccc !important; color:#fff; border:solid #ccc 1px; }
+.nav-tabs > li > a{ color: #000; background-color:#ccc; border:solid #ccc 1px; }
+.nav-tabs > li > a:hover{ background-color: #888 !important; color:#fff; border:solid #ccc 1px; }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
 {% endblock %}
@@ -12,9 +12,14 @@
 {% for d in datumi %}
 {% if d == title %}<li class="active">{% else %}<li>{% endif %}
 
-{% if d == shodiena and d != title %}
-<a href="/reception/day/{{ forloop.counter0 }}/" style="background-color:#888;">{{ d|date:"D d/m" }}</a></li>{% else %}
-<a href="/reception/day/{{ forloop.counter0 }}/">{{ d|date:"D d/m" }}</a></li>{% endif %}{% endfor %}
+{% if d.0 == shodiena and d.0 != title %}
+<a href="/reception/day/{{ forloop.counter0 }}/" style="background-color: #ff8080;">{{ d.0|date:"D d/m" }}</a></li>{% elif d.0 == title %}
+<a href="/reception/day/{{ forloop.counter0 }}/">{{ d.0|date:"D d/m" }}</a></li>{% else %}
+
+{% if d.1 == 5 or d.1 == 6 %}
+<a href="/reception/day/{{ forloop.counter0 }}/" style="background-color: #ffffb3;">{{ d.0|date:"D d/m" }}</a></li>{% else %}
+<a href="/reception/day/{{ forloop.counter0 }}/" style="background-color: #ccff99;">{{ d.0|date:"D d/m" }}</a></li>{% endif %}
+{% endif %}{% endfor %}
 
 </ul>
 <!-- </div></div> -->

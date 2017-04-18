@@ -105,7 +105,8 @@ def day_list(request, d_id):
     dienas_nodarb = Grafiks.objects.filter(sakums__startswith=datums).order_by('sakums') # datuma nodarbibas
 
     for d in range(0,33):
-        datumi.append(today + datetime.timedelta( days=dienas[d] ))
+#        datumi.append(today + datetime.timedelta( days=dienas[d] ))
+        datumi.append([(today + datetime.timedelta(days=dienas[d])), ((today + datetime.timedelta(days=dienas[d])).weekday())])
 
     args['title'] = datums
     args['shodiena'] = datetime.date.today()
@@ -156,6 +157,8 @@ def print_nod(request, d_id, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
+    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+        args['super'] = True
 
     args['title'] = datetime.datetime.now()
     args['title2'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
@@ -199,10 +202,15 @@ def reception_pieraksts(request, d_id, n_id):
         nod = Grafiks.objects.get( id=n_id )
     except ObjectDoesNotExist:  # not existing --> 404
         return redirect ('day_list', d_id=d_id)
+    args = {}
+    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+        args['super'] = True
+        super = True
+    else:
+        super = False
 
     form = KlientsReceptionForm
 
-    args = {}
     args['d_id'] = d_id
     args['n_id'] = n_id
     args['title'] = nod.nodarbiba.nos + ' - ' + nod.treneris.vards
@@ -240,9 +248,10 @@ def reception_pieraksts(request, d_id, n_id):
             for c in clients:
                 if c.tel == new_tel and c.vards == new_name:
                    # klients jau eksiste
-                    if getattr(Grafiks.objects.get( id=n_id ), 'vietas') < 1: # IF VIETAS=0 --> ERROR
+                    if getattr(Grafiks.objects.get( id=n_id ), 'vietas') < 1 and super != True: # IF VIETAS=0 --> ERROR
                         error = True
                         args['error_msg'] = u' Atvainojiet visas nodarbības vietas jau ir aizņemtas'
+
                     if nod_check(n_id, c) == False: # False --> jau ir pieraksts uz sho laiku
                         error = True
                         args['error_msg'] = u' Uz šo laiku klients jau ir pierakstījies'
@@ -254,13 +263,17 @@ def reception_pieraksts(request, d_id, n_id):
                         new += 1
 
                         nodarbiba = Grafiks.objects.get( id=n_id ) # VIETAS -1
-                        nodarbiba.vietas -= 1
+                        if nodarbiba.vietas > 0 and super != True:
+                            nodarbiba.vietas -= 1
                         nodarbiba.save()
 
                         pieraksts = Pieraksti(klients=c, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
                         pieraksts.save()
                  # Pieraksts sekmigs
-                        return redirect ('day_list', d_id=d_id)
+                        args['vards'] = c.vards
+                        args['epasts'] = c.e_pasts
+                        args['telefons'] = c.tel
+                        return render_to_response ('rec_pier_success.html', args )
 
             if error == True:
                 args['error'] = True
@@ -269,7 +282,7 @@ def reception_pieraksts(request, d_id, n_id):
 
             if new == 0:
                # Jauns klients
-                if getattr(Grafiks.objects.get( id=n_id ), 'vietas') < 1: # IF VIETAS=0 --> ERROR
+                if getattr(Grafiks.objects.get( id=n_id ), 'vietas') < 1 and super != True: # IF VIETAS=0 --> ERROR
                     error = True
                     args['error_msg'] = u' Atvainojiet visas nodarbības vietas ir aizņemtas'
                 else: # VIETAS > 0 --> Pieraksts
@@ -277,13 +290,17 @@ def reception_pieraksts(request, d_id, n_id):
                     new_client.save()
 
                     nodarbiba = Grafiks.objects.get( id=n_id ) # VIETAS -1
-                    nodarbiba.vietas -= 1
+                    if nodarbiba.vietas < 0 and super != True:
+                        nodarbiba.vietas -= 1
                     nodarbiba.save()
 
                     pieraksts = Pieraksti(klients=new_client, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
                     pieraksts.save()
              # Pieraksts sekmigs
-                    return redirect ('day_list', d_id=d_id)
+                    args['vards'] = new_client.vards
+                    args['epasts'] = new_client.e_pasts
+                    args['telefons'] = new_client.tel
+                    return render_to_response ('rec_pier_success.html', args )
 
             if error == True:
                 args['error'] = True
