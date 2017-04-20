@@ -93,7 +93,7 @@ def any(request, n_id):
     except ObjectDoesNotExist:  # not existing --> 404
         return redirect ('main')
     args = {}
-    args['title'] = getattr( n, 'nos') # Nodarb_tips nosaukums
+    args['title'] = getattr( n, 'nos') + u' - Visi' # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
     args['treneri'] = trener_list( n_id )
 
@@ -125,7 +125,7 @@ def specific(request, n_id, t_id):
     except ObjectDoesNotExist:  # not existing --> 404
         return redirect ('main')
     args = {}
-    args['title'] = getattr( n, 'nos') # Nodarb_tips nosaukums
+    args['title'] = getattr( n, 'nos') + ' - ' + getattr( t, 'vards') # Nodarb_tips nosaukums
     args['nodarb_slug'] = n_id
     args['treneri'] = trener_list( n_id )
 
@@ -148,10 +148,6 @@ def specific(request, n_id, t_id):
 
     args['back'] = False
     return render_to_response( 'select.html', args )
-
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# !!!      INSERT BRAIN HERE       !!!
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 # =================================================================================================================

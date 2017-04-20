@@ -13,14 +13,26 @@
  <th>Pieraksts</th>
 </tr></thead>
 
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+
+<div class="alert alert-danger">
+  <center><strong>Svarīgi!</strong> Visa tabulas rinda ir <i>"spiežama"</i> (links uz nodarbību)</center>
+</div>
+
 <tbody>
 {% for d in data %}
-<tr>
- <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.sakums|date:"H:i" }}</a></td>
- <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.nodarbiba }}</a></td>
- <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.treneris }}</a></td>
- <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.telpa }}</a></td>
- <td><a href="/reception/nod/{{ d_id }}/{{ d.id }}/">{{ d.vietas }}</a></td>
+<tr class="clickable-row" data-href="/reception/nod/{{ d_id }}/{{ d.id }}/">
+ <td>{{ d.sakums|date:"H:i" }}</td>
+ <td>{{ d.nodarbiba }}</td>
+ <td>{{ d.treneris }}</td>
+ <td>{{ d.telpa }}</td>
+ <td>{{ d.vietas }}</td>
  <td>
   {% if d.vietas != 0 %}<a href="/reception/pierakstities/{{ d_id }}/{{ d.id }}/"><button type="button" class="btn btn-success btn-xs">Pierakstīties</button></a>{% endif %}
   {% if d.vietas < 1 and super == True %}<a href="/reception/pierakstities/{{ d_id }}/{{ d.id }}/"><button type="button" class="btn btn-danger btn-xs">Pierakstīties</button></a>{% endif %}
