@@ -10,7 +10,9 @@
  <th>Treneris</th>
  <th>Zāle</th>
  <th>Vietas</th>
+{% if title >= shodiena %}
  <th>Pieraksts</th>
+{% endif %}
 </tr></thead>
 
 <script>
@@ -22,7 +24,11 @@ jQuery(document).ready(function($) {
 </script>
 
 <div class="alert alert-danger">
-  <center><strong>Svarīgi!</strong> Visa tabulas rinda ir <i>"spiežama"</i> (links uz nodarbību)</center>
+ <center><strong>Svarīgi!</strong> Vairs nav iespējams atcelt pierakstus uz <i><u>jau notikušām</u></i> nodarbībām !!!</center>
+</div>
+
+<div class="alert alert-warning">
+ <center><strong>Svarīgi!</strong> Pašlaik nav iespējams aplūkot pierakstus uz nodarbībām, kuras ir notikušas <strong><i><u>līdz 23/04</u></i></strong>, tiek veiktas izmaiņas sistēmā!</center>
 </div>
 
 <tbody>
@@ -33,10 +39,12 @@ jQuery(document).ready(function($) {
  <td>{{ d.treneris }}</td>
  <td>{{ d.telpa }}</td>
  <td>{{ d.vietas }}</td>
+{% if title >= shodiena %}
  <td>
   {% if d.vietas != 0 %}<a href="/reception/pierakstities/{{ d_id }}/{{ d.id }}/"><button type="button" class="btn btn-success btn-xs">Pierakstīties</button></a>{% endif %}
   {% if d.vietas < 1 and super == True %}<a href="/reception/pierakstities/{{ d_id }}/{{ d.id }}/"><button type="button" class="btn btn-danger btn-xs">Pierakstīties</button></a>{% endif %}
  </td>
+{% endif %}
 </tr>
 {% endfor %}
 </tbody>

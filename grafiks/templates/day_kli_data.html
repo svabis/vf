@@ -28,7 +28,9 @@
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
 <thead><tr>
+{% if datums >= shodiena %}
  <th></th>
+{% endif %}
  <th>Nr.pk.</th>
  <th>Pierakstīšanās laiks</th>
  <th>Vārds Uzvārds</th>
@@ -40,13 +42,14 @@
 <tbody>
 {% for d in data %}
 <tr>
+{% if datums >= shodiena %}
  <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Cancel{{ d.id }}">Atcelt Pierakstu</button></td>
+{% endif %}
  <td>{{ forloop.counter }}</td>
  <td>{{ d.pieraksta_laiks|date:"d/m/Y H:i" }}</td>
  <td>{{ d.klients }}</td>
  <td>{{ d.klients.e_pasts }}</td>
  <td>{{ d.klients.tel }}</td>
-<!-- <td style="text-align:center;"><input type="checkbox" value="" class="disabled_checkbox"></td> -->
 </tr>
 {% endfor %}
 </tbody>

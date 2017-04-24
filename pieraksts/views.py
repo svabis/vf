@@ -16,6 +16,10 @@ from grafiks.models import Grafiks, Planotajs
 from pieraksts.forms import KlientsForm
 from pieraksts.models import *
 
+# Pieraksta statistikas modulis
+from statistika import day_stat
+
+# E-pasta modulis
 from main import mail
 from slugify import slugify
 
@@ -178,10 +182,18 @@ def pieraksts(request, g_id):
             new_name = slugify(form.cleaned_data['vards']).lower()
             new_email = form.cleaned_data['e_pasts']
             new_tel = form.cleaned_data['tel']
+           # REMOVE +371 etc.
+            if new_tel.startswith('+371 '):
+                new_tel = new_tel[5:]
+            elif new_tel.startswith('+371'):
+                new_tel = new_tel[4:]
+            else:
+                pass
+
 
             args['vards'] = form.cleaned_data['vards']
             args['epasts'] = new_email
-            args['telefons'] = new_tel
+            args['telefons'] = form.cleaned_data['tel']
 
             error = False
             clients = Klienti.objects.all()
@@ -223,6 +235,7 @@ def pieraksts(request, g_id):
                         mail.send_email(new_email, nod.nodarbiba.nos, nod.sakums, pieraksts.atteikuma_kods)
                         pieraksts.save()
                  # Pieraksts sekmigs
+                        day_stat.day_stat()
                         args['back'] = False
                         return render_to_response( 'success.html', args )
 
@@ -249,6 +262,7 @@ def pieraksts(request, g_id):
                     mail.send_email(new_email, nod.nodarbiba.nos, nod.sakums, pieraksts.atteikuma_kods)
                     pieraksts.save()
              # Pieraksts sekmigs
+                    day_stat.day_stat()
                     args['back'] = False
                     return render_to_response( 'success.html', args )
 

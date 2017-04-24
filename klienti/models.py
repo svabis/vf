@@ -1,12 +1,14 @@
 from django.db import models
 from django.utils import timezone
-#from phonenumber_field.modelfields import PhoneNumberField
+
+#from klienti.models import Klienti
+from grafiks.models import Grafiks
+
 
 # !!! Klienti !!!
 class Klienti(models.Model):
     class Meta():
         db_table = "klienti"
-#        app_label = 'Klienti'
 
     pirmais_pieteikums = models.DateTimeField( default = timezone.now )
     pedejais_pieteikums = models.DateTimeField( default = timezone.now )
@@ -18,3 +20,26 @@ class Klienti(models.Model):
 
     def __unicode__(self):
         return u'%s' % (self.vards)
+
+
+
+# !!! Pieraksti !!!
+class HistPieraksti(models.Model):
+    class Meta():
+        db_table = "hist_pieraksti"
+
+    pieraksta_laiks = models.DateTimeField( default = timezone.now )
+    klients = models.ForeignKey( Klienti )
+    nodarbiba = models.ForeignKey( Grafiks )
+
+
+# !!! Atteikumi !!!
+class HistAtteikumi(models.Model):
+    class Meta():
+        db_table = "hist_atteikumi"
+
+    ateikuma_laiks = models.DateTimeField( default = timezone.now )
+    pieraksta_laiks = models.DateTimeField( default = timezone.now )
+    klients = models.ForeignKey( Klienti )
+    nodarbiba = models.ForeignKey( Grafiks )
+

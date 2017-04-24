@@ -18,11 +18,16 @@ from grafiks.forms import PlanotajsForm
 
 from pieraksts.forms import KlientsReceptionForm
 
+# Pieraksta statistikas modulis
+from statistika import day_stat
+
 from slugify import slugify
 from main import mail
 
 import datetime
+import pytz
 today = datetime.date.today()
+tz = pytz.timezone('UTC')
 
 # !!!!! NODARBIBAS LAIKU OVERLAP CHEKER !!!!!
 def nod_check(n_id, k_id):
@@ -130,6 +135,9 @@ def nod_list(request, d_id, g_id):
     args['data'] = klienti
     args['g_id'] = g_id
     args['d_id'] = d_id
+
+    args['datums'] = getattr(Grafiks.objects.get( id=g_id ), 'sakums').date()
+    args['shodiena'] = datetime.datetime.now().date()
     return render_to_response( 'day_kli_data.html', args )
 
 
@@ -224,11 +232,18 @@ def reception_pieraksts(request, d_id, n_id):
            # SLUGIFY "Vārds Uzvārds" --> "vards_uzvards"
             new_name = slugify(form.cleaned_data['vards']).lower()
             new_email = form.cleaned_data['e_pasts']
-            new_tel = form.cleaned_data['tel']
+            new_tel = str(form.cleaned_data['tel'])
+           # REMOVE +371 etc.
+            if new_tel.startswith('+371 '):
+                new_tel = new_tel[5:]
+            elif new_tel.startswith('+371'):
+                new_tel = new_tel[4:]
+            else:
+                pass
 
             args['vards'] = form.cleaned_data['vards']
             args['epasts'] = new_email
-            args['telefons'] = new_tel
+            args['telefons'] = form.cleaned_data['tel']
 
             error = False
             clients = Klienti.objects.all()
@@ -238,7 +253,7 @@ def reception_pieraksts(request, d_id, n_id):
                 if c.tel == new_tel and c.vards != new_name:
                    # CITS KLIENTA VARDS
                     error = True
-                    args['error_msg'] = u' Autorizācijas kļūda, klienta tālrunim atbilst cits tālruņa nummurs'
+                    args['error_msg'] = u' Autorizācijas kļūda, klienta tālrunim atbilst cits klients'
 
             if error == True:
                 args['error'] = True
@@ -270,9 +285,10 @@ def reception_pieraksts(request, d_id, n_id):
                         pieraksts = Pieraksti(klients=c, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
                         pieraksts.save()
                  # Pieraksts sekmigs
-                        args['vards'] = c.vards
-                        args['epasts'] = c.e_pasts
-                        args['telefons'] = c.tel
+                        day_stat.day_stat()
+                        args['vards'] = form.cleaned_data['vards']
+                        args['epasts'] = form.cleaned_data['e_pasts']
+                        args['telefons'] = form.cleaned_data['tel']
                         return render_to_response ('rec_pier_success.html', args )
 
             if error == True:
@@ -297,9 +313,10 @@ def reception_pieraksts(request, d_id, n_id):
                     pieraksts = Pieraksti(klients=new_client, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
                     pieraksts.save()
              # Pieraksts sekmigs
-                    args['vards'] = new_client.vards
-                    args['epasts'] = new_client.e_pasts
-                    args['telefons'] = new_client.tel
+                    day_stat.day_stat()
+                    args['vards'] = form.cleaned_data['vards']
+                    args['epasts'] = form.cleaned_data['e_pasts']
+                    args['telefons'] = form.cleaned_data['tel']
                     return render_to_response ('rec_pier_success.html', args )
 
             if error == True:

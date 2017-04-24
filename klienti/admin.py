@@ -1,5 +1,5 @@
 from django.contrib import admin
-from klienti.models import Klienti
+from klienti.models import *
 
 
 class KlientiAdmin(admin.ModelAdmin):
@@ -8,4 +8,11 @@ class KlientiAdmin(admin.ModelAdmin):
     search_fields = ['vards', 'e_pasts', 'tel']
     exclude = ['pirmais_pieteikums', 'pedejais_pieteikums', 'atteikuma_reizes', 'pieteikuma_reizes']
 
+
+class HistPierakstiAdmin(admin.ModelAdmin):
+    list_display = ['pieraksta_laiks', 'klients', 'nodarbiba']
+
+
 admin.site.register(Klienti, KlientiAdmin)
+admin.site.register(HistPieraksti, HistPierakstiAdmin)
+admin.site.register(HistAtteikumi)
