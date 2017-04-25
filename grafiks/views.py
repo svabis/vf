@@ -231,7 +231,7 @@ def reception_pieraksts(request, d_id, n_id):
         if form.is_valid():
            # SLUGIFY "Vārds Uzvārds" --> "vards_uzvards"
             new_name = slugify(form.cleaned_data['vards']).lower()
-            new_email = form.cleaned_data['e_pasts']
+            new_email = form.cleaned_data['e_pasts'].lower()
             new_tel = str(form.cleaned_data['tel'])
            # REMOVE +371 etc.
             if new_tel.startswith('+371 '):
@@ -278,7 +278,7 @@ def reception_pieraksts(request, d_id, n_id):
                         new += 1
 
                         nodarbiba = Grafiks.objects.get( id=n_id ) # VIETAS -1
-                        if nodarbiba.vietas > 0 and super != True:
+                        if nodarbiba.vietas > 0:
                             nodarbiba.vietas -= 1
                         nodarbiba.save()
 
@@ -306,7 +306,7 @@ def reception_pieraksts(request, d_id, n_id):
                     new_client.save()
 
                     nodarbiba = Grafiks.objects.get( id=n_id ) # VIETAS -1
-                    if nodarbiba.vietas < 0 and super != True:
+                    if nodarbiba.vietas > 0:
                         nodarbiba.vietas -= 1
                     nodarbiba.save()
 

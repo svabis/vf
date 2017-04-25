@@ -8,6 +8,8 @@
 	klienti - klienti objects
 	nodarb - nodarbibas, treneri, telpas, relacijas objects
 
+	statistika - statistikas dati
+
 # DJANGO FOLDERS
 	media		MEDIA FILES treneri.images e.t.c.
 	static		STATIC FILES bootstrap, images e.t.c
@@ -24,13 +26,17 @@ grafiks/management/commands/
 	manage.py add_day	pievieno dienu pēc mēneša, ja tādas vēl nav	palaižas no crontab katru nakti 00:05
 
 
+
 klienti/management/commands/
 	manage.py clear_tel	notīra Klienti telefonus no '+371' un '+371 '
 	manage.py check_kli	skaita vienādos vārdus, telefonus
-	manage.py chech_pier	meklē pierakstus uz vecām darbadienām
+	manage.py arhive_pier	pārvieto pierakstus uz nodarbībām, vecākus par 4 dienām uz HistPieraksti	palaižas no crontab katru nakti 00:15
+
 
 
 pieraksts/management/commands/
 	transfer.py transfer	DB imports no widgeta
 
-3136 Pierakstis
+
+statistika/management/commands/
+	day_stat.py day_stat	collect day Pieraksti statistics data
