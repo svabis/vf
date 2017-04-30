@@ -16,9 +16,6 @@ from grafiks.models import Grafiks, Planotajs
 from pieraksts.forms import KlientsForm
 from pieraksts.models import *
 
-# Pieraksta statistikas modulis
-from statistika import day_stat
-
 # E-pasta modulis
 from main import mail
 from slugify import slugify
@@ -235,7 +232,6 @@ def pieraksts(request, g_id):
                         mail.send_email(new_email, nod.nodarbiba.nos, nod.sakums, pieraksts.atteikuma_kods)
                         pieraksts.save()
                  # Pieraksts sekmigs
-                        day_stat.day_stat()
                         args['back'] = False
                         return render_to_response( 'success.html', args )
 
@@ -262,7 +258,6 @@ def pieraksts(request, g_id):
                     mail.send_email(new_email, nod.nodarbiba.nos, nod.sakums, pieraksts.atteikuma_kods)
                     pieraksts.save()
              # Pieraksts sekmigs
-                    day_stat.day_stat()
                     args['back'] = False
                     return render_to_response( 'success.html', args )
 

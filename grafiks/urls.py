@@ -9,7 +9,10 @@ urlpatterns = [
     # url(r'^blog/', include('blog.urls')),
 
 # Reception History
-    url(r'^hist/$', 'grafiks.views.history', name='history'),
+    url(r'^hist/$', 'grafiks.views.history'),
+    url(r'^hist/(?P<date>\d+\/\d+\/\d+)/$', 'grafiks.views.hist_date', name='hist_date'),
+    url(r'^hist/(?P<date>\d+\/\d+\/\d+)/(?P<g_id>\d+)/p/$', 'grafiks.views.hist_date_kli'),
+    url(r'^hist/(?P<date>\d+\/\d+\/\d+)/(?P<g_id>\d+)/c/$', 'grafiks.views.hist_date_cancel'),
 
 # Reception Cancel
     url(r'^cancel/(?P<d_id>\d+)/(?P<g_id>\d+)/(?P<p_id>\d+)/$', 'grafiks.views.reception_cancel'),

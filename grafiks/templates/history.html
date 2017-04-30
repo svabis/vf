@@ -1,0 +1,36 @@
+{% extends 'admin.html' %}{% load staticfiles%}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'bootstrap/js/datepicker.js' %}"></script>
+<link rel="stylesheet" href="{% static 'bootstrap/css/datepicker.css' %}"/>
+{% endblock %}
+
+{% block history_header %}
+
+<div class="bootstrap-iso"><div class="container-fluid"><div class="row">
+ <form action="/reception/hist/" method="post">{% csrf_token %}
+  <div class="col-md-1 col-sm-2"></div>
+  <div class="col-md-3 col-sm-4"><div class="form-group"><input class="form-control" id="date" name="date" placeholder="DD/MM/YYY" type="text"/></div></div>
+  <div class="col-md-1 col-sm-2"><div class="form-group"><button class="btn btn-primary " name="submit" type="submit">Pāriet uz datumu</button></div></div>
+ </form>
+</div></div></div>
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        format: 'dd/mm/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+        weekStart: 1,
+      };
+      date_input.datepicker(options);
+    })
+</script>
+
+<div class="alert alert-warning">
+ <center><strong>Svarīgi!</strong> Šajā sadaļā ir iespējams aplūkot tikai datus par jau notikušām nodarbībām!</center>
+</div>
+
+{% endblock %}

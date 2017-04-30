@@ -1,0 +1,33 @@
+{% extends 'history.html' %}
+{% block style %}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
+{% endblock %}
+
+{% block content %}
+<a href="/reception/hist/{{ date }}/{{ g_id }}/p/"><button type="button" class="btn btn-success">Pieteikumi uz nodarbību</button></a><br>
+
+<div class="container">
+<table class="table table-hover table-striped table-condensed">
+<thead><tr>
+ <th>Nr.pk.</th>
+ <th>Pieraksta laiks</th>
+ <th>Atcelšanas laiks</th>
+ <th>Vārds Uzvārds</th>
+ <th>E-pasts</th>
+ <th>Tālrunis</th>
+</tr></thead>
+
+<tbody>
+{% for d in data %}
+<tr>
+ <td>{{ forloop.counter }}</td>
+ <td>{{ d.pieraksta_laiks|date:"d/m/Y H:i" }}</td>
+ <td>{{ d.ateikuma_laiks|date:"d/m/Y H:i" }}</td>
+ <td>{{ d.klients }}</td>
+ <td>{{ d.klients.e_pasts }}</td>
+ <td>{{ d.klients.tel }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</div>
+{% endblock %}

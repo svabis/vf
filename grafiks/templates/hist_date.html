@@ -1,0 +1,35 @@
+{% extends 'history.html' %}
+
+{% block content %}
+<div class="container-fluid" style="margin-top: 20px;"></div>
+<div class="container">
+<table class="table table-hover table-striped table-condensed">
+<thead><tr>
+ <th>Nodarbības laiks</th>
+ <th>Nodarbība</th>
+ <th>Treneris</th>
+ <th>Zāle</th>
+ <th>Vietas</th>
+</tr></thead>
+
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+
+<tbody>
+{% for d in data %}
+<tr class="clickable-row" data-href="/reception/hist/{{ date }}/{{ d.id }}/p/">
+ <td>{{ d.sakums|date:"H:i" }}</td>
+ <td>{{ d.nodarbiba }}</td>
+ <td>{{ d.treneris }}</td>
+ <td>{{ d.telpa }}</td>
+ <td>{{ d.vietas }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</div>
+{% endblock %}

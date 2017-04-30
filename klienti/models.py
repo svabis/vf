@@ -30,7 +30,7 @@ class HistPieraksti(models.Model):
 
     pieraksta_laiks = models.DateTimeField( default = timezone.now )
     klients = models.ForeignKey( Klienti )
-    nodarbiba = models.ForeignKey( Grafiks )
+    nodarbiba = models.ForeignKey( Grafiks, related_name='hist' )
 
 
 # !!! Atteikumi !!!
@@ -41,5 +41,5 @@ class HistAtteikumi(models.Model):
     ateikuma_laiks = models.DateTimeField( default = timezone.now )
     pieraksta_laiks = models.DateTimeField( default = timezone.now )
     klients = models.ForeignKey( Klienti )
-    nodarbiba = models.ForeignKey( Grafiks )
+    nodarbiba = models.ForeignKey( Grafiks, related_name='hist_cancel' )
 

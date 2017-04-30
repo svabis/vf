@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
 # !!! PIERAKSTI !!!
         pier = Pieraksti.objects.all()
-        today = datetime.date.today() - datetime.timedelta(days=4)
+        today = datetime.date.today() # - datetime.timedelta(days=1)
         count = 0
         for p in pier:
             if  p.nodarbiba.sakums.date() < today:
@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
 # !!! ATTEIKUMI !!!
         cancel = Atteikumi.objects.all()
-        today = datetime.date.today() - datetime.timedelta(days=4)
+        today = datetime.date.today() # - datetime.timedelta(days=1)
         for c in cancel:
             if  c.nodarbiba.sakums.date() < today:
                 hist = HistAtteikumi( ateikuma_laiks = c.ateikuma_laiks, klients = c.klients, nodarbiba = c.nodarbiba )
