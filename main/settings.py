@@ -19,8 +19,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '+t%cc5jq-rg+=#9%(qzer83=dwv1$u@oplo*1@+cmc3_^*-ag4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 
 #TEMPLATE_DEBUG = True
 
@@ -97,7 +97,8 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
 
-LANGUAGE_CODE = 'LV-LV.UTF-8'
+#LANGUAGE_CODE = 'LV-LV.UTF-8'
+LANGUAGE_CODE = 'LV-LV'
 
 TIME_ZONE = 'EET'
 #TIME_ZONE = 'Europe/Riga'

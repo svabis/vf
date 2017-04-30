@@ -1,0 +1,79 @@
+{% extends 'admin.html' %}{% load staticfiles %}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'bootstrap/js/datepicker.js' %}"></script>
+<link rel="stylesheet" href="{% static 'bootstrap/css/datepicker.css' %}"/>
+{% endblock %}
+
+{% block content %}
+<div class="bootstrap-iso"><div class="container-fluid"><div class="row">
+ <form action="/reception/hist/" method="post">{% csrf_token %}
+<!--  <div class="col-md-1 col-sm-2"><div class="form-group"><label class="control-label" for="date">Datums</label></div></div> -->
+  <div class="col-md-3 col-sm-4"><div class="form-group"><input class="form-control" id="date" name="date" placeholder="DD/MM/YYY" type="text"/></div></div>
+  <div class="col-md-1 col-sm-2"><div class="form-group"><button class="btn btn-primary " name="submit" type="submit">Aiziet!</button></div></div>
+ </form>
+</div></div></div>
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={
+        format: 'dd/mm/yyyy',
+        container: container,
+        todayHighlight: true,
+        autoclose: true,
+        weekStart: 1,
+      };
+      date_input.datepicker(options);
+    })
+</script>
+
+
+{% if datums_select %}
+<div class="container-fluid" style="margin-top: 300px;"></div>
+<div class="container">
+<table class="table table-hover table-striped table-condensed">
+<thead><tr>
+ <th>Nodarbības laiks</th>
+ <th>Nodarbība</th>
+ <th>Treneris</th>
+ <th>Zāle</th>
+ <th>Vietas</th>
+{% if title >= shodiena %}
+ <th>Pieraksts</th>
+{% endif %}
+</tr></thead>
+
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+
+<!-- <div class="alert alert-warning"> -->
+<!--  <center><strong>Svarīgi!</strong> Pašlaik nav iespējams aplūkot pierakstus uz nodarbībām, kuras ir notikušas <strong><i><u>līdz 23/04</u></i></strong>, tiek veiktas izmaiņas sistēmā!</center> -->
+<!-- </div> -->
+
+<tbody>
+{% for d in data %}
+<tr class="clickable-row" data-href="/reception/nod/{{ d_id }}/{{ d.id }}/">
+ <td>{{ d.sakums|date:"H:i" }}</td>
+ <td>{{ d.nodarbiba }}</td>
+ <td>{{ d.treneris }}</td>
+ <td>{{ d.telpa }}</td>
+ <td>{{ d.vietas }}</td>
+{% if title >= shodiena %}
+ <td>
+  {% if d.vietas != 0 %}<a href="/reception/pierakstities/{{ d_id }}/{{ d.id }}/"><button type="button" class="btn btn-success btn-xs">Pierakstīties</button></a>{% endif %}
+  {% if d.vietas < 1 and super == True %}<a href="/reception/pierakstities/{{ d_id }}/{{ d.id }}/"><button type="button" class="btn btn-danger btn-xs">Pierakstīties</button></a>{% endif %}
+ </td>
+{% endif %}
+</tr>
+{% endfor %}
+</tbody>
+</div>
+
+{% endif %}
+{% endblock %}

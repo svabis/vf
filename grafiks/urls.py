@@ -8,13 +8,16 @@ urlpatterns = [
     # url(r'^$', 'main.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+# Reception History
+    url(r'^hist/$', 'grafiks.views.history', name='history'),
+
 # Reception Cancel
     url(r'^cancel/(?P<d_id>\d+)/(?P<g_id>\d+)/(?P<p_id>\d+)/$', 'grafiks.views.reception_cancel'),
 
-# Reception Cancel
+# Reception Pieraksts
     url(r'^pierakstities/(?P<d_id>\d+)/(?P<n_id>\d+)/$', 'grafiks.views.reception_pieraksts'),
 
-# Reception
+# Reception Print
     url(r'^print_nod/(?P<d_id>\d+)/(?P<g_id>\d+)/$', 'grafiks.views.print_nod'),
 
 # Nodarbibas

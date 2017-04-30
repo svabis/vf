@@ -9,7 +9,9 @@
 <div class="modal fade" id="Cancel{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
  <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:1.5em;"></span>
  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
-<div class="modal-body"><h4>{{ d.klients }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.klients.tel }}</h4><h4>{{ d.klients.e_pasts }}</h4></div>
+<div class="modal-body">
+ <center><h4>{{ d.klients }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.klients.tel }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.klients.e_pasts }}</h4></center>
+</div>
 <div class="modal-footer">
  <a href="/reception/cancel/{{ d_id }}/{{ g_id }}/{{ d.id }}/"><button type="button" class="btn btn-danger">Atcelt pierakstu</button></a>
  <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>

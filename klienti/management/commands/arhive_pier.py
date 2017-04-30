@@ -10,16 +10,23 @@ import datetime
 class Command(BaseCommand):
     def handle(self, *args, **options):
 
+# !!! PIERAKSTI !!!
         pier = Pieraksti.objects.all()
-
         today = datetime.date.today() - datetime.timedelta(days=4)
-        print today
-
         count = 0
         for p in pier:
             if  p.nodarbiba.sakums.date() < today:
                 hist = HistPieraksti( pieraksta_laiks = p.pieraksta_laiks, klients = p.klients, nodarbiba = p.nodarbiba )
                 hist.save()
-
-#                print p.nodarbiba.sakums
                 p.delete()
+
+
+# !!! ATTEIKUMI !!!
+        cancel = Atteikumi.objects.all()
+        today = datetime.date.today() - datetime.timedelta(days=4)
+        for c in cancel:
+            if  c.nodarbiba.sakums.date() < today:
+                hist = HistAtteikumi( ateikuma_laiks = c.ateikuma_laiks, klients = c.klients, nodarbiba = c.nodarbiba )
+                hist.save()
+                c.delete()
+

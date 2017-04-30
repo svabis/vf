@@ -22,7 +22,7 @@ def send_email(recipient, nodarb, timedate, code_uuid):
     time = new_time.strftime("%d/%m/%Y %H:%M")
 
 #    code = 'http://pieraksts.vfabrika.lv/atcelt/' + str(code_uuid) + '/'
-    code = 'http://85.9.209.213/atcelt/' + str(code_uuid) + '/'
+    code = 'http://pieraksts.vfabrika.lv/atcelt/' + str(code_uuid) + '/'
 
 # Create the root message and fill in the from, to, and subject headers
     msgRoot = MIMEMultipart('related')
@@ -40,7 +40,7 @@ def send_email(recipient, nodarb, timedate, code_uuid):
     msgAlternative.attach(msgText)
 
 # We reference the image in the IMG SRC attribute by the ID we give it below
-    content = u'<b><p>Paldies par veikto rezervāciju uz nodarbību – <i>' + nodarb + ' , ' + time  + u'</i></b></p><p>Rezervācijas atcelšanai lūdzam izmantot šo saiti:<br>' + code + u'</p><p>Jūsu sporta klubs <b><i> “</i>Veselības Fabrika<i>”</i></b></p><img src="cid:image1">'
+    content = u'<b><p>Paldies par veikto rezervāciju uz nodarbību – <i>' + nodarb + ' , ' + time  + u'</i></b></p><br><p>Rezervācijas atcelšanai lūdzam izmantot šo saiti:<br>' + code + u'</p><br><p>Jūsu sporta klubs <b><i> “</i>Veselības Fabrika<i>”</i></b></p><img src="cid:image1">'
     msgText = MIMEText(content.encode('utf-8'), 'html','utf-8')
     msgAlternative.attach(msgText)
 

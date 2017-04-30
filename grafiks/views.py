@@ -92,7 +92,7 @@ def logout(request):
 def main(request):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
-    return redirect ('day_list', d_id=4)
+    return redirect ('day_list', d_id=0)
 
 
 # !!!!! KONKRETA DIENA !!!!!
@@ -103,13 +103,14 @@ def day_list(request, d_id):
     if auth.get_user(request).is_superuser: # superuser --> Left menu available
         args['super'] = True
 
-    dienas = [-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28] # DIENAS 0 --> SHODIENA
+#    dienas = [-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28] # DIENAS 0 --> SHODIENA
+    dienas = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28] # DIENAS 0 --> SHODIENA
     datumi = []
 
     datums = today + datetime.timedelta( days=dienas[int(d_id)] ) # datums
     dienas_nodarb = Grafiks.objects.filter(sakums__startswith=datums).order_by('sakums') # datuma nodarbibas
 
-    for d in range(0,33):
+    for d in range(0,29):
 #        datumi.append(today + datetime.timedelta( days=dienas[d] ))
         datumi.append([(today + datetime.timedelta(days=dienas[d])), ((today + datetime.timedelta(days=dienas[d])).weekday())])
 
@@ -247,18 +248,26 @@ def reception_pieraksts(request, d_id, n_id):
 
             error = False
             clients = Klienti.objects.all()
-            new = 0
+            new = 0 # jaunas lietotāja counters
+            tel_err_count = 0 #telefona dublikātu counters
+
            # meklejam kljudas pieteikuma forma
             for c in clients:
-                if c.tel == new_tel and c.vards != new_name:
-                   # CITS KLIENTA VARDS
-                    error = True
-                    args['error_msg'] = u' Autorizācijas kļūda, klienta tālrunim atbilst cits klients'
+                if c.tel == new_tel:
+                    tel_err_count += 1
+            if tel_err_count > 1:
+                args['tel_msg'] = True
 
-            if error == True:
-                args['error'] = True
-                args['form'] = form     # ERROR MESSAGE
-                return render_to_response( 'rec_pierakst.html', args )
+#            for c in clients:
+#                if c.tel == new_tel and c.vards != new_name:
+                   # CITS KLIENTA VARDS
+#                    error = True
+#                    args['error_msg'] = u' Autorizācijas kļūda, klienta tālrunim atbilst cits klients'
+
+#            if error == True:
+#                args['error'] = True
+#                args['form'] = form     # ERROR MESSAGE
+#                return render_to_response( 'rec_pierakst.html', args )
 
             for c in clients:
                 if c.tel == new_tel and c.vards == new_name:
@@ -287,7 +296,7 @@ def reception_pieraksts(request, d_id, n_id):
                  # Pieraksts sekmigs
                         day_stat.day_stat()
                         args['vards'] = form.cleaned_data['vards']
-                        args['epasts'] = form.cleaned_data['e_pasts']
+                        args['epasts'] = c.e_pasts
                         args['telefons'] = form.cleaned_data['tel']
                         return render_to_response ('rec_pier_success.html', args )
 
@@ -411,4 +420,31 @@ def graf_add(request):
 
         return render_to_response('add_plan.html', args)
     return redirect('/reception/login/')
+
+# ========================================================================================================
+
+# !!!!! NODARBIBAS VĒSTURE !!!!!
+def history(request):
+    if auth.get_user(request).get_username() == '': # IF NO USER -->
+        return redirect ("/reception/login/")
+    args = {}
+    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+        args['super'] = True
+
+    args.update(csrf(request)) # ADD CSRF TOKEN
+    if request.POST:
+
+
+            return render_to_response( 'hist_day.html', args )
+
+#    args['datums_select'] = True
+
+#    args['title'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
+#    args['subtitle'] = getattr(Grafiks.objects.get( id=g_id ), 'sakums')
+
+#    klienti = Grafiks.objects.get(id=g_id).ateikt.all()
+#    args['data'] = klienti
+#    args['g_id'] = g_id
+#    args['d_id'] = d_id
+    return render_to_response( 'hist_day.html', args )
 

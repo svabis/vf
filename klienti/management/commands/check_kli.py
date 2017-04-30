@@ -37,9 +37,9 @@ class Command(BaseCommand):
                         print str(klienti[m]) + '\t' + str(klienti[m].e_pasts) + '\t' + str(klienti[m].tel)
 
         print 'teleonu dublikāti: ' + str(tel)
- #       t = sorted(t)
- #       for n in range( 0, len(t) ):
- #           print str(n+1) + '\t' + str(t[n])
+        t = sorted(t)
+        for n in range( 0, len(t) ):
+            print str(n+1) + '\t' + str(t[n])
 
 
 # !!! E-PASTI !!!
@@ -49,7 +49,7 @@ class Command(BaseCommand):
             if k.e_pasts == temp:
                 mail += 1
 
-        print 'e-pastu dublikāti: ' + str(mail -1)
+#        print 'e-pastu dublikāti: ' + str(mail -1)
 
 #        c = Klienti.objects.filter( vards='natalja-jevdokimova' )
 #        print c
