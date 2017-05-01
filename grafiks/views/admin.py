@@ -1,27 +1,17 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render_to_response, redirect	# response to template, redirect to another view
-from django.http.response import Http404	# ERRORR 404
 from django.core.exceptions import ObjectDoesNotExist
 
-from django.template.loader import get_template
-from django.template import Context, RequestContext		# RequestContext <-- get user from request
-
-from django.contrib.auth.models import User	# autorisation library
 from django.contrib import auth			# autorisation library
-
 from django.core.context_processors import csrf
 
 from pieraksts.models import *
 from grafiks.models import Grafiks
 from grafiks.forms import PlanotajsForm
 
-from pieraksts.forms import KlientsReceptionForm
-
 # Pieraksta statistikas modulis
 from statistika import day_stat
 
-from slugify import slugify
 from main import mail
 
 import datetime
@@ -50,7 +40,7 @@ def graf_list(request):
     return redirect('/reception/login/')
 
 
-# !!!!! SUPERUSER NODARBIBAS ATCELSHANA NEDELAS IZVELE !!!!!
+# !!!!! SUPERUSER NODARBIBAS ATCELSHANA DIENAS IZVELE !!!!!
 def week_list(request, w_id):
     username = auth.get_user(request)
     if username.is_superuser:
@@ -76,12 +66,13 @@ def week_list(request, w_id):
                 grafiks.append(gr)
             except: # if day is empty
                 pass
-#                gr = []
+
         args['w_id'] = w_id
         args['data'] = grafiks
         return render_to_response ( 'nod_plan.html', args )
     return redirect('/reception/login/')
 
+# !!!!! SUPERUSER NODARBIBAS ATCELSHANA !!!!!
 def graf_cancel(request, w_id, g_id):
     username = auth.get_user(request)
     if username.is_superuser:
@@ -90,7 +81,7 @@ def graf_cancel(request, w_id, g_id):
         nodarb = Grafiks.objects.get(id=g_id)
         klienti = nodarb.nod.all()
         for k in klienti:
-            try:
+            try: # reception Pieraksts may not include e-mail
                 mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
 # !!!!! INSERT DELETE PIERAKSTS !!!!!
             except:

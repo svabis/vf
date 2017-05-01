@@ -1,37 +1,18 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render_to_response, redirect	# response to template, redirect to another view
-from django.http.response import Http404	# ERRORR 404
-from django.core.exceptions import ObjectDoesNotExist
 
-from django.template.loader import get_template
-from django.template import Context, RequestContext		# RequestContext <-- get user from request
-
-from django.contrib.auth.models import User	# autorisation library
 from django.contrib import auth			# autorisation library
-
 from django.core.context_processors import csrf
 
-from pieraksts.models import *
 from grafiks.models import Grafiks
-from grafiks.forms import PlanotajsForm
-
-from pieraksts.forms import KlientsReceptionForm
-
-# Pieraksta statistikas modulis
-from statistika import day_stat
-
-from slugify import slugify
-from main import mail
 
 import datetime
 import pytz
 today = datetime.date.today()
 tz = pytz.timezone('UTC')
 
-# ========================================================================================================
 
-# !!!!! NODARBIBAS VĒSTURE !!!!!
+# !!!!! DATUMA IZVĒLE !!!!!
 def history(request):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
@@ -48,6 +29,7 @@ def history(request):
     return render_to_response( 'history.html', args )
 
 
+# !!!!! DIENAS VĒSTURE !!!!!
 def hist_date(request, date):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
@@ -64,6 +46,8 @@ def hist_date(request, date):
     args['data'] = dienas_nodarb
     return render_to_response( 'hist_date.html', args )
 
+
+# !!!!! NODARBIBAS PIERAKSTI !!!!!
 def hist_date_kli(request, date, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
@@ -82,6 +66,8 @@ def hist_date_kli(request, date, g_id):
     args['g_id'] = g_id
     return render_to_response( 'hist_date_kli.html', args )
 
+
+# !!!!! NODARBIBAS ATTEIKUMI !!!!!
 def hist_date_cancel(request, date, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")

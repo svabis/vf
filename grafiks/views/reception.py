@@ -1,20 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render_to_response, redirect	# response to template, redirect to another view
-from django.http.response import Http404	# ERRORR 404
 from django.core.exceptions import ObjectDoesNotExist
 
-from django.template.loader import get_template
-from django.template import Context, RequestContext		# RequestContext <-- get user from request
-
-from django.contrib.auth.models import User	# autorisation library
 from django.contrib import auth			# autorisation library
-
 from django.core.context_processors import csrf
 
 from pieraksts.models import *
 from grafiks.models import Grafiks
-from grafiks.forms import PlanotajsForm
 
 from pieraksts.forms import KlientsReceptionForm
 
@@ -22,12 +14,41 @@ from pieraksts.forms import KlientsReceptionForm
 from statistika import day_stat
 
 from slugify import slugify
-from main import mail
 
 import datetime
 import pytz
 today = datetime.date.today()
 tz = pytz.timezone('UTC')
+
+# ========================================================================================================
+
+# !!!!! NODARBIBAS LAIKU OVERLAP CHEKER !!!!!
+def nod_check(n_id, k_id):
+    result = False      # denied Pieraksts
+    n = Grafiks.objects.get( id=n_id )
+    nod_start = getattr( n, 'sakums')
+    nod_end = getattr( n, 'sakums') + datetime.timedelta(minutes=int(getattr( n, 'ilgums')))
+
+    nod_date = nod_start.date()
+    date_nod = Grafiks.objects.filter( sakums__startswith = nod_date ).order_by('sakums')
+
+    count = 0
+    for d in date_nod:
+        end = d.sakums + datetime.timedelta(minutes=int(d.ilgums))
+        Overlap = max(nod_start, d.sakums) < min(nod_end, end)
+        if Overlap == True:
+            try:
+                pieraksti_nodarb = Pieraksti.objects.get( klients = k_id, nodarbiba = d )
+                count += 1
+            except Pieraksti.DoesNotExist:
+                pass
+            except:
+                count += 1
+
+    if count != 0:
+        return False # Pieraksts --> DENIED
+    else:
+        return True
 
 # ========================================================================================================
 
@@ -62,7 +83,7 @@ def day_list(request, d_id):
     args['d_id'] = d_id
     return render_to_response( 'day_data.html', args )
 
-# !!!!! KONKRETA DIENAS NODARBIBA !!!!!
+# !!!!! KONKRETA NODARBIBAS PIERAKSTI !!!!!
 def nod_list(request, d_id, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
@@ -83,7 +104,7 @@ def nod_list(request, d_id, g_id):
     return render_to_response( 'day_kli_data.html', args )
 
 
-# !!!!! NODARBIBAS ATEIKUMI !!!!!
+# !!!!! KONKRETAS NODARBIBAS ATEIKUMI !!!!!
 def cancel_list(request, d_id, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
@@ -143,6 +164,7 @@ def reception_cancel(request, d_id, g_id, p_id):
         pass
     return redirect( 'nod_list', d_id=d_id, g_id=g_id )
 
+# ===================================================
 
 # !!!!! RECEPTION PIERAKSTS !!!!!
 def reception_pieraksts(request, d_id, n_id):
@@ -275,6 +297,5 @@ def reception_pieraksts(request, d_id, n_id):
                 return render_to_response( 'rec_pierakst.html', args )
         return render_to_response( 'rec_pierakst.html', args )
     return render_to_response( 'rec_pierakst.html', args )
-
 
 # ========================================================================================================
