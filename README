@@ -3,6 +3,13 @@
 
 # DJANGO APP's
 	grafiks - grafiks, planotajs objects | reception web part
+		views/
+			login.py	- autorizācijas skati
+			reception.py	- recepcijas daļa (tabi, pieraksti, atteikumi, u.t.t.)
+			admin.py	- superuser skati (nodarbību atcelšana, izmaiņas grafikā)
+			hist.py		- sadaļa "Vēsture"
+
+
 	pieraksts - pieraksti, atteikumi objects | pieraksts web part
 
 	klienti - klienti objects
@@ -30,7 +37,7 @@ grafiks/management/commands/
 klienti/management/commands/
 	manage.py clear_tel	notīra Klienti telefonus no '+371' un '+371 '
 	manage.py check_kli	skaita vienādos vārdus, telefonus
-	manage.py arhive_pier	pārvieto pierakstus uz nodarbībām, vecākus par 4 dienām uz HistPieraksti	palaižas no crontab katru nakti 00:15
+	manage.py arhive_pier	pārvieto pierakstus/atteikumus, vecākus par 1 dienu uz HistPieraksti/HistAtteikumi	palaižas no crontab katru nakti 00:15
 
 
 
@@ -39,4 +46,4 @@ pieraksts/management/commands/
 
 
 statistika/management/commands/
-	day_stat.py day_stat	collect day Pieraksti statistics data
+	day_stat.py day_stat	collect day Pieraksti statistics data - ATSLĒGTS
