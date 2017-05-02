@@ -7,10 +7,9 @@
 
 {% block history_header %}
 
-<div class="bootstrap-iso"><div class="container-fluid"><div class="row">
+<div class="bootstrap-iso" style="padding-top:20px;"><div class="container-fluid" style="margin-bottom:-20px;"><div class="row">
  <form action="/reception/hist/" method="post">{% csrf_token %}
-  <div class="col-md-1 col-sm-2"></div>
-  <div class="col-md-3 col-sm-4"><div class="form-group"><input class="form-control" id="date" name="date" placeholder="DD/MM/YYY" type="text"/></div></div>
+  <div class="col-md-3 col-sm-4"><div class="form-group"><input class="form-control" id="date" name="date" placeholder="spied šeit lai izvēlētos datumu" type="text"/></div></div>
   <div class="col-md-1 col-sm-2"><div class="form-group"><button class="btn btn-primary " name="submit" type="submit">Pāriet uz datumu</button></div></div>
  </form>
 </div></div></div>
@@ -29,10 +28,8 @@
     })
 </script>
 
-<div class="container">
 <!-- <div class="alert alert-warning"> -->
 <!--  <center><strong>Svarīgi!</strong> Šajā sadaļā ir iespējams aplūkot tikai datus par jau notikušām nodarbībām!</center> -->
 <!-- </div> -->
-</div>
 
 {% endblock %}

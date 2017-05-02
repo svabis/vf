@@ -1,24 +1,88 @@
-{% extends 'admin.html' %}
-{% block style %}{% endblock %}
+{% extends 'admin.html' %}{% load staticfiles%}
+
+{% block javascript %}
+<script type="text/javascript" src="{% static 'bootstrap/js/datepicker.js' %}"></script>
+<link rel="stylesheet" href="{% static 'bootstrap/css/datepicker.css' %}"/>
+{% endblock %}
 
 {% block content %}
+<form action="/reception/add/" method="post"><div class="col-md-6 col-md-offset-3">{% csrf_token %}
 
-<form action="/reception/add/" method="post">
-    <div class="col-md-6 col-md-offset-2">
+<div class="alert alert-danger">
+  <center><strong>!!! Nodarbību pievienošana grafikam !!!</strong></center>
+</div>
+
+<div class="alert alert-warning" style="margin-top:10px;">
+ <center><strong>Svarīgi!</strong> Ja nodarbība tiek pievienota <b>VIENU</b> reizi, tad Diena nav svarīga.</center>
+ <center>Pievienojot vienu nodarbību datuma izvēle notiek <i><b>"lejā"</b></i></center>
+</div>
+
 {% if message %}
-        <div class="alert alert-success" role="alert">
-                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                <strong> {{ message }}</strong>
-        </div>
+ <div class="alert alert-success" role="alert">
+  <span class="glyphicon glyphicon-ok" aria-hidden="true"></span><strong> {{ message }}</strong>
+ </div>
 {% endif %}
-        <div class="form-group">
-{% csrf_token %}{{ form }}
-	</div>
-        <div class="form-group">
-            <input class="btn btn-primary" type="submit" value="Pievienot darbu">
-        </div>
-    </div>
-</form>
+ <div class="fieldWrapper">
+  <label for="{{ form.diena.id_for_label }}">Diena:</label>
+  {{ form.diena.errors }}
+  {{ form.diena }}
+ </div>
+ <div class="fieldWrapper">
+  <label for="{{ form.laiks.id_for_label }}">Sākums:</label>
+  {{ form.laiks.errors }}
+  {{ form.laiks }}
+ </div>
+ <div class="fieldWrapper">
+  <label for="{{ form.ilgums.id_for_label }}">Nodarbības ilgums:</label>
+  {{ form.ilgums.errors }}
+  {{ form.ilgums }}
+ </div>
 
+<div class="alert alert-warning" style="margin-top:10px;">
+ <center><strong>Svarīgi!</strong> Nākamajās versijās tiks sasaistītas nodarbības un treneri.</center>
+</div>
 
+ <div class="fieldWrapper">
+  <label for="{{ form.nodarbiba.id_for_label }}">Nodarbība:</label>
+  {{ form.nodarbiba.errors }}
+  {{ form.nodarbiba }}
+ </div>
+ <div class="fieldWrapper">
+  <label for="{{ form.treneris.id_for_label }}">Treneris:</label>
+  {{ form.treneris.errors }}
+  {{ form.treneris }}
+ </div>
+
+ <div class="fieldWrapper">
+  <label for="{{ form.telpa.id_for_label }}">Telpa:</label>
+  {{ form.telpa.errors }}
+  {{ form.telpa }}
+ </div>
+ <div class="fieldWrapper">
+  <label for="{{ form.vietas.id_for_label }}">Vietu skaits:</label>
+  {{ form.vietas.errors }}
+  {{ form.vietas }}
+ </div>
+<br>
+
+<div class="alert alert-danger" style="margin-top:10px;">
+ <center><strong>Uzmanību!</strong> <i><b>"ĶEKSI"</b></i> liek tikai ja Nodarbība ir paredzēta <b>TIKAI</b> vienu reizi.</center>
+ <center><strong>Uzmanību!</strong> izvēlamies datumu no kura sākot nodarbība būs pieejama, vai kurā datumā tā būs (ja ir <i><b>"ĶEKSIS"</b></i>).</center>
+</div>
+
+<div class="bootstrap-iso"><div class="fieldWrapper"><div class="row">
+ <div class="col-md-4"><label style="margin-left:10px;"><input id="chk" name="chk" type="checkbox"> Vienu reizi</label></div>
+ <div class="col-md-7"><div class="form-group"><input class="form-control" id="date" name="date" placeholder="spied šeit lai izvēlētos datumu" type="text"/></div></div>
+</div></div></div>
+
+<script>
+$(document).ready(function(){ var date_input=$('input[name="date"]'); var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+ var options={ format: 'dd/mm/yyyy', container: container, todayHighlight: true, autoclose: true, weekStart: 1, }; date_input.datepicker(options); })
+</script>
+
+ <div class="form-group text-right">
+  <input class="btn btn-danger" type="submit" value="Pievienot nodarbību grafikam">
+ </div>
+
+</div></form>
 {% endblock %}

@@ -2,6 +2,8 @@ from django.db import models
 from nodarb.models import Nodarb_tips, Treneris, Telpa
 from datetime import datetime, timedelta
 
+from django.utils import timezone
+
 def default_start_time():
     now = datetime.now()
     start = now.replace(hour=8, minute=0, second=0, microsecond=0)
@@ -39,9 +41,7 @@ class Grafiks(models.Model):
 class Planotajs(models.Model):
     class Meta():
         db_table = "planotajs"
-#        app_label = 'Planotajs'
 
-#    sakums = models.DateTimeField()
     diena = models.CharField( max_length = 1, default = 0, choices=DAY_CHOISES )
     laiks = models.TimeField( default=default_start_time )
 
@@ -50,6 +50,10 @@ class Planotajs(models.Model):
     treneris = models.ForeignKey( Treneris ) # Treneris
     telpa = models.ForeignKey( Telpa ) # Telpa
     vietas = models.IntegerField()
+
+# for adding nodarbiba
+    start_date = models.DateField( default = timezone.now )
+#    one = models.BooleanField( default = False )
 
     def __unicode__(self):
         return self.nodarbiba.nos

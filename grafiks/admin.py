@@ -2,7 +2,7 @@ from django.contrib import admin
 from grafiks.models import *
 
 class PlanotajsAdmin(admin.ModelAdmin):
-    list_display = ['nodarbiba', 'treneris', 'diena', 'laiks', 'ilgums', 'telpa', 'vietas']
+    list_display = ['nodarbiba', 'treneris', 'diena', 'laiks', 'ilgums', 'telpa', 'vietas', 'start_date']
     list_filter = ['diena']
 
 class GrafiksAdmin(admin.ModelAdmin):

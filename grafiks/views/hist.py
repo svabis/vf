@@ -21,7 +21,7 @@ def history(request):
         args['super'] = True
 
     args.update(csrf(request)) # ADD CSRF TOKEN
-    args['title'] = u'Izvēlies datumu'
+#    args['title'] = u'Izvēlies datumu'
     if request.POST:
         datums = request.POST.get('date', '')
         if datums != "":

@@ -6,8 +6,9 @@ from django.contrib import auth			# autorisation library
 from django.core.context_processors import csrf
 
 from pieraksts.models import *
-from grafiks.models import Grafiks
+from grafiks.models import Grafiks, Planotajs
 from grafiks.forms import PlanotajsForm
+from nodarb.models import *
 
 # Pieraksta statistikas modulis
 from statistika import day_stat
@@ -78,18 +79,26 @@ def graf_cancel(request, w_id, g_id):
     if username.is_superuser:
         args = {}
         args['super'] = True
+
+        nod_atcelshana(g_id)	# nodarbības atcelšana
+
+        return redirect ( 'nod_plan', w_id=w_id )
+    return redirect('/reception/login/')
+
+
+def nod_atcelshana(g_id):
         nodarb = Grafiks.objects.get(id=g_id)
         klienti = nodarb.nod.all()
         for k in klienti:
             try: # reception Pieraksts may not include e-mail
                 mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
+
 # !!!!! INSERT DELETE PIERAKSTS !!!!!
+
             except:
                 pass
-
         nodarb.delete()
-        return redirect ( 'nod_plan', w_id=w_id )
-    return redirect('/reception/login/')
+
 
 # ========================================================================================================
 
@@ -102,8 +111,43 @@ def graf_add(request):
         args['super'] = True
         args['form'] = PlanotajsForm
 
+        if request.POST:
+            diena = request.POST.get('diena', '')
+            laiks_str = request.POST.get('laiks', '')
+            laiks = datetime.datetime.strptime( laiks_str[:5], '%H:%M')
+
+            ilgums = int(request.POST.get('ilgums', ''))
+            vietas = int(request.POST.get('vietas', ''))
+
+            nodarbiba = Nodarb_tips.objects.get( id = int(request.POST.get('nodarbiba', '')) )
+            treneris = Treneris.objects.get( id = int(request.POST.get('treneris', '')) )
+            telpa = Telpa.objects.get( id = int(request.POST.get('telpa', '')) )
+
+            chk_once = request.POST.get('chk', '')
+            date_str = request.POST.get('date', '')
+            date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
+
+            after_month = (datetime.datetime.today() + datetime.timedelta(days=28)).date()
+
+            if chk_once == "on":	# ja nodarbiba notiks vienu reizi -->
+                temp_date = datetime.datetime.combine(date, datetime.datetime.min.time())	# Date to DateTime
+                new_sakums = temp_date.replace(hour=laiks.hour, minute=laiks.minute)
+
+                new_graf = Grafiks(sakums=new_sakums, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas)
+                new_graf.save()
+
+            else:	# ja atkārtojās, tad  veidojam Planotāja ierakstu
+                if date <= after_month:	# jāieliek esošajā grafikā
+
+# !!!!!!!! WEEKDAY NO DIENA... FOR DATE TO AFTER_MONTH... INSERT GRAFIKS
+#                    args['message'] = u'datumi iekļaujās'
+                    pass
+
+                new_plan = Planotajs(diena=diena, laiks=laiks, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas, start_date=date)
+                new_plan.save()
+
+            args['message'] = u'Nodarbība izveidota sekmīgi'
+#            return redirect ( 'added', plan = new_plan )
+
         return render_to_response('add_plan.html', args)
     return redirect('/reception/login/')
-
-# ========================================================================================================
-

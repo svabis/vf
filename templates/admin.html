@@ -61,10 +61,10 @@
 </div></nav>
 
 <div class="container-fluid">
+{% block history_header %}{% endblock %}
 <h2>{{ title }}</h2>
 {% if subtitle %}<h3>{{ subtitle|date:"d/m/Y H:i" }}</h3>{% endif %}
 
-{% block history_header %}{% endblock %}
 {% block content_header %}{% endblock %}
 {% block content %}{% endblock %}
 {% block logsys %}{% endblock %}
