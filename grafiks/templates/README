@@ -1,0 +1,27 @@
+add_plan.html	- Nodarbības pievienošanas forma	- SO SO
+del_plan.html	- Nodarbības dzēšana no plānotāja	- NOPE
+tren_aizv.html	- Treneru aizvietošana			- NOPE
+
+nod_plan.html	- Nodarbības atcelšana			- OK
+
+
+day_header.html		- Pierakstu dienu Tabi
+day_data.html		- Pieraksta dienas skats
+day_kli_data.html	- Nodarbības pieraksti
+day_cancel_data.html	- Nodarbības atteikumi
+
+day_kli_print.html	- Nodarbības apmeklētāju PRINT skats
+
+
+history.html		- Vēstures Datepicker
+hist_date.html		- Vēstures dienas skats
+hist_date_kli.html	- Vēstures...Nodarbības pieraksti
+hist_date_cancel.html	- Vēstures...Nodarbības atteikumi
+
+
+login.html		- Autorizācijas skats
+
+
+rec_pierakst.html	- Reception pieraksts
+rec_pier_success.html	- Reception pieraksts... Succsess
+
