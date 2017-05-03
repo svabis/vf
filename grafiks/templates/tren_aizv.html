@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<div class="alert alert-warning">
+<div class="alert alert-danger">
   <center><strong>!!! Treneru aizvietošana !!!</strong>
 </center>
 </div>
@@ -26,31 +26,35 @@ jQuery(document).ready(function($) {
 </tr></thead>
 <tbody>
 {% for w in week %}
-<tr class="clickable-row" data-href="/reception/plan/{{ forloop.counter0 }}/"><td>{{ w|date:"d M" }}</td></tr>
+<tr class="clickable-row" data-href="/reception/tren/{{ forloop.counter0 }}/"><td>{{ w|date:"d M" }}</td></tr>
 {% endfor %}
 </tbody>
 {% else %}
 
-{% for dat in data %}{% for d in dat %}
-<div class="modal fade" id="Graf{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
- <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:1.5em;"></span>
+<script>
+function tren_change(val) {
+ $("#TrenModal").modal('show');
+}
+</script>
+
+<div class="modal fade" id="TrenModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
+ <span class="glyphicon glyphicon-refresh" aria-hidden="true" style="font-size:1.5em;"></span>
  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
 <div class="modal-body"><h4>{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h4><h4>{{ d.sakums|date:"d/M/Y H:i" }}</h4></div>
 <div class="modal-footer">
- <a href="/reception/plan/{{ w_id }}/cancel/{{ d.id }}/"><button type="button" class="btn btn-danger">Atcelt nodarbību</button></a>
+<!-- <a href="/reception/plan/{{ w_id }}/cancel/{{ d.id }}/"><button type="button" class="btn btn-danger">Atcelt nodarbību</button></a> -->
  <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
 </div></div></div></div>
-{% endfor %}{% endfor %}
 
-<a href="/reception/plan/"><button type="button" class="btn btn" style="colour: black;"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</button></a><br>
+
+<a href="/reception/tren/"><button type="button" class="btn btn" style="colour: black;"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</button></a><br>
 
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
 <thead><tr>
- <th>Diena</th>
- <th colspan="2">Nodarbības laiks</th>
+ <th colspan="2" style="text-align: center;">Diena / Nodarbības laiks</th>
  <th>Nodarbība</th>
- <th>Treneris</th>
+ <th colspan="2" style="text-align: center;">Treneris</th>
  <th>Zāle</th>
  <th>Vietas</th>
 </tr></thead>
@@ -59,10 +63,10 @@ jQuery(document).ready(function($) {
 <tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="7"></td></tr>
 {% for d in dat %}
 <tr>
- <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Graf{{ d.id }}">Atcelt nodarbību</button></td>
- <td>{{ d.sakums|date:"d/m" }}</td>
+ <td style="text-align: center;">{{ d.sakums|date:"d/m" }}</td>
  <td>{{ d.sakums|date:"H:i" }}</td>
  <td>{{ d.nodarbiba }}</td>
+ <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" onclick="tren_change(this.value)" value="{{ d }}">Aizvietot Treneri</button></td>
  <td>{{ d.treneris }}</td>
  <td>{{ d.telpa }}</td>
  <td>{{ d.vietas }}</td>

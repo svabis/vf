@@ -146,8 +146,64 @@ def graf_add(request):
                 new_plan = Planotajs(diena=diena, laiks=laiks, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas, start_date=date)
                 new_plan.save()
 
-            args['message'] = u'Nodarbība izveidota sekmīgi'
+            args['message'] = u' Nodarbība pievienota sekmīgi'
 #            return redirect ( 'added', plan = new_plan )
 
         return render_to_response('add_plan.html', args)
     return redirect('/reception/login/')
+
+# =======================================================================================================
+
+# !!!!! TRENERU AIZVIETOSANA NEDELAS IZVELE !!!!!
+def tren_list( request ):
+    username = auth.get_user(request)
+    if username.is_superuser:
+        args = {}
+        args['super'] = True
+        weeks = []
+        weeks.append(today)
+
+        next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
+        for _ in range (0,4): # add 4 weeks in row
+            weeks.append(next)
+            next = next + datetime.timedelta(days=7)
+
+        args['week'] = weeks
+        return render_to_response ( 'tren_aizv.html', args )
+    return redirect('/reception/login/')
+
+def tren_week_list( request, w_id ):
+    username = auth.get_user(request)
+    if username.is_superuser:
+        args = {}
+        args['super'] = True
+        weeks = []
+        weeks.append(today)
+        next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
+        for _ in range (0,4): # add 4 weeks in row
+            weeks.append(next)
+            next = next + datetime.timedelta(days=7)
+
+       # check if full week
+        if int(w_id) == 0:
+            days = 7 - int( today.weekday())
+        else:
+            days = 7
+
+        grafiks = []
+        for d in range (0,days): # add 7 days in row
+            try:
+                gr = Grafiks.objects.filter(sakums__startswith=( weeks[int(w_id)] + datetime.timedelta( days=d ))).order_by('sakums')
+                grafiks.append(gr)
+            except: # if day is empty
+                pass
+
+        args['w_id'] = w_id
+        args['data'] = grafiks
+        return render_to_response ( 'tren_aizv.html', args )
+    return redirect('/reception/login/')
+
+def tren_aizv( request, w_id, g_id ):
+    return True
+
+

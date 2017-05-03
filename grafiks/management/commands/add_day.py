@@ -17,9 +17,9 @@ class Command(BaseCommand):
         after_month = today + timedelta(days=28)
         nod = Grafiks.objects.filter( sakums__gt=after_month )
 
-        if not nod:
-            plan = Planotajs.objects.all()
-            for p in plan:
+#        if not nod:
+        plan = Planotajs.objects.all()
+        for p in plan:
                 if int(p.diena) == weekno:
                     if p.start_date <= after_month.date():	# ja nodarbība start_date ir pirms šodienas -->
                         sakums = today + timedelta(days=28, hours=p.laiks.hour, minutes=p.laiks.minute)
