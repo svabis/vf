@@ -1,4 +1,5 @@
-add_plan.html	- Nodarbības pievienošanas forma	- SO SO
+add_plan.html	- Nodarbības pievienošanas forma	- OK
+
 del_plan.html	- Nodarbības dzēšana no plānotāja	- NOPE
 tren_aizv.html	- Treneru aizvietošana			- NOPE
 
@@ -22,6 +23,6 @@ hist_date_cancel.html	- Vēstures...Nodarbības atteikumi
 login.html		- Autorizācijas skats
 
 
-rec_pierakst.html	- Reception pieraksts
+rec_pierakst.html	- Reception pieraksta forma
 rec_pier_success.html	- Reception pieraksts... Succsess
 
