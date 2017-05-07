@@ -49,7 +49,7 @@ class Planotajs(models.Model):
     nodarbiba = models.ForeignKey( Nodarb_tips ) # Nodarbiba
     treneris = models.ForeignKey( Treneris ) # Treneris
     telpa = models.ForeignKey( Telpa ) # Telpa
-    vietas = models.IntegerField()
+    vietas = models.IntegerField( default = 20 )
 
 # for adding nodarbiba
     start_date = models.DateField( default = timezone.now )

@@ -110,6 +110,7 @@ def graf_add(request):
         args.update(csrf(request))      # ADD CSRF TOKEN
         args['super'] = True
         args['form'] = PlanotajsForm
+        args['success'] = 'false'	# Modal never vaļā
 
         if request.POST:
             diena = request.POST.get('diena', '')
@@ -133,8 +134,18 @@ def graf_add(request):
                 temp_date = datetime.datetime.combine(date, datetime.datetime.min.time())	# Date to DateTime
                 new_sakums = temp_date.replace(hour=laiks.hour, minute=laiks.minute)
 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!! INSERT Nodarbība veidota vēsturē ERROR !!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!! INSERT Nodarbība OVELAP ERROR !!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
                 new_graf = Grafiks(sakums=new_sakums, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas)
                 new_graf.save()
+                args['nodarbiba'] = new_graf	# pievienota viena nodarbība --> Modal_success
+                args['one'] = True	# Modal_success --> viena apraksts
 
             else:	# ja atkārtojās, tad  veidojam Planotāja ierakstu
                 if date <= after_month:	# jāieliek esošajā grafikā
@@ -143,11 +154,19 @@ def graf_add(request):
 #                    args['message'] = u'datumi iekļaujās'
                     pass
 
-                new_plan = Planotajs(diena=diena, laiks=laiks, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas, start_date=date)
-                new_plan.save()
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!! INSERT Nodarbība OVELAP ERROR !!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+                new_plan = Planotajs(diena=diena, laiks=laiks, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas, start_date=date)
+                args['nodarbiba'] = new_plan	# pievienots grafikam -->
+
+                new_plan.save()
+            args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi"
+
+# !!! ERRORS CITUR !!!
+#            args['error'] = u' KĻŪDA'
             args['message'] = u' Nodarbība pievienota sekmīgi'
-#            return redirect ( 'added', plan = new_plan )
 
         return render_to_response('add_plan.html', args)
     return redirect('/reception/login/')

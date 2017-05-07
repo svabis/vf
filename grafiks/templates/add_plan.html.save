@@ -7,32 +7,14 @@
 
 {% block content %}
 
-<div class="modal fade" id="Pievienots" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">
-<div class="modal-header">
- <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;Nodarbība pievienota</h3>
-</div>
-<div class="modal-body">
-{% if one %}
-<h4><strong>Nodarbiba</strong> - {{ nodarbiba.nodarbiba }}</h4>
-<h4><strong>Notiks vienu reizi</strong> - {{ nodarbiba.sakums|date:"d/m/Y H:i" }}</h4>
-<h4><strong>Treneris</strong> - {{ nodarbiba.treneris }}</h4>
-<h4><strong>Zāle</strong> - {{ nodarbiba.telpa }}</h4>
-<h4><strong>Nodarbības ilgums</strong> - {{ nodarbiba.ilgums }}</h4>
-<h4><strong>Vietus skaits</strong> - {{ nodarbiba.vietas }}</h4>
-{% else %}
-<h4><strong>Nodarbiba</strong> - {{ nodarbiba.nodarbiba }}</h4>
-<h4><strong>Notiks katru nedēļu</strong> - {{ nodarbiba.get_diena_display }} {{ nodarbiba.laiks|date:"H:i" }}</h4>
-<h4><strong>Nodarbību sākums</strong> - {{ nodarbiba.start_date|date:"d/m/Y" }}</h4>
-<h4><strong>Treneris</strong> - {{ nodarbiba.treneris }}</h4>
-<h4><strong>Zāle</strong> - {{ nodarbiba.telpa }}</h4>
-<h4><strong>Nodarbības ilgums</strong> - {{ nodarbiba.ilgums }}</h4>
-<h4><strong>Vietus skaits</strong> - {{ nodarbiba.vietas }}</h4>
-{% endif %}
-</div>
+<div class="modal fade" id="Pievienots" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;Nodarbība pievienota</h3></div>
+
+<div class="modal-body"><h4>{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h4><h4>{{ d.sakums|date:"d/M/Y H:i" }}</h4></div>
 <div class="modal-footer">
+<!-- <a href="/reception/plan/{{ w_id }}/cancel/{{ d.id }}/"><button type="button" class="btn btn-danger">Atcelt nodarbību</button></a> -->
  <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
 </div></div></div></div>
-
 
 <script>
 window.onload = success_modal;
@@ -46,22 +28,26 @@ function showMe (box) {
     document.getElementById(box).style.display = vis; }
 </script>
 
-<div class="col-md-6 col-md-offset-3">
-<form action="/reception/add/" method="post">{% csrf_token %}
+<form action="/reception/add/" method="post"><div class="col-md-6 col-md-offset-3">{% csrf_token %}
+
+{% if error %}
+ <div class="alert alert-danger" role="alert">
+  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><strong> &nbsp;&nbsp;&nbsp;{{  }}</strong>
+ </div>
+{% endif %}
 
 <div class="alert alert-danger">
   <center><strong>!!! Nodarbību pievienošana grafikam !!!</strong></center>
 </div>
 
-{% if error %}
- <div class="alert alert-danger" role="alert">
-  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><strong> &nbsp;&nbsp;&nbsp;{{ error }}</strong>
- </div>
-{% endif %}
+<div class="alert alert-danger" style="margin-top:10px;">
+ <center><strong>Uzmanību!</strong> <i><b>"ĶEKSI"</b></i> liek tikai ja Nodarbība ir paredzēta <b>TIKAI</b> vienu reizi.</center>
+ <center><strong>Uzmanību!</strong> izvēlamies datumu no kura sākot nodarbība būs pieejama, vai kurā datumā tā būs (ja ir <i><b>"ĶEKSIS"</b></i>).</center>
+</div>
 
 <div class="alert alert-warning" style="margin-top:10px;">
- <center><strong>Svarīgi!</strong> Ja nodarbība tiek pievienota <b>VIENU</b> reizi, tad datuma izvēle notiek <i><b>"lejā"</b></i></center>
- <center>Pretējā gadījumā datuma izvēle nozīmē no kura laika sākas nodarbības.</center>
+ <center><strong>Svarīgi!</strong> Ja nodarbība tiek pievienota <b>VIENU</b> reizi, tad Diena nav svarīga.</center>
+ <center>Pievienojot vienu nodarbību datuma izvēle notiek <i><b>"lejā"</b></i></center>
 </div>
 
 <div class="bootstrap-iso"><div class="fieldWrapper"><div class="row">
