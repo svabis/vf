@@ -113,61 +113,75 @@ def graf_add(request):
         args['success'] = 'false'	# Modal never vaļā
 
         if request.POST:
-            diena = request.POST.get('diena', '')
-            laiks_str = request.POST.get('laiks', '')
-            laiks = datetime.datetime.strptime( laiks_str[:5], '%H:%M')
+            form = PlanotajsForm( request.POST )
+            if form.is_valid():
+                diena = request.POST.get('diena', '')
+                laiks_str = request.POST.get('laiks', '')
+                laiks = datetime.datetime.strptime( laiks_str[:5], '%H:%M')
 
-            ilgums = int(request.POST.get('ilgums', ''))
-            vietas = int(request.POST.get('vietas', ''))
+                ilgums = int(request.POST.get('ilgums', ''))
+                vietas = int(request.POST.get('vietas', ''))
 
-            nodarbiba = Nodarb_tips.objects.get( id = int(request.POST.get('nodarbiba', '')) )
-            treneris = Treneris.objects.get( id = int(request.POST.get('treneris', '')) )
-            telpa = Telpa.objects.get( id = int(request.POST.get('telpa', '')) )
+                nodarbiba = Nodarb_tips.objects.get( id = int(request.POST.get('nodarbiba', '')) )
+                treneris = Treneris.objects.get( id = int(request.POST.get('treneris', '')) )
+                telpa = Telpa.objects.get( id = int(request.POST.get('telpa', '')) )
 
-            chk_once = request.POST.get('chk', '')
-            date_str = request.POST.get('date', '')
-            date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
+                chk_once = request.POST.get('chk', '')
+                date_str = request.POST.get('date', '')
+                date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
 
-            after_month = (datetime.datetime.today() + datetime.timedelta(days=28)).date()
+                after_month = (datetime.datetime.today() + datetime.timedelta(days=28)).date()
 
-            if chk_once == "on":	# ja nodarbiba notiks vienu reizi -->
-                temp_date = datetime.datetime.combine(date, datetime.datetime.min.time())	# Date to DateTime
-                new_sakums = temp_date.replace(hour=laiks.hour, minute=laiks.minute)
+                if chk_once == "on":	# ja nodarbiba notiks vienu reizi -->
+                    temp_date = datetime.datetime.combine(date, datetime.datetime.min.time())	# Date to DateTime
+                    new_sakums = temp_date.replace(hour=laiks.hour, minute=laiks.minute)
 
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# !!!!!!! INSERT Nodarbība veidota vēsturē ERROR !!!!!!!!
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   # !!!!!!! CHECK Nodarbība veidota vēsturē ERROR !!!!!!!!
+                   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    if new_sakums < datetime.datetime.now():
+                        args['form'] = form
+                        args['error'] = u' Izvēlētais datums ir jau pagājis !!!'
+                        return render_to_response('add_plan.html', args)
+                    else:
 
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# !!!!!!! INSERT Nodarbība OVELAP ERROR !!!!!!!!
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   # !!!!!!! INSERT Nodarbība OVELAP ERROR !!!!!!!!
+                   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!
+                        new_graf = Grafiks(sakums=new_sakums, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas)
+                        new_graf.save()
+                        args['nodarbiba'] = new_graf	# pievienota viena nodarbība --> Modal_success
+                        args['one'] = True	# Modal_success --> viena apraksts
+                        args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi"
+                        return render_to_response('add_plan.html', args)
 
-                new_graf = Grafiks(sakums=new_sakums, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas)
-                new_graf.save()
-                args['nodarbiba'] = new_graf	# pievienota viena nodarbība --> Modal_success
-                args['one'] = True	# Modal_success --> viena apraksts
+                else:	# ja atkārtojās, tad  veidojam Planotāja ierakstu
 
-            else:	# ja atkārtojās, tad  veidojam Planotāja ierakstu
-                if date <= after_month:	# jāieliek esošajā grafikā
+                   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   # !!!!!!! INSERT Nodarbība OVELAP ERROR !!!!!!!!
+                   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!
+                    if date <= after_month:	# jāieliek esošajā grafikā
+                        days_to_add = []
+                        d = date
+                        while d <= after_month: # veido masīvu no datumiem sākot ar izvēlēto, beidzot ar pēdējo pieraksta (ieskaitot)
+                            if int(d.weekday()) == int(diena):
+                                temp_date = datetime.datetime.combine(d, datetime.datetime.min.time())	# Date to DateTime
+                                new_sakums = temp_date.replace(hour=laiks.hour, minute=laiks.minute)
 
-# !!!!!!!! WEEKDAY NO DIENA... FOR DATE TO AFTER_MONTH... INSERT GRAFIKS
-#                    args['message'] = u'datumi iekļaujās'
-                    pass
+                                new_graf = Grafiks(sakums=new_sakums, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas) 	# Create Grafiks Object
+                                new_graf.save()
+                            d += datetime.timedelta(days=1)
 
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# !!!!!!! INSERT Nodarbība OVELAP ERROR !!!!!!!!
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    new_plan = Planotajs(diena=diena, laiks=laiks, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas, start_date=date)
+                    new_plan.save()
+                    args['nodarbiba'] = new_plan	# pievienots grafikam -->
+                    args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi" Plānotājam
+                    return render_to_response('add_plan.html', args)
 
-                new_plan = Planotajs(diena=diena, laiks=laiks, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas, start_date=date)
-                args['nodarbiba'] = new_plan	# pievienots grafikam -->
-
-                new_plan.save()
-            args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi"
-
-# !!! ERRORS CITUR !!!
-#            args['error'] = u' KĻŪDA'
-            args['message'] = u' Nodarbība pievienota sekmīgi'
-
+            else: # form is not valid
+                args['form'] = form
         return render_to_response('add_plan.html', args)
     return redirect('/reception/login/')
 
