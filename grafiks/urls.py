@@ -39,8 +39,8 @@ urlpatterns = [
     url(r'^add/$', 'grafiks.views.graf_add'),
 
 # Treneru aizvietosan
-    url(r'^tren/(?P<w_id>\d+)/$', 'grafiks.views.tren_week_list', name="nod_plan"),
-    url(r'^tren/(?P<w_id>\d+)/cancel/(?P<g_id>\d+)/$', 'grafiks.views.tren_aizv'),
+    url(r'^tren/(?P<w_id>\d+)/$', 'grafiks.views.tren_week_list', name="tren_week_list"),
+    url(r'^tren/(?P<w_id>\d+)/replace/(?P<g_id>\d+)/$', 'grafiks.views.tren_aizv'),
     url(r'^tren/$', 'grafiks.views.tren_list'),
 
 # Main --> Shodienas nodarbibas

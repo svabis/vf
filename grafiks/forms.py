@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 from django.forms import ModelForm
+
 from grafiks.models import Planotajs
+from nodarb.models import *
+
 from django import forms
 
-# create forms here
 
+# !!!!! Planotajs Form !!!!!
 class PlanotajsForm(ModelForm):
+
+    nodarbiba = forms.ModelChoiceField( queryset = Nodarb_tips.objects.all() )
+#    treneris = forms.ModelChoiceField( queryset = Treneris.objects.filter( t = nodarbiba ) )
 
     chk = forms.BooleanField( required=False, widget = forms.CheckboxInput( attrs={'onclick': "showMe('diena')"} ))
 
@@ -15,5 +21,11 @@ class PlanotajsForm(ModelForm):
 
     class Meta:
         model = Planotajs
-        fields = ('diena', 'laiks', 'ilgums', 'nodarbiba', 'treneris', 'telpa', 'vietas')
+        fields = ('diena', 'laiks', 'ilgums', 'telpa', 'vietas', 'treneris' ) # 'nodarbiba'
 
+
+# !!!!! TrenRelForm !!!!!
+class TrenRelForm(ModelForm):
+    class Meta:
+        model = Tren_nodarb
+        fields = ( 'treneris', 'nodarb' )

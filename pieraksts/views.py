@@ -106,7 +106,7 @@ def any(request, n_id):
     if gr.count() != 0:
         grafiks_data.append(gr)
 
-    for day in range(1,30):
+    for day in range(1,29):
         gr = Grafiks.objects.filter(nodarbiba = n, sakums__range=( start_time + datetime.timedelta( days=day) , end_time + datetime.timedelta( days=day ))).order_by('sakums')
         if gr.count() != 0:
             grafiks_data.append(gr)
@@ -138,7 +138,7 @@ def specific(request, n_id, t_id):
     if gr.count() != 0:
         grafiks_data.append(gr)
 
-    for day in range(1,30):
+    for day in range(1,29):
         gr = Grafiks.objects.filter(nodarbiba = n, treneris = t, sakums__range=( start_time + datetime.timedelta( days=day) , end_time + datetime.timedelta( days=day ))).order_by('sakums')
         if gr.count() != 0:
             grafiks_data.append(gr)

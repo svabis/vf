@@ -7,7 +7,7 @@ from django.core.context_processors import csrf
 
 from pieraksts.models import *
 from grafiks.models import Grafiks, Planotajs
-from grafiks.forms import PlanotajsForm
+from grafiks.forms import *
 from nodarb.models import *
 
 # Pieraksta statistikas modulis
@@ -32,7 +32,7 @@ def graf_list(request):
         weeks.append(today)
 
         next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
-        for _ in range (0,4): # add 4 weeks in row
+        for _ in range (0,8): # add 4 weeks in row
             weeks.append(next)
             next = next + datetime.timedelta(days=7)
 
@@ -50,7 +50,7 @@ def week_list(request, w_id):
         weeks = []
         weeks.append(today)
         next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
-        for _ in range (0,4): # add 4 weeks in row
+        for _ in range (0,8): # add 4 weeks in row
             weeks.append(next)
             next = next + datetime.timedelta(days=7)
 
@@ -114,7 +114,8 @@ def graf_add(request):
 
         if request.POST:
             form = PlanotajsForm( request.POST )
-            if form.is_valid():
+
+            if form.is_valid(): # and form2.is_valid():
                 diena = request.POST.get('diena', '')
                 laiks_str = request.POST.get('laiks', '')
                 laiks = datetime.datetime.strptime( laiks_str[:5], '%H:%M')
@@ -130,18 +131,22 @@ def graf_add(request):
                 date_str = request.POST.get('date', '')
                 date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
 
-                after_month = (datetime.datetime.today() + datetime.timedelta(days=28)).date()
+                after_month = (datetime.datetime.today() + datetime.timedelta(days=28+28)).date()
 
                 if chk_once == "on":	# ja nodarbiba notiks vienu reizi -->
                     temp_date = datetime.datetime.combine(date, datetime.datetime.min.time())	# Date to DateTime
                     new_sakums = temp_date.replace(hour=laiks.hour, minute=laiks.minute)
 
-                   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                   # !!!!!!! CHECK Nodarbība veidota vēsturē ERROR !!!!!!!!
-                   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   # !!!!!!! CHECK Nodarbība veidota vēsturē OR nākotnē ERROR !!!!!!!!
+                   # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     if new_sakums < datetime.datetime.now():
                         args['form'] = form
                         args['error'] = u' Izvēlētais datums ir jau pagājis !!!'
+                        return render_to_response('add_plan.html', args)
+                    if new_sakums > (datetime.datetime.now() + datetime.timedelta(days=28+28)):
+                        args['form'] = form
+                        args['error'] = u' Izvēlētais datums ir ārpus Pieraksta sistēmas - vairāk kā 2 mēneši uz priekšu !!!'
                         return render_to_response('add_plan.html', args)
                     else:
 
@@ -197,7 +202,7 @@ def tren_list( request ):
         weeks.append(today)
 
         next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
-        for _ in range (0,4): # add 4 weeks in row
+        for _ in range (0,8): # add 4 weeks in row
             weeks.append(next)
             next = next + datetime.timedelta(days=7)
 
@@ -209,11 +214,13 @@ def tren_week_list( request, w_id ):
     username = auth.get_user(request)
     if username.is_superuser:
         args = {}
+        args.update(csrf(request))      # ADD CSRF TOKEN
         args['super'] = True
+        args['form'] = TrenRelForm
         weeks = []
         weeks.append(today)
         next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
-        for _ in range (0,4): # add 4 weeks in row
+        for _ in range (0,8): # add 4 weeks in row
             weeks.append(next)
             next = next + datetime.timedelta(days=7)
 
@@ -237,6 +244,21 @@ def tren_week_list( request, w_id ):
     return redirect('/reception/login/')
 
 def tren_aizv( request, w_id, g_id ):
-    return True
+    username = auth.get_user(request)
+    if username.is_superuser:
+        args = {}
+        args.update(csrf(request))      # ADD CSRF TOKEN
+        args['super'] = True
+
+        if request.POST:
+            new_tren = request.POST.get('treneris', '')
+            if new_tren != '':
+                treneris = Treneris.objects.get( id = int( new_tren ) )
+                change = Grafiks.objects.get( id=g_id )
+                change.treneris = treneris
+                change.save()
+
+        return redirect ( 'tren_week_list', w_id=w_id )
+    return redirect('/reception/login/')
 
 

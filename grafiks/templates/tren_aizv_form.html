@@ -31,36 +31,18 @@ jQuery(document).ready(function($) {
 </tbody>
 {% else %}
 
-
-{% for dat in data %}{% for d in dat %}
-<div class="modal fade" id="Tren{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
- <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:1.5em;"></span>
- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
-
-<form action="/reception/tren/{{ w_id }}/replace/{{ d.id }}/" method="post">{% csrf_token %}
-<div class="modal-body">
- <h4>{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h4><h4>{{ d.sakums|date:"d/m/Y H:i" }}</h4>
- <div class="fieldWrapper">
-  <label for="{{ form.treneris.id_for_label }}">Aizvietot ar treneri:</label>
-  {{ form.treneris }}
-  {{ form.treneris.errors }}
- </div> 
-</div>
-<div class="modal-footer">
- <input class="btn btn-danger" type="submit" value="Aizvietot treneri">
- <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
-</div>
-</form>
-</div></div></div>
-{% endfor %}{% endfor %}
-
+<script>
+function tren_change(val) {
+ $("#TrenModal").modal('show');
+}
+</script>
 
 <div class="modal fade" id="TrenModal" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
  <span class="glyphicon glyphicon-refresh" aria-hidden="true" style="font-size:1.5em;"></span>
  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
 <div class="modal-body"><h4>{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h4><h4>{{ d.sakums|date:"d/M/Y H:i" }}</h4></div>
 <div class="modal-footer">
- <a href="/reception/tren/{{ w_id }}/replace/1/"><button type="button" class="btn btn-danger">Aizvietot treneri</button></a>
+ <a href="/reception/tren/{{ w_id }}/replace/{{ d.id }}/"><button type="button" class="btn btn-danger">Aizvietot treneri</button></a>
  <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
 </div></div></div></div>
 
@@ -84,7 +66,7 @@ jQuery(document).ready(function($) {
  <td style="text-align: center;">{{ d.sakums|date:"d/m" }}</td>
  <td>{{ d.sakums|date:"H:i" }}</td>
  <td>{{ d.nodarbiba }}</td>
- <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Tren{{ d.id }}">Aizvietot Treneri</button></td>
+ <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" onclick="tren_change(this.value)" value="{{ d }}">Aizvietot Treneri</button></td>
  <td>{{ d.treneris }}</td>
  <td>{{ d.telpa }}</td>
  <td>{{ d.vietas }}</td>
