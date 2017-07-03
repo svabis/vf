@@ -220,6 +220,8 @@ def reception_pieraksts(request, d_id, n_id):
                     tel_err_count += 1
             if tel_err_count > 1:
                 args['tel_msg'] = True
+                args['form'] = form     # ERROR MESSAGE
+                return render_to_response( 'rec_pierakst.html', args )
 
 #            for c in clients:
 #                if c.tel == new_tel and c.vards != new_name:
@@ -295,6 +297,9 @@ def reception_pieraksts(request, d_id, n_id):
                 args['error'] = True
                 args['form'] = form     # ERROR MESSAGE
                 return render_to_response( 'rec_pierakst.html', args )
+
+        args['error']= True
+        args['msg']= u'forma nav validēta'
         return render_to_response( 'rec_pierakst.html', args )
     return render_to_response( 'rec_pierakst.html', args )
 

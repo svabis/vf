@@ -25,7 +25,7 @@ jQuery(document).ready(function($) {
 </tr></thead>
 <tbody>
 {% for w in week %}
-<tr class="clickable-row" data-href="/reception/plan/{{ forloop.counter0 }}/"><td>{{ w|date:"d M" }}</td></tr>
+<tr class="clickable-row" data-href="/reception/graf/{{ forloop.counter0 }}/"><td>{{ w|date:"d M" }}</td></tr>
 {% endfor %}
 </tbody>
 {% else %}
@@ -36,12 +36,12 @@ jQuery(document).ready(function($) {
  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
 <div class="modal-body"><h4>{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h4><h4>{{ d.sakums|date:"d/M/Y H:i" }}</h4></div>
 <div class="modal-footer">
- <a href="/reception/plan/{{ w_id }}/cancel/{{ d.id }}/"><button type="button" class="btn btn-danger">Atcelt nodarbību</button></a>
+ <a href="/reception/graf/{{ w_id }}/cancel/{{ d.id }}/"><button type="button" class="btn btn-danger">Atcelt nodarbību</button></a>
  <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
 </div></div></div></div>
 {% endfor %}{% endfor %}
 
-<a href="/reception/plan/"><button type="button" class="btn btn" style="colour: black;"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</button></a><br>
+<a href="/reception/graf/"><button type="button" class="btn btn" style="colour: black;"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</button></a><br>
 
 <div class="container">
 <table class="table table-hover table-striped table-condensed">

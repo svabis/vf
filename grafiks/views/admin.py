@@ -91,7 +91,8 @@ def nod_atcelshana(g_id):
         klienti = nodarb.nod.all()
         for k in klienti:
             try: # reception Pieraksts may not include e-mail
-                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
+#                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
+                pass
 
 # !!!!! INSERT DELETE PIERAKSTS !!!!!
 
@@ -262,3 +263,20 @@ def tren_aizv( request, w_id, g_id ):
     return redirect('/reception/login/')
 
 
+# =======================================================================================================
+
+# !!!!! PLANOTĀJS IZVELE !!!!!
+def plan_list( request ):
+    username = auth.get_user(request)
+    if username.is_superuser:
+        args = {}
+        args['super'] = True
+        days = []
+
+        for i in range (0,7):
+            day = Planotajs.objects.filter( diena=i ).order_by( 'laiks' )
+            days.append(day)
+
+        args['data'] = days
+        return render_to_response ( 'del_plan.html', args )
+    return redirect('/reception/login/')

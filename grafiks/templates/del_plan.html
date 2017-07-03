@@ -1,14 +1,8 @@
-{% extends 'admin.html' %}
-{% block style %}
-.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
-{% endblock %}
+{% extends 'admin.html' %}{% load staticfiles%}
 
-{% block content %}
-
-<div class="alert alert-danger">
-  <center><strong>!!! Nodarbību atcelšana !!!</strong></center>
-</div>
-
+{% block javascript %}
+<script type="text/javascript" src="{% static 'bootstrap/js/datepicker.js' %}"></script>
+<link rel="stylesheet" href="{% static 'bootstrap/css/datepicker.css' %}"/>
 <script>
 jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {
@@ -16,38 +10,67 @@ jQuery(document).ready(function($) {
     });
 });
 </script>
-{% if week %}
-<div class="container">
+<script>
+    $(document).ready(function(){
+      var date_input=$('input[name="date{{ d.id }}"]'); //our date input has the name "date"
+      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+      var options={ format: 'dd/mm/yyyy', container: container, todayHighlight: true, autoclose: true, weekStart: 1, };
+      date_input.datepicker(options);
+    })
+</script>
 
-<table class="table table-hover table-striped table-condensed">
-<thead><tr>
- <th>Nedēļas sākums</th>
-</tr></thead>
-<tbody>
-{% for w in week %}
-<tr class="clickable-row" data-href="/reception/plan/{{ forloop.counter0 }}/"><td>{{ w|date:"d M" }}</td></tr>
-{% endfor %}
-</tbody>
-{% else %}
+{% endblock %}
+
+{% block style %}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
+{% endblock %}
+
+{% block content %}
+<div class="alert alert-danger">
+  <center><strong>!!! Nodarbību Izņemšanas no Plānotāja !!!</strong></center>
+</div>
 
 {% for dat in data %}{% for d in dat %}
-<div class="modal fade" id="Graf{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
+<div class="modal fade" id="Plan{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
  <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:1.5em;"></span>
  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
-<div class="modal-body"><h4>{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h4><h4>{{ d.sakums|date:"d/M/Y H:i" }}</h4></div>
+<div class="modal-body">
+ <h3>{{ d.get_diena_display }}&nbsp;&nbsp;&nbsp;{{ d.laiks|date:"H:i" }}&nbsp;&nbsp;&nbsp;{{ d.ilgums }}minūtes</h3>
+ <h3>&nbsp;{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h3>
+
+<form action="/reception/plan/{{ d.id }}" method="post">{% csrf_token %}
+ <div class="form-group">
+  <input class="form-control" id="date" name="date" placeholder="spied šeit lai izvēlētos datumu" type="text"/>
+ </div>
+</form>
+
+</div>
 <div class="modal-footer">
- <a href="/reception/plan/{{ w_id }}/cancel/{{ d.id }}/"><button type="button" class="btn btn-danger">Atcelt nodarbību</button></a>
+ <a href="/reception/plan/{{ d.id }}/"><button type="button" class="btn btn-danger">Izņemt nodarbību no Plānotāja</button></a>
  <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
 </div></div></div></div>
 {% endfor %}{% endfor %}
 
-<a href="/reception/plan/"><button type="button" class="btn btn" style="colour: black;"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</button></a><br>
+
+<div class="modal fade" id="Check" tabindex="-10" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
+ <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:1.5em;"></span>
+ <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
+<div class="modal-body">
+ <h3>Vai esat pārliecināts</h3>
+</div>
+<div class="modal-footer">
+ <a href="/reception/plan/{{ d.id }}/"><button type="button" class="btn btn-danger">Jā</button></a>
+ <button type="button" class="btn btn-default" data-dismiss="modal">Atcelt</button>
+</div></div></div></div>
+
+
 
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
 <thead><tr>
- <th>Diena</th>
- <th colspan="2">Nodarbības laiks</th>
+ <th colspan="2">Diena</th>
+ <th>Sakums</th>
+ <th>Ilgums</th>
  <th>Nodarbība</th>
  <th>Treneris</th>
  <th>Zāle</th>
@@ -55,17 +78,18 @@ jQuery(document).ready(function($) {
 </tr></thead>
 <tbody>
 {% for dat in data %}
-<tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="7"></td></tr>
+<tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="8"></td></tr>
 {% for d in dat %}
 <tr>
- <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Graf{{ d.id }}">Atcelt nodarbību</button></td>
- <td>{{ d.sakums|date:"d/m" }}</td>
- <td>{{ d.sakums|date:"H:i" }}</td>
+ <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Plan{{ d.id }}">Izņemt no Plānotāja</button></td>
+ <td>{{ d.get_diena_display }}</td>
+ <td>{{ d.laiks|date:"H:i" }}</td>
+ <td>{{ d.ilgums }}</td>
  <td>{{ d.nodarbiba }}</td>
  <td>{{ d.treneris }}</td>
  <td>{{ d.telpa }}</td>
  <td>{{ d.vietas }}</td>
 </tr>
-{% endfor %}{% endfor %}{% endif %}
+{% endfor %}{% endfor %}
 </tbody>
 {% endblock %}
