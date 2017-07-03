@@ -27,7 +27,7 @@ class Grafiks(models.Model):
 
     sakums = models.DateTimeField()
     ilgums = models.IntegerField()
-    nodarbiba = models.ForeignKey( Nodarb_tips ) # Nodarbiba
+    nodarbiba = models.ForeignKey( Nodarb_tips, related_name='nd' ) # Nodarbiba
     treneris = models.ForeignKey( Treneris ) # Treneris
     telpa = models.ForeignKey( Telpa ) # Telpa
     vietas = models.IntegerField()
