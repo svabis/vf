@@ -91,8 +91,8 @@ def nod_atcelshana(g_id):
         klienti = nodarb.nod.all()
         for k in klienti:
             try: # reception Pieraksts may not include e-mail
-#                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
-                pass
+                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
+#                pass
 
 # !!!!! INSERT DELETE PIERAKSTS !!!!!
 

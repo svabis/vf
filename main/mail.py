@@ -10,7 +10,23 @@ from email.MIMEImage import MIMEImage
 
 from datetime import datetime
 from datetime import timedelta
-#import pytz	# to set timezone
+
+# DST
+def dst(time):
+    import calendar
+    import datetime
+    date = time.date()
+    year = date.year
+
+    dst_start = max(week[-1] for week in calendar.monthcalendar(year, 10))
+    dst_end   = max(week[-1] for week in calendar.monthcalendar(year, 3))
+    date_dst_start = datetime.date(year, 10, dst_start)
+    date_dst_end = datetime.date(year, 3, dst_end)
+
+    if date_dst_end <= date <= date_dst_start:
+        return 3
+    else:
+        return 2
 
 # !!!!! PIETEIKUMA APSTIPRINAJUMS !!!!!
 def send_email(recipient, nodarb, timedate, code_uuid):
@@ -18,7 +34,7 @@ def send_email(recipient, nodarb, timedate, code_uuid):
     strFrom = 'info@vfabrika.lv'
     strTo = recipient
 
-    new_time = timedate + timedelta(hours=3)
+    new_time = timedate + timedelta(hours=dst(timedate))
     time = new_time.strftime("%d/%m/%Y %H:%M")
 
     code = 'http://pieraksts.vfabrika.lv/atcelt/' + str(code_uuid) + '/'
@@ -70,7 +86,7 @@ def send_cancel(recipient, datums, nos):
     strFrom = 'info@vfabrika.lv'
     strTo = recipient
 
-    new_time = datums + timedelta(hours=3)
+    new_time = datums + timedelta(hours=dst(datums))
 
     time = new_time.strftime("%d/%m/%Y %H:%M")
 

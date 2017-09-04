@@ -1,4 +1,5 @@
 {% load staticfiles %}{% load tz %}
+{% load auth_extras %}
 <!DOCTYPE html>
 <html lang="LV-LV">
 <head>
@@ -39,15 +40,23 @@
   <li><a href="/reception/hist/"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span> &nbsp;Vēsture</a></li>
   <li><a href="/reception/"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> &nbsp;Nodarbību pieraksti</a></li>
   <li><a target="_blank" href="/admin/klienti/klienti/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> &nbsp;Klientu dati</a></li>
-{% if super %}
+{% if super or request.user|has_group:"admin" %}
   <li style="background-color: #FF8080;"><a href="/reception/graf/"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> &nbsp;Atcelt nodarbību</a></li>
-  <li style="background-color: #FF8080;"><a href="/reception/tren/"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> &nbsp;Treneru aizvietošana</a></li>
+
+  <li style="background-color: #FF8080;" class="dropdown">
+   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+     <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> &nbsp;Treneru aizvietošana&nbsp;<span class="caret"></span></a>
+    <ul class="dropdown-menu">
+     <li><a href="/reception/tren/"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> &nbsp;Vienai nodarbībai</a></li>
+     <li><a href="#"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> &nbsp;Sākot no konrēta datuma</a></li>
+    </ul>
+  </li>
+
   <li style="background-color: #FF8080;" class="dropdown">
    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
      <span class="glyphicon glyphicon-list" aria-hidden="true"></span> &nbsp;izmaiņas grafikā&nbsp;<span class="caret"></span></a>
     <ul class="dropdown-menu">
      <li><a href="/reception/add/"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> &nbsp;Pievienot nodarbību grafikam/plānotājam</a></li>
-<!--     <li role="separator" class="divider"></li> -->
      <li><a href="/reception/plan/"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> &nbsp;Izņemt nodarbību no plānotāja</a></li>
     </ul>
   </li>
@@ -63,6 +72,7 @@
 </div></nav>
 
 <div class="container-fluid">
+<h1>request.user = {{ request.user }}</h1>
 {% block history_header %}{% endblock %}
 <h2>{{ title }}</h2>
 {% if subtitle %}<h3>{{ subtitle|date:"d/m/Y H:i" }}</h3>{% endif %}
@@ -73,7 +83,6 @@
 {% block rec_pieraksts %}{% endblock %}
 
 </div>
-
 </body>
 </html>
 

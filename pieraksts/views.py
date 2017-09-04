@@ -230,7 +230,10 @@ def pieraksts(request, g_id):
                         pieraksts = Pieraksti(klients=c, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
                  # SEND ACCEPT MAIL WITH CANCEL CODE
                         pieraksts.save()
-                        mail.send_email(new_email, nod.nodarbiba.nos, nod.sakums, pieraksts.atteikuma_kods)
+                        try:
+                           mail.send_email(new_email, nod.nodarbiba.nos, nod.sakums, pieraksts.atteikuma_kods)
+                        except:
+                           pass
                  # Pieraksts sekmigs
                         args['back'] = False
                         return render_to_response( 'success.html', args )
@@ -256,7 +259,10 @@ def pieraksts(request, g_id):
                     pieraksts = Pieraksti(klients=new_client, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
              # SEND ACCEPT MAIL WITH CANCEL CODE
                     pieraksts.save()
-                    mail.send_email(new_email, nod.nodarbiba.nos, nod.sakums, pieraksts.atteikuma_kods)
+                    try:
+                      mail.send_email(new_email, nod.nodarbiba.nos, nod.sakums, pieraksts.atteikuma_kods)
+                    except:
+                      pass
              # Pieraksts sekmigs
                     args['back'] = False
                     return render_to_response( 'success.html', args )
