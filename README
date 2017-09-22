@@ -46,4 +46,4 @@ pieraksts/management/commands/
 
 
 nodarb/management/commands/
-	chk_rel.py chk_rel	katru dienu 01:00 atjaunos Relācijas - TO COME
+	chk_rel.py chk_rel	katru dienu 04:00 atjaunos Relācijas Treneris vs Nodarbība
