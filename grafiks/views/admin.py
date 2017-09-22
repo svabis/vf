@@ -238,7 +238,13 @@ def tren_week_list( request, w_id ):
             except: # if day is empty
                 pass
 
-        args['w_id'] = w_id
+        args['w_id'] = w_id # this week number
+        if int(w_id) > 0: # previous week number
+             args['pw_id'] = int(w_id) - 1
+        if int(w_id) < 8: # next week number
+             args['nw_id'] = int(w_id) + 1
+
+
         args['data'] = grafiks
         return render_to_response ( 'tren_aizv.html', args )
     return redirect('/reception/login/')
