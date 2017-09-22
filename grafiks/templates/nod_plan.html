@@ -9,6 +9,10 @@
   <center><strong>!!! Nodarbību atcelšana !!!</strong></center>
 </div>
 
+<div class="alert alert-warning">
+  <center><strong>!!! Pievienotas pogas: uz nākamo nedēļu / uz iepriekšējo nedēļu !!!</strong></center>
+</div>
+
 <script>
 jQuery(document).ready(function($) {
     $(".clickable-row").click(function() {
@@ -28,7 +32,11 @@ jQuery(document).ready(function($) {
 <tr class="clickable-row" data-href="/reception/graf/{{ forloop.counter0 }}/"><td>{{ w|date:"d M" }}</td></tr>
 {% endfor %}
 </tbody>
+</table>
+</div>
 {% else %}
+
+
 
 {% for dat in data %}{% for d in dat %}
 <div class="modal fade" id="Graf{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
@@ -41,7 +49,12 @@ jQuery(document).ready(function($) {
 </div></div></div></div>
 {% endfor %}{% endfor %}
 
-<a href="/reception/graf/"><button type="button" class="btn btn" style="colour: black;"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ</button></a><br>
+<a href="/reception/graf/"><button type="button" class="btn btn" style="colour: black;"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ pie nedēļu izvēles</button></a><br>
+
+{% if pw_id %}
+<center><a href="/reception/graf/{{ pw_id }}/"><button type="button" class="btn btn" style="colour: black;">
+<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Uz iepriekšējo nedēļu</button></a></center><br>
+{% endif %}
 
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
@@ -66,6 +79,16 @@ jQuery(document).ready(function($) {
  <td>{{ d.telpa }}</td>
  <td>{{ d.vietas }}</td>
 </tr>
-{% endfor %}{% endfor %}{% endif %}
+{% endfor %}{% endfor %}
 </tbody>
+</table>
+</div>
+
+{% if nw_id %}
+<center><a href="/reception/graf/{{ nw_id }}/"><button type="button" class="btn btn" style="colour: black;">
+<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span> Uz nākamo nedēļu</button></a></center><br><br>
+{% endif %}
+
+{% endif %}
+
 {% endblock %}

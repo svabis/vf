@@ -10,9 +10,6 @@ from grafiks.models import Grafiks, Planotajs
 from grafiks.forms import *
 from nodarb.models import *
 
-# Pieraksta statistikas modulis
-from statistika import day_stat
-
 from main import mail
 
 import datetime
@@ -68,7 +65,12 @@ def week_list(request, w_id):
             except: # if day is empty
                 pass
 
-        args['w_id'] = w_id
+        args['w_id'] = w_id # this week number
+        if int(w_id) > 0: # previous week number
+             args['pw_id'] = int(w_id) - 1
+        if int(w_id) < 8: # next week number
+             args['nw_id'] = int(w_id) + 1
+
         args['data'] = grafiks
         return render_to_response ( 'nod_plan.html', args )
     return redirect('/reception/login/')
@@ -92,10 +94,6 @@ def nod_atcelshana(g_id):
         for k in klienti:
             try: # reception Pieraksts may not include e-mail
                 mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
-#                pass
-
-# !!!!! INSERT DELETE PIERAKSTS !!!!!
-
             except:
                 pass
         nodarb.delete()
@@ -211,6 +209,7 @@ def tren_list( request ):
         return render_to_response ( 'tren_aizv.html', args )
     return redirect('/reception/login/')
 
+# !!!!! TRENERU AIZVIETOSANA NEDELAS SKATS !!!!!
 def tren_week_list( request, w_id ):
     username = auth.get_user(request)
     if username.is_superuser:
@@ -244,6 +243,8 @@ def tren_week_list( request, w_id ):
         return render_to_response ( 'tren_aizv.html', args )
     return redirect('/reception/login/')
 
+
+# !!!!! TRENERU AIZVIETOSANAS POST FORMA !!!!!
 def tren_aizv( request, w_id, g_id ):
     username = auth.get_user(request)
     if username.is_superuser:
@@ -265,7 +266,7 @@ def tren_aizv( request, w_id, g_id ):
 
 # =======================================================================================================
 
-# !!!!! PLANOTĀJS IZVELE !!!!!
+# !!!!! PLANOTĀJS IZNEMT NODARBIBU IZVELE !!!!!
 def plan_list( request ):
     username = auth.get_user(request)
     if username.is_superuser:
@@ -280,3 +281,24 @@ def plan_list( request ):
         args['data'] = days
         return render_to_response ( 'del_plan.html', args )
     return redirect('/reception/login/')
+
+# !!!!! PLANOTAJS REMOVE STARTING WITH DATE !!!!!
+def plan_remove(request, p_id):
+    username = auth.get_user(request)
+    if username.is_superuser:
+        args = {}
+        args.update(csrf(request))      # ADD CSRF TOKEN
+        args['super'] = True
+
+        if request.POST:
+            pass
+#            new_tren = request.POST.get('treneris', '')
+#            if new_tren != '':
+#                treneris = Treneris.objects.get( id = int( new_tren ) )
+#                change = Grafiks.objects.get( id=g_id )
+#                change.treneris = treneris
+#                change.save()
+
+        return redirect ( 'plan_list' )
+    return redirect('/reception/login/')
+

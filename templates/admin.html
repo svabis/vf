@@ -1,5 +1,4 @@
 {% load staticfiles %}{% load tz %}
-{% load auth_extras %}
 <!DOCTYPE html>
 <html lang="LV-LV">
 <head>
@@ -40,7 +39,7 @@
   <li><a href="/reception/hist/"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span> &nbsp;Vēsture</a></li>
   <li><a href="/reception/"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> &nbsp;Nodarbību pieraksti</a></li>
   <li><a target="_blank" href="/admin/klienti/klienti/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> &nbsp;Klientu dati</a></li>
-{% if super or request.user|has_group:"admin" %}
+{% if super %}
   <li style="background-color: #FF8080;"><a href="/reception/graf/"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> &nbsp;Atcelt nodarbību</a></li>
 
   <li style="background-color: #FF8080;" class="dropdown">
@@ -72,7 +71,6 @@
 </div></nav>
 
 <div class="container-fluid">
-<h1>request.user = {{ request.user }}</h1>
 {% block history_header %}{% endblock %}
 <h2>{{ title }}</h2>
 {% if subtitle %}<h3>{{ subtitle|date:"d/m/Y H:i" }}</h3>{% endif %}
@@ -83,6 +81,7 @@
 {% block rec_pieraksts %}{% endblock %}
 
 </div>
+
 </body>
 </html>
 

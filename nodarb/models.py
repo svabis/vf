@@ -11,6 +11,7 @@ class Nodarb_tips(models.Model):
     slug = models.SlugField( unique = True )
     apraksts = models.TextField( default = 'apraksts' )
     redz = models.BooleanField( default = True )
+    izcelt = models.BooleanField( default = False )
 
     def __unicode__(self):
         return u'%s' % (self.nos)

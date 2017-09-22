@@ -10,9 +10,6 @@ from grafiks.models import Grafiks
 
 from pieraksts.forms import KlientsReceptionForm
 
-# Pieraksta statistikas modulis
-from statistika import day_stat
-
 from slugify import slugify
 
 import datetime
@@ -259,7 +256,6 @@ def reception_pieraksts(request, d_id, n_id):
                         pieraksts = Pieraksti(klients=c, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
                         pieraksts.save()
                  # Pieraksts sekmigs
-                        day_stat.day_stat()
                         args['vards'] = form.cleaned_data['vards']
                         args['epasts'] = c.e_pasts
                         args['telefons'] = form.cleaned_data['tel']
@@ -287,7 +283,6 @@ def reception_pieraksts(request, d_id, n_id):
                     pieraksts = Pieraksti(klients=new_client, nodarbiba=nodarbiba) # PIETEIKUMS --> ACCEPT
                     pieraksts.save()
              # Pieraksts sekmigs
-                    day_stat.day_stat()
                     args['vards'] = form.cleaned_data['vards']
                     args['epasts'] = form.cleaned_data['e_pasts']
                     args['telefons'] = form.cleaned_data['tel']

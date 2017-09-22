@@ -48,7 +48,8 @@ urlpatterns = [
     url(r'^tren/$', 'grafiks.views.tren_list'),
 
 # Grafika izmaiņas - Atcelšana
-    url(r'^plan/$', 'grafiks.views.plan_list'),
+    url(r'^plan/$', 'grafiks.views.plan_list', name="plan_list"),
+    url(r'^plan/(?P<p_id>\d+)/$', 'grafiks.views.plan_remove'),
 
 
 # Main --> Shodienas nodarbibas
