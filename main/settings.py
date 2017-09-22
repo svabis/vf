@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'klienti',
     'grafiks',
     'pieraksts',
-    'statistika',
+#    'statistika',
     'django_cleanup',
 )
 
