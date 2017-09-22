@@ -81,9 +81,14 @@ def tren(request, n_id):
     except ObjectDoesNotExist:  # not existing --> 404
         return redirect ('main')
 
-    if len(trener_list( n_id )) > 1:
+    t = trener_list(n_id)
+
+    if not t:
+        return redirect ('main') # Temporary solution ( Nodarbiba redz=True, no coresponding Grafiks entries)
+
+    if len(t) > 1:
          return redirect( 'any', n_id=n_id) # ===> ANY TRAINER
-    return redirect( 'specific', n_id=n_id, t_id=trener_list(n_id)[0].slug ) # ===> SPECIFIC TRAINER
+    return redirect( 'specific', n_id=n_id, t_id=t[0].slug ) # ===> SPECIFIC TRAINER
 
 # =================================================================================================================
 
