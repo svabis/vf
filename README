@@ -45,5 +45,5 @@ pieraksts/management/commands/
 	transfer.py transfer	DB imports no widgeta
 
 
-statistika/management/commands/
-	day_stat.py day_stat	collect day Pieraksti statistics data - ATSLĒGTS
+nodarb/management/commands/
+	chk_rel.py chk_rel	katru dienu 01:00 atjaunos Relācijas - TO COME
