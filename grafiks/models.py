@@ -53,7 +53,7 @@ class Planotajs(models.Model):
 
 # for adding nodarbiba
     start_date = models.DateField( default = timezone.now )
-#    one = models.BooleanField( default = False )
+    end_date = models.DateField( blank = True, null = True )
 
     def __unicode__(self):
         return self.nodarbiba.nos

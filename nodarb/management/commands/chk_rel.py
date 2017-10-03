@@ -12,8 +12,10 @@ class Command(BaseCommand):
        # Define 4 week boundries
         import datetime
         today = datetime.datetime.now()
-        start = datetime.datetime(today.year, today.month, today.day)
+        start = datetime.datetime(today.year, today.month, today.day, today.hour, today.minute)
         end = today.replace(hour=23, minute=59, second=59) + datetime.timedelta(days=28)
+        print start
+        print end
 
        # All relations
         rel_exist = Tren_nodarb.objects.all()

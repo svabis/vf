@@ -11,7 +11,6 @@ from django import forms
 class PlanotajsForm(ModelForm):
 
     nodarbiba = forms.ModelChoiceField( queryset = Nodarb_tips.objects.all() )
-#    treneris = forms.ModelChoiceField( queryset = Treneris.objects.filter( t = nodarbiba ) )
 
     chk = forms.BooleanField( required=False, widget = forms.CheckboxInput( attrs={'onclick': "showMe('diena')"} ))
 
@@ -19,9 +18,13 @@ class PlanotajsForm(ModelForm):
          error_message = (u'Ievadiet korektu datumu.'),
          widget = forms.TextInput( attrs={'class': 'form-control', 'size': 15, 'title': 'Datums'}))
 
+    end_date = forms.RegexField( regex=r'^\d\d\/\d\d\/\d\d\d\d$', max_length = 10, required=False,
+         error_message = (u'Ievadiet korektu datumu.'),
+         widget = forms.TextInput( attrs={'class': 'form-control', 'size': 15, 'title': 'Datums'}))
+
     class Meta:
         model = Planotajs
-        fields = ('diena', 'laiks', 'ilgums', 'telpa', 'vietas', 'treneris' ) # 'nodarbiba'
+        fields = ('diena', 'laiks', 'ilgums', 'telpa', 'vietas', 'treneris' )
 
 
 # !!!!! TrenRelForm !!!!!

@@ -22,6 +22,7 @@
 <h4><strong>Nodarbiba</strong> - {{ nodarbiba.nodarbiba }}</h4>
 <h4><strong>Notiks katru nedēļu</strong> - {{ nodarbiba.get_diena_display }} {{ nodarbiba.laiks|date:"H:i" }}</h4>
 <h4><strong>Nodarbību sākums</strong> - {{ nodarbiba.start_date|date:"d/m/Y" }}</h4>
+{% if nodarbiba.end_date %}<h4><strong>Nodarbība notiks līdz</strong> - {{ nodarbiba.end_date|date:"d/m/Y" }}</h4>{% endif %}
 <h4><strong>Treneris</strong> - {{ nodarbiba.treneris }}</h4>
 <h4><strong>Zāle</strong> - {{ nodarbiba.telpa }}</h4>
 <h4><strong>Nodarbības ilgums</strong> - {{ nodarbiba.ilgums }}</h4>
@@ -58,29 +59,48 @@ function showMe (box) {
 {% endif %}
 
 <div class="alert alert-warning" style="margin-top:10px;">
- <center><strong>Svarīgi!</strong> Ja nodarbība tiek pievienota <b>VIENU</b> reizi, tad nodarbība notiks <b>izvēlētajā datumā</b></center>
- <center>Pretējā gadījumā datuma izvēle nozīmē pēc kura datuma <b><i>(ieskaitot)</i></b> nodarbības tiks pievienotas.</center>
+ <center><strong>Svarīgi!</strong> Ja nodarbība tiek pievienota <b><i>Vienu reizi</i></b>, tad nodarbība notiks <b>izvēlētajā datumā</b>
+ un <i>Beigu datums</i>, kā arī <i>Diena</i> netiek ņemts vērā</center><br>
+ <center>Pretējā gadījumā - <i>Sākuma datums</i> nozīmē pēc kura datuma <b><i>(ieskaitot)</i></b> nodarbības tiks pievienotas, 
+ norādītajā <i>Dienā</i> līdz norādītajam <i>Beigu datumam</i> <b>(ja tāds tiek norādīts)</b> <b><i>(ieskaitot)</i></b></center>
 </div>
 
-<div class="bootstrap-iso"><div class="fieldWrapper"><div class="row">
- <div class="col-md-4"><label style="margin-left:10px;">{{ form.chk }} Vienu reizi</label></div>
- <div class="col-md-7"><div class="form-group">
+<div class="bootstrap-iso"><div class="fieldWrapper">
+ <label style="margin-left:10px;">{{ form.chk }} Vienu reizi</label>
+</div>
+
+<div class="form-group">
+ <label for="{{ form.date.id_for_label }}">Sākuma datums:</label>
  {{ form.date }}
  {{ form.date.errors }}
-</div></div>
-</div></div></div>
+</div>
+</div>
 
-<script>
-$(document).ready(function(){ var date_input=$('input[name="date"]'); var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
- var options={ format: 'dd/mm/yyyy', container: container, todayHighlight: true, autoclose: true, weekStart: 1, }; date_input.datepicker(options); })
-</script>
+<div class="bootstrap-iso" id="diena">
+ <div class="form-group">
+  <label for="{{ form.end_date.id_for_label }}">Beigu datums:</label>
+  {{ form.end_date }}
+  {{ form.end_date.errors }}
+ </div>
 
- <div class="fieldWrapper" id="diena">
+ <div class="fieldWrapper">
   <label for="{{ form.diena.id_for_label }}">Diena:</label>
   {{ form.diena }}
   {{ form.diena.errors }}
  </div>
+</div>
 
+<script>
+$(document).ready(function(){ var date_input=$('input[name="date"]');
+ var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+ var options={ format: 'dd/mm/yyyy', container: container, todayHighlight: true, autoclose: true, weekStart: 1, };
+ date_input.datepicker(options); })
+
+$(document).ready(function(){ var date_input=$('input[name="end_date"]');
+ var container=$('.form-group form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+ var options={ format: 'dd/mm/yyyy', container: container, todayHighlight: true, autoclose: true, weekStart: 1, };
+ date_input.datepicker(options); })
+</script>
 
  <div class="fieldWrapper">
   <label for="{{ form.laiks.id_for_label }}">Sākums:</label>
