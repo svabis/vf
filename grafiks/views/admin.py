@@ -86,6 +86,9 @@ def graf_cancel(request, w_id, g_id):
 
         nod_atcelshana(g_id)	# nodarbības atcelšana
 
+       # UPDATE Relations and Nodarbības redz
+        os.system('python /pieraksts_web/manage.py chk_rel')
+        os.system('python /pieraksts_web/manage.py chk_redz')
         return redirect ( 'nod_plan', w_id=w_id )
     return redirect('/reception/login/')
 

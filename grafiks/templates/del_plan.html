@@ -30,6 +30,11 @@ jQuery(document).ready(function($) {
   <center><strong>!!! Nodarbību Izņemšanas no Plānotāja !!!</strong></center>
 </div>
 
+<div class="alert alert-warning">
+  <center><strong>!!! Nodarbību sākuma un beigu datumi ir <i><u>IESKAITOT</u></i> !!!</strong></center>
+  <center><strong>Ja beigu datums nav norādīts tad sistēma turpinās pievienot nodarbību "bezgalīgi"</strong></center>
+</div>
+
 <div class="alert alert-danger">
   <center><strong>!!! Tiek veiktas izmaiņas <i>NEAIZTIKT :)</i> !!!</strong></center>
 </div>
@@ -79,10 +84,12 @@ jQuery(document).ready(function($) {
  <th>Treneris</th>
  <th>Zāle</th>
  <th>Vietas</th>
+ <th>Sākuma datums</th>
+ <th>Beigu datums</th>
 </tr></thead>
 <tbody>
 {% for dat in data %}
-<tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="8"></td></tr>
+<tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="10"></td></tr>
 {% for d in dat %}
 <tr>
  <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Plan{{ d.id }}">Izņemt no Plānotāja</button></td>
@@ -93,6 +100,8 @@ jQuery(document).ready(function($) {
  <td>{{ d.treneris }}</td>
  <td>{{ d.telpa }}</td>
  <td>{{ d.vietas }}</td>
+ <td>{{ d.start_date }}</td>
+ <td>{% if d.end_date %}{{ d.end_date }}{% else %}-{% endif %}</td>
 </tr>
 {% endfor %}{% endfor %}
 </tbody>
