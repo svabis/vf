@@ -1,5 +1,5 @@
 from django.contrib import admin
-from statistika.models import *
+from log.models import *
 
 
 class DayPierStatAdmin(admin.ModelAdmin):

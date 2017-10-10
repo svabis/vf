@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'klienti',
     'grafiks',
     'pieraksts',
-#    'statistika',
+#    'log',
     'django_cleanup',
 )
 
@@ -58,12 +58,12 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-#                '/pieraksts_web/templates',
-#                '/pieraksts_web/pieraksts/templates',
-#                '/pieraksts_web/grafiks/templates',
-                '/home/svabis/pieraksts_web/templates',
-                '/home/svabis/pieraksts_web/pieraksts/templates',
-                '/home/svabis/pieraksts_web/grafiks/templates',
+#                '/pieraksts/templates',
+#                '/pieraksts/pieraksts/templates',
+#                '/pieraksts/grafiks/templates',
+                '/home/svabis/pieraksts/templates',
+                '/home/svabis/pieraksts/pieraksts/templates',
+                '/home/svabis/pieraksts/grafiks/templates',
                 ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -123,8 +123,8 @@ USE_TZ = True
 #    '/pieraksts_web/static/',
 #)
 
-STATIC_ROOT = "/pieraksts_web/static/"
+STATIC_ROOT = "/pieraksts/static/"
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/pieraksts_web/media/'
+MEDIA_ROOT = '/pieraksts/media/'
 MEDIA_URL = '/media/'
