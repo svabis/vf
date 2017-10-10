@@ -1,13 +1,25 @@
 from django.db import models
 
 # !!!!! Dienas statistikas uzskaite !!!!!
-class DayPierStat(models.Model):
+class Logs(models.Model):
     class Meta():
-        db_table = "dienas_stat_dati"
+        db_table = "log"
 
-    x = models.IntegerField( default=0 )
-    y = models.IntegerField( default=0 )
+# datetime
+# USER
 
-    def __unicode__(self):
-        return u'%s' % (self.x)
+# OBJECT
+#   NAME/ID
+#   COUNT
+
+# action
+#    ADD
+#    DEL
+
+
+
+#    x = models.IntegerField( default=0 )
+#    y = models.IntegerField( default=0 )
+#    def __unicode__(self):
+#        return u'%s' % (self.x)
 

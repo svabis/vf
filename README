@@ -2,47 +2,57 @@
 	main
 
 # DJANGO APP's
-	grafiks - grafiks, planotajs objects | reception web part
+	grafiks
+		objects:
+			Grafiks - visas nodarbības
+			Planotajs - viena nedēļa
+		reception web part
 		views/
 			login.py	- autorizācijas skati
 			reception.py	- recepcijas daļa (tabi, pieraksti, atteikumi, u.t.t.)
 			admin.py	- superuser skati (nodarbību atcelšana, izmaiņas grafikā)
 			hist.py		- sadaļa "Vēsture"
-
-
-	pieraksts - pieraksti, atteikumi objects | pieraksts web part
-
-	klienti - klienti objects
-	nodarb - nodarbibas, treneri, telpas, relacijas objects
-
+	pieraksts
+		objects:
+			Pieraksts - datetime + Grafiks + Klients + uuid4
+			Atteikumi - datetime + Pieraksts - uuid4
+		pieraksts web part
+	klienti
+		objects:
+			Klients - klienta dati
+			Hist_Pieraksts - Pieraksti līdz vakardienai (ieskaitot)
+			Hist_Atteikumi - Atteikumi līdz vakardienai (ieskaitot)
+	nodarb
+		objects:
+			Nodarb_tips - nosaukums, slug, nodarbiba, apraksts, redz, izcelts
+			Treneris - treneru saraksts
+			Tren_Nodarb - Nodarb_tips <=> Treneris
+			Telpa - L, M, C, V, G (sporta zāļu saraksts)   (izmantojas tikai reception vizuālajā)
 
 # DJANGO FOLDERS
 	media		MEDIA FILES treneri.images e.t.c.
-	static		STATIC FILES bootstrap, images e.t.c
+	static		STATIC FILES bootstrap, JS, images e.t.c
 	templates	MAIN TEMPLATE FOLDER
+		main.html - pieraksts (web)
+		admin.html - reception (web)
+		print.html - drukāt nodarbību (sagatave)
+		loginsys.html - autorizācijas forma --> reception
 
 manage.py - python django runfile
 serv - run develop server on 8000 port shortcut
-
-
-
 
 grafiks/management/commands/
 	manage.py add_month	pievieno mēnesi
 	manage.py add_day	pievieno dienu pēc mēneša, ja tādas vēl nav	palaižas no crontab katru nakti 00:05
 
-
-
 klienti/management/commands/
 	manage.py clear_tel	notīra Klienti telefonus no '+371' un '+371 '
 	manage.py check_kli	skaita vienādos vārdus, telefonus
 	manage.py arhive_pier	pārvieto pierakstus/atteikumus, vecākus par 1 dienu uz HistPieraksti/HistAtteikumi	palaižas no crontab katru nakti 00:15
-
-
+	manage.py reminder	atgādinājumi par pierakstiem 08:00 un 20:00 izsūta e-pastus	palaižas no crontab
 
 pieraksts/management/commands/
 	transfer.py transfer	DB imports no widgeta
-
 
 nodarb/management/commands/
 	chk_rel.py chk_rel	katru dienu 04:00 atjauno Relācijas Treneris vs Nodarbība
