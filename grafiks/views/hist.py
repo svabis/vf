@@ -2,6 +2,8 @@
 from django.shortcuts import render_to_response, redirect	# response to template, redirect to another view
 
 from django.contrib import auth			# autorisation library
+from django.contrib.auth.models import User, Group
+
 from django.core.context_processors import csrf
 
 from grafiks.models import Grafiks
@@ -17,7 +19,8 @@ def history(request):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
-    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['super'] = True
 
     args.update(csrf(request)) # ADD CSRF TOKEN
@@ -34,7 +37,8 @@ def hist_date(request, date):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
-    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['super'] = True
 
     datums = datetime.datetime.strptime( date, '%d/%m/%Y').date()
@@ -52,7 +56,8 @@ def hist_date_kli(request, date, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
-    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['super'] = True
 
     args.update(csrf(request)) # ADD CSRF TOKEN
@@ -72,7 +77,8 @@ def hist_date_cancel(request, date, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
-    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['super'] = True
 
     args.update(csrf(request)) # ADD CSRF TOKEN

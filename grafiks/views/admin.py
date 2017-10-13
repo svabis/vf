@@ -2,7 +2,9 @@
 from django.shortcuts import render_to_response, redirect	# response to template, redirect to another view
 from django.core.exceptions import ObjectDoesNotExist
 
-from django.contrib import auth			# autorisation library
+from django.contrib import auth # autorisation library
+from django.contrib.auth.models import User, Group
+
 from django.core.context_processors import csrf
 
 from pieraksts.models import *
@@ -24,7 +26,7 @@ import os
 # !!!!! SUPERUSER NODARBIBAS ATCELSHANA NEDELAS IZVELE !!!!!
 def graf_list(request):
     username = auth.get_user(request)
-    if username.is_superuser:
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args['super'] = True
         weeks = []
@@ -43,7 +45,7 @@ def graf_list(request):
 # !!!!! SUPERUSER NODARBIBAS ATCELSHANA DIENAS IZVELE !!!!!
 def week_list(request, w_id):
     username = auth.get_user(request)
-    if username.is_superuser:
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args['super'] = True
         weeks = []
@@ -80,15 +82,15 @@ def week_list(request, w_id):
 # !!!!! SUPERUSER NODARBIBAS ATCELSHANA !!!!!
 def graf_cancel(request, w_id, g_id):
     username = auth.get_user(request)
-    if username.is_superuser:
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args['super'] = True
 
         nod_atcelshana(g_id)	# nodarbības atcelšana
 
        # UPDATE Relations and Nodarbības redz
-        os.system('python /pieraksts_web/manage.py chk_rel')
-        os.system('python /pieraksts_web/manage.py chk_redz')
+        os.system('python /pieraksts/manage.py chk_rel')
+        os.system('python /pieraksts/manage.py chk_redz')
         return redirect ( 'nod_plan', w_id=w_id )
     return redirect('/reception/login/')
 
@@ -109,7 +111,7 @@ def nod_atcelshana(g_id):
 # !!!!! SUPERUSER PIEVIENOT GRAFIKAM JAUNU NODARBIBU !!!!!
 def graf_add(request):
     username = auth.get_user(request)
-    if username.is_superuser:
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args.update(csrf(request))      # ADD CSRF TOKEN
         args['super'] = True
@@ -169,8 +171,8 @@ def graf_add(request):
                         args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi"
 
                        # UPDATE Relations and Nodarbības redz
-                        os.system('python /pieraksts_web/manage.py chk_rel')
-                        os.system('python /pieraksts_web/manage.py chk_redz')
+                        os.system('python /pieraksts/manage.py chk_rel')
+                        os.system('python /pieraksts/manage.py chk_redz')
                         return render_to_response('add_plan.html', args)
 
                 else:	# ja atkārtojās, tad  veidojam Planotāja ierakstu
@@ -221,8 +223,8 @@ def graf_add(request):
                     args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi" Plānotājam
 
                    # UPDATE Relations and Nodarbības redz
-                    os.system('python /pieraksts_web/manage.py chk_rel')
-                    os.system('python /pieraksts_web/manage.py chk_redz')
+                    os.system('python /pieraksts/manage.py chk_rel')
+                    os.system('python /pieraksts/manage.py chk_redz')
                     return render_to_response('add_plan.html', args)
 
             else: # form is not valid
@@ -235,7 +237,7 @@ def graf_add(request):
 # !!!!! TRENERU AIZVIETOSANA NEDELAS IZVELE !!!!!
 def tren_list( request ):
     username = auth.get_user(request)
-    if username.is_superuser:
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args['super'] = True
         weeks = []
@@ -253,7 +255,7 @@ def tren_list( request ):
 # !!!!! TRENERU AIZVIETOSANA NEDELAS SKATS !!!!!
 def tren_week_list( request, w_id ):
     username = auth.get_user(request)
-    if username.is_superuser:
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args.update(csrf(request))      # ADD CSRF TOKEN
         args['super'] = True
@@ -294,7 +296,7 @@ def tren_week_list( request, w_id ):
 # !!!!! TRENERU AIZVIETOSANAS POST FORMA !!!!!
 def tren_aizv( request, w_id, g_id ):
     username = auth.get_user(request)
-    if username.is_superuser:
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args.update(csrf(request))      # ADD CSRF TOKEN
         args['super'] = True
@@ -316,7 +318,7 @@ def tren_aizv( request, w_id, g_id ):
 # !!!!! PLANOTĀJS IZNEMT NODARBIBU IZVELE !!!!!
 def plan_list( request ):
     username = auth.get_user(request)
-    if username.is_superuser:
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args['super'] = True
         days = []
@@ -332,7 +334,7 @@ def plan_list( request ):
 # !!!!! PLANOTAJS REMOVE STARTING WITH DATE !!!!!
 def plan_remove(request, p_id):
     username = auth.get_user(request)
-    if username.is_superuser:
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args.update(csrf(request))      # ADD CSRF TOKEN
         args['super'] = True

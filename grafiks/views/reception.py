@@ -3,6 +3,8 @@ from django.shortcuts import render_to_response, redirect	# response to template
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib import auth			# autorisation library
+from django.contrib.auth.models import User, Group
+
 from django.core.context_processors import csrf
 
 from pieraksts.models import *
@@ -61,7 +63,8 @@ def day_list(request, d_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
-    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['super'] = True
 
     dienas = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28] # DIENAS 0 --> SHODIENA
@@ -85,7 +88,9 @@ def nod_list(request, d_id, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
-    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
+#    if auth.get_user(request).is_superuser: # superuser --> Left menu available
         args['super'] = True
 
     args['title'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
@@ -106,7 +111,9 @@ def cancel_list(request, d_id, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
-    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
+#    if auth.get_user(request).is_superuser: # superuser --> Left menu available
         args['super'] = True
 
     args['title'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
@@ -125,7 +132,8 @@ def print_nod(request, d_id, g_id):
     if auth.get_user(request).get_username() == '': # IF NO USER -->
         return redirect ("/reception/login/")
     args = {}
-    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['super'] = True
 
     args['title'] = datetime.datetime.now()
@@ -172,7 +180,8 @@ def reception_pieraksts(request, d_id, n_id):
     except ObjectDoesNotExist:  # not existing --> 404
         return redirect ('day_list', d_id=d_id)
     args = {}
-    if auth.get_user(request).is_superuser: # superuser --> Left menu available
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['super'] = True
         super = True
     else:

@@ -2,6 +2,8 @@
 from django.shortcuts import render_to_response, redirect	# response to template, redirect to another view
 
 from django.contrib import auth			# autorisation library
+from django.contrib.auth.models import User, Group
+
 from django.core.context_processors import csrf
 
 # !!!!! LOGIN !!!!!
@@ -17,7 +19,8 @@ def login(request):
 
                 if user is not None:    # auth return None if this user does not exit, if not then:
                         auth.login( request, user )     # authorizate user from Form
-                        args['super'] = True
+                        if user.is_superuser or user.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
+                            args['super'] = True
 		        return redirect ("/reception/")
 
                 else:   # if user does not exist:

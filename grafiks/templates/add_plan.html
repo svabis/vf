@@ -65,6 +65,11 @@ function showMe (box) {
  norādītajā <i>Dienā</i> līdz norādītajam <i>Beigu datumam</i> <b>(ja tāds tiek norādīts)</b> <b><i>(ieskaitot)</i></b></center>
 </div>
 
+<div class="alert alert-danger">
+  <center><strong>!!! Pirms pievienot nodarbību jāpārliecinās vai tajā laikā jau nenotiek cita nodarbība !!!</strong></center>
+  <center><strong>!!! Sistēmai tādas pārbaudes nav !!!</strong></center>
+</div>
+
 <div class="bootstrap-iso"><div class="fieldWrapper">
  <label style="margin-left:10px;">{{ form.chk }} Vienu reizi</label>
 </div>
@@ -114,7 +119,8 @@ $(document).ready(function(){ var date_input=$('input[name="end_date"]');
  </div>
 
 <div class="alert alert-warning" style="margin-top:10px;">
- <center><strong>Svarīgi!</strong> Nākamajās versijās tiks sasaistītas nodarbības un treneri.</center>
+ <center><strong>Svarīgi!</strong> Nodarbības ilgums jāliek tā lai nepārklātos ar nākamajām nodarbībām</center>
+ <center><strong>Piemērs:</strong> Nodarbība notiek reizi pusstundā, tad ilgums = <b>29</b> minūtes</center>
 </div>
 
  <div class="fieldWrapper">
