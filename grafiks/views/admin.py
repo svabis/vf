@@ -21,6 +21,25 @@ tz = pytz.timezone('UTC')
 
 import os
 
+def kalend(request):
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
+        args = {}
+        args['super'] = True
+        args['today'] = today
+#        weeks = []
+#        weeks.append(today)
+
+#        next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
+#        for _ in range (0,8): # add 4 weeks in row
+#            weeks.append(next)
+#            next = next + datetime.timedelta(days=7)
+
+#        args['week'] = weeks
+        return render_to_response ( 'kalend.html', args )
+    return redirect('/reception/login/')
+
+
 # ========================================================================================================
 
 # !!!!! SUPERUSER NODARBIBAS ATCELSHANA NEDELAS IZVELE !!!!!

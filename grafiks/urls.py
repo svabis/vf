@@ -34,6 +34,9 @@ urlpatterns = [
 
 
 # -------------------------------------- SUPERUSER SADAĻA --------------------------------------------
+# Klientu saraksts
+    url(r'^klienti/$', 'grafiks.views.klienti'),
+
 # Nodarbibu ATCELŠANA
     url(r'^graf/(?P<w_id>\d+)/$', 'grafiks.views.week_list', name="nod_plan"),
     url(r'^graf/(?P<w_id>\d+)/cancel/(?P<g_id>\d+)/$', 'grafiks.views.graf_cancel'),
@@ -50,6 +53,9 @@ urlpatterns = [
 # Grafika izmaiņas - Atcelšana
     url(r'^plan/$', 'grafiks.views.plan_list', name="plan_list"),
     url(r'^plan/(?P<p_id>\d+)/$', 'grafiks.views.plan_remove'),
+
+# Kalendāra skats
+    url(r'^kalendar/$', 'grafiks.views.kalend'),
 
 
 # Main --> Shodienas nodarbibas

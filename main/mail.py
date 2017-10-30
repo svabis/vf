@@ -60,7 +60,7 @@ def send_email(recipient, nodarb, timedate, code_uuid):
     msgAlternative.attach(msgText)
 
 # This example assumes the image is in the current directory
-    fp = open('/pieraksts_web/static/logo.jpg', 'rb')
+    fp = open('/pieraksts/static/logo.jpg', 'rb')
     msgImage = MIMEImage(fp.read())
     fp.close()
 
@@ -112,7 +112,7 @@ def send_cancel(recipient, datums, nos):
     msgAlternative.attach(msgText)
 
 # This example assumes the image is in the current directory
-    fp = open('/pieraksts_web/static/logo.jpg', 'rb')
+    fp = open('/pieraksts/static/logo.jpg', 'rb')
     msgImage = MIMEImage(fp.read())
     fp.close()
 
@@ -137,7 +137,8 @@ def send_remind(recipient, nodarb, timedate, code_uuid):
     strFrom = 'info@vfabrika.lv'
     strTo = recipient
 
-    new_time = timedate + timedelta(hours=3)
+#    new_time = timedate + timedelta(hours=3)
+    new_time = timedate + timedelta(hours=dst(timedate))
     time = new_time.strftime("%d/%m/%Y %H:%M")
 
     code = 'http://pieraksts.vfabrika.lv/atcelt/' + str(code_uuid) + '/'
@@ -163,7 +164,7 @@ def send_remind(recipient, nodarb, timedate, code_uuid):
     msgAlternative.attach(msgText)
 
 # This example assumes the image is in the current directory
-    fp = open('/pieraksts_web/static/logo.jpg', 'rb')
+    fp = open('/pieraksts/static/logo.jpg', 'rb')
     msgImage = MIMEImage(fp.read())
     fp.close()
 
@@ -179,3 +180,74 @@ def send_remind(recipient, nodarb, timedate, code_uuid):
     smtp.login(strFrom, 'fabrika2017')
     smtp.sendmail(strFrom, strTo, msgRoot.as_string())
     smtp.quit()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# SORRY
+# ===================================================================================================
+def send_sorry(recipient, nodarb, timedate, code_uuid):
+    # Define these once; use them twice!
+    strFrom = 'info@vfabrika.lv'
+    strTo = recipient
+
+#    new_time = timedate + timedelta(hours=3)
+    new_time = timedate + timedelta(hours=dst(timedate))
+    time = new_time.strftime("%d/%m/%Y %H:%M")
+
+    code = 'http://pieraksts.vfabrika.lv/atcelt/' + str(code_uuid) + '/'
+
+# Create the root message and fill in the from, to, and subject headers
+    msgRoot = MIMEMultipart('related')
+    msgRoot['Subject'] = u'Pieraksta sistēma, Paziņojums par kļūdu.'
+    msgRoot['From'] = strFrom
+    msgRoot['To'] = strTo
+    msgRoot.preamble = 'This is a multi-part message in MIME format.'
+
+# Encapsulate the plain and HTML versions of the message body in an
+# 'alternative' part, so message agents can decide which they want to display.
+    msgAlternative = MIMEMultipart('alternative')
+    msgRoot.attach(msgAlternative)
+
+    msgText = MIMEText('This is the alternative plain text message.')
+    msgAlternative.attach(msgText)
+
+# We reference the image in the IMG SRC attribute by the ID we give it below
+    content = u'<p>Sveiki! Atvainojamie par ieprikš kļūdaini izsūtītu e-pastu.</p><p>30/10 visas nodarbības notiek pēc grafika. Atvainojamies par sagādātajām neērtībām.<p>Jūsu sporta klubs <b><i> “</i>Veselības Fabrika<i>”</i></b></p><img src="cid:image1">'
+    msgText = MIMEText(content.encode('utf-8'), 'html','utf-8')
+    msgAlternative.attach(msgText)
+
+# This example assumes the image is in the current directory
+    fp = open('/pieraksts/static/logo.jpg', 'rb')
+    msgImage = MIMEImage(fp.read())
+    fp.close()
+
+# Define the image's ID as referenced above
+    msgImage.add_header('Content-ID', '<image1>')
+    msgRoot.attach(msgImage)
+
+# Send the email (SMTP authentication is required)
+    import smtplib
+    smtp = smtplib.SMTP("smtp.gmail.com", 587)
+    smtp.ehlo()
+    smtp.starttls()
+    smtp.login(strFrom, 'fabrika2017')
+    smtp.sendmail(strFrom, strTo, msgRoot.as_string())
+    smtp.quit()
+

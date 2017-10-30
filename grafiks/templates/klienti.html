@@ -1,0 +1,59 @@
+{% extends 'admin.html' %}
+{% block javascript %}
+{% endblock javascript %}
+
+{% block content %}
+<style>
+/*.table > thead > tr > th {vertical-align:top;}
+a {color:#888;}*/
+</style>
+
+<script>
+jQuery(document).ready(function($) {
+    $(".clickable-row").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+
+<form action="/reception/klienti/" method=POST>
+  <div  class="col-lg-4 col-md-5 col-sm-6">
+  <div class="input-group" style="margin-bottom:20px;">{% csrf_token %}
+    <input type="text" class="form-control" name="search" placeholder="Meklēt...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+      </span>
+    </div>
+  </div>
+</form>
+
+<div class="container-fluid">
+  <table class="table table-hover table-striped table-condensed">
+    <thead>
+      <tr style="background: #aaa;">
+ <th>Vārds</th>
+ <th>E-pasts</th>
+ <th>Telefons</th>
+ <th>Pirmais pieteikums</th>
+ <th>Pēdējais pieteikums</th>
+ <th>Pieteikumu reizes</th>
+ <th>Attteikumu reizes</th>
+      </tr>
+    </thead>
+    <tbody>
+{% for k in klienti %}
+      <tr> <!-- class="clickable-row" data-href="/reception/klienti/{{ k.id }}/"> -->
+        <td>{{ k.vards }}</td>
+        <td>{{ k.e_pasts }}</td>
+        <td>{{ k.tel }}</td>
+        <td>{{ k.pirmais_pieteikums|date:"d/m/Y H:i" }}</td>
+        <td>{{ k.pedejais_pieteikums|date:"d/m/Y H:i" }}</td>
+        <td>{{ k.pieteikuma_reizes }}</td>
+        <td>{{ k.atteikuma_reizes }}</td>
+      </tr>
+{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
