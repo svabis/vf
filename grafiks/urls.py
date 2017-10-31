@@ -60,8 +60,6 @@ urlpatterns = [
 # Kalendāra skats
     url(r'^kalendar/$', 'grafiks.views.kalend'),
 
-
 # Main --> Shodienas nodarbibas
     url(r'^$', 'grafiks.views.main'),
-
 ]

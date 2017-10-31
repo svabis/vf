@@ -359,6 +359,9 @@ def plan_list( request ):
                  plan = Planotajs.objects.get(id=p_id)
                  plan.end_date = date
                  plan.save()
+                # UPDATE Relations and Nodarbības redz
+#               os.system('python /pieraksts/manage.py chk_rel')
+#               os.system('python /pieraksts/manage.py chk_redz')
 # remove Grafiks objects...
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 # !!!!! INSERT BRAIN HERE !!!!!
@@ -371,8 +374,6 @@ def plan_list( request ):
 
         args['data'] = days
 
-       # UPDATE Relations and Nodarbības redz
-#        os.system('python /pieraksts/manage.py chk_rel')
-#        os.system('python /pieraksts/manage.py chk_redz')
+#        return render_to_response ( 'kalend.html', args )
         return render_to_response ( 'del_plan.html', args )
     return redirect('/reception/login/')
