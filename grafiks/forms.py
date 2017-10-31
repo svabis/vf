@@ -10,7 +10,9 @@ from django import forms
 # !!!!! Planotajs Form !!!!!
 class PlanotajsForm(ModelForm):
 
-    nodarbiba = forms.ModelChoiceField( queryset = Nodarb_tips.objects.all() )
+    nodarbiba = forms.ModelChoiceField( queryset = Nodarb_tips.objects.all().order_by('nos') )
+
+    treneris = forms.ModelChoiceField( queryset = Treneris.objects.all().order_by('vards') )
 
     chk = forms.BooleanField( required=False, widget = forms.CheckboxInput( attrs={'onclick': "showMe('diena')"} ))
 
@@ -24,7 +26,7 @@ class PlanotajsForm(ModelForm):
 
     class Meta:
         model = Planotajs
-        fields = ('diena', 'laiks', 'ilgums', 'telpa', 'vietas', 'treneris' )
+        fields = ('diena', 'laiks', 'ilgums', 'telpa', 'vietas' ) #, 'treneris' )
 
 
 # !!!!! TrenRelForm !!!!!

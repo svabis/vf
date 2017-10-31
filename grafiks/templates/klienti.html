@@ -1,27 +1,83 @@
 {% extends 'admin.html' %}
-{% block javascript %}
-{% endblock javascript %}
+{% block style %}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
+{% endblock %}
 
 {% block content %}
-<style>
-/*.table > thead > tr > th {vertical-align:top;}
-a {color:#888;}*/
-</style>
-
 <script>
 jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        window.location = $(this).data("href");
+    $(".clickable-row").click(function(e) {
+// open modal
+        $("#Klients").modal('show');
+// fill Form
+        document.getElementById('k_id').value=$(this).children('td')[0].innerHTML;
+        document.getElementById('vards').value=$(this).children('td')[1].innerHTML;
+        document.getElementById('e_pasts').value=$(this).children('td')[2].innerHTML;
+        document.getElementById('tel').value=$(this).children('td')[3].innerHTML;
+// fill text
+        document.getElementById('kvards').innerHTML = $(this).children('td')[1].innerHTML;
+        document.getElementById('ke_pasts').innerHTML = $(this).children('td')[2].innerHTML;
+        document.getElementById('ktel').innerHTML = $(this).children('td')[3].innerHTML;
     });
 });
+var countdown;
+function cancel() { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
+function apply() {
+  $("#yes").show(); $("#ok").hide(); var slidetime = 14,
+  display = document.querySelector('#yes'); startTimer(slidetime, display);
+}
+function startTimer(duration, display) {
+  var timer = duration, seconds = 15; countdown = setInterval( function () {
+    seconds = parseInt(timer % 60, 10); // seconds = seconds < 10 ? "0" + seconds : seconds;
+    display.value = "Apstiprināt izmaiņas (" + seconds + ") ?"; --timer;
+    if (seconds < 1) { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
+  }, 1000);}
 </script>
+
+<!-- klienta edit modal START -->
+<div class="modal fade" id="Klients" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;Klienta dati</h3>
+</div>
+<div class="modal-body">
+ <form action="/reception/klients/" method=POST>{% csrf_token %}
+  <input type="hidden" id="k_id" name="k_id">
+  <input type="hidden" name="search" value="{{ search }}">
+  <table class="table table-condensed">
+   <thead><tr><th>Vārds</th><th>E-pasts</th><th>Tālrunis</th></tr></thead>
+   <tbody><tr>
+    <td id="kvards"></td>
+    <td id="ke_pasts"></td>
+    <td id="ktel"></td>
+   </tr><tr>
+    <td><input type="text" id="vards" name="vards"></td>
+    <td><input type="text" id="e_pasts" name="e_pasts"></td>
+    <td><input type="text" id="tel" name="tel"></td>
+   </tr></tbody>
+  </table>
+</div>
+<div class="modal-footer">
+ <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes">
+ <button type="button" class="btn btn-danger" onclick="apply();" id="ok">Veikt izmaiņas</button>
+ <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel();">Aizvērt</button>
+</form>
+</div></div></div></div>
+<!-- klienta edit modal END -->
+
+<script>
+</script>
+
+<div class="alert alert-warning">
+ <center><strong>!!! Klientu datu sadaļa !!!</strong></center>
+ <center>Meklēt iespējams pēc <b><i>Vārda, E-pasta, Tālruņa</i></b></center>
+</div>
 
 <form action="/reception/klienti/" method=POST>
   <div  class="col-lg-4 col-md-5 col-sm-6">
   <div class="input-group" style="margin-bottom:20px;">{% csrf_token %}
     <input type="text" class="form-control" name="search" placeholder="Meklēt...">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="submit">
+        <button class="btn btn-success" type="submit">
         <span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
       </span>
     </div>
@@ -34,7 +90,7 @@ jQuery(document).ready(function($) {
       <tr style="background: #aaa;">
  <th>Vārds</th>
  <th>E-pasts</th>
- <th>Telefons</th>
+ <th>Tālrunis</th>
  <th>Pirmais pieteikums</th>
  <th>Pēdējais pieteikums</th>
  <th>Pieteikumu reizes</th>
@@ -43,7 +99,8 @@ jQuery(document).ready(function($) {
     </thead>
     <tbody>
 {% for k in klienti %}
-      <tr> <!-- class="clickable-row" data-href="/reception/klienti/{{ k.id }}/"> -->
+      <tr class="clickable-row"> <!-- data-href="/reception/klienti/{{ k.id }}/"> -->
+        <td style="display:none;">{{ k.id }}</>
         <td>{{ k.vards }}</td>
         <td>{{ k.e_pasts }}</td>
         <td>{{ k.tel }}</td>
