@@ -4,19 +4,47 @@
 <script type="text/javascript" src="{% static 'bootstrap/js/datepicker.js' %}"></script>
 <link rel="stylesheet" href="{% static 'bootstrap/css/datepicker.css' %}"/>
 <script>
+// datepicker
+$(document).ready(function(){
+  var day = document.getElementsByTagName("p");
+  for (i = 0; i < day.length; i++) { 
+    day.item(i).innerHTML = days[i];
+  }
+  var date_input=$('input[name="date{{ d.id }}"]'); //our date input has the name "date"
+  var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+  var options={ format: 'dd/mm/yyyy', container: container, todayHighlight: true, autoclose: true, weekStart: 1, };
+  date_input.datepicker(options);
+})
+
+// clickable row
+var days = ['Pirmdiena', 'Otrdiena', 'Trešdiena', 'Ceturtdiena', 'Piektdiena', 'Sestdiena', 'Svētdiena']
 jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        window.location = $(this).data("href");
+    $(".clickable-row").click(function(e) {
+// open modal
+        $("#Planotajs").modal('show');
+// fill Form
+//        document.getElementById('k_id').value=$(this).children('td')[0].innerHTML;
+//        document.getElementById('vards').value=$(this).children('td')[1].innerHTML;
+//        document.getElementById('e_pasts').value=$(this).children('td')[2].innerHTML;
+//        document.getElementById('tel').value=$(this).children('td')[3].innerHTML;
+// fill text
+//        document.getElementById('kvards').innerHTML = $(this).children('td')[1].innerHTML;
+//        document.getElementById('ke_pasts').innerHTML = $(this).children('td')[2].innerHTML;
+//        document.getElementById('ktel').innerHTML = $(this).children('td')[3].innerHTML;
     });
 });
-</script>
-<script>
-    $(document).ready(function(){
-      var date_input=$('input[name="date{{ d.id }}"]'); //our date input has the name "date"
-      var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
-      var options={ format: 'dd/mm/yyyy', container: container, todayHighlight: true, autoclose: true, weekStart: 1, };
-      date_input.datepicker(options);
-    })
+var countdown;
+function cancel() { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
+function apply() {
+  $("#yes").show(); $("#ok").hide(); var slidetime = 14,
+  display = document.querySelector('#yes'); startTimer(slidetime, display);
+}
+function startTimer(duration, display) {
+  var timer = duration, seconds = 15; countdown = setInterval( function () {
+    seconds = parseInt(timer % 60, 10); // seconds = seconds < 10 ? "0" + seconds : seconds;
+    display.value = "Apstiprināt izmaiņas (" + seconds + ") ?"; --timer;
+    if (seconds < 1) { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
+  }, 1000);}
 </script>
 
 {% endblock %}
@@ -26,6 +54,7 @@ jQuery(document).ready(function($) {
 {% endblock %}
 
 {% block content %}
+
 <div class="alert alert-danger">
   <center><strong>!!! Nodarbību Izņemšanas no Plānotāja !!!</strong></center>
 </div>
@@ -35,17 +64,14 @@ jQuery(document).ready(function($) {
   <center><strong>Ja beigu datums nav norādīts tad sistēma turpinās pievienot nodarbību "bezgalīgi"</strong></center>
 </div>
 
-<div class="alert alert-danger">
-  <center><strong>!!! Tiek veiktas izmaiņas <i>NEAIZTIKT :)</i> !!!</strong></center>
+<!-- Planotajs Modal START -->
+<div class="modal fade" id="Planotajs" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;Izņemt nodarbību no plānotāja</h3>
 </div>
-
-{% for dat in data %}{% for d in dat %}
-<div class="modal fade" id="Plan{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
- <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:1.5em;"></span>
- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
 <div class="modal-body">
- <h3>{{ d.get_diena_display }}&nbsp;&nbsp;&nbsp;{{ d.laiks|date:"H:i" }}&nbsp;&nbsp;&nbsp;{{ d.ilgums }}minūtes</h3>
- <h3>&nbsp;{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h3>
+ <h3></h3>
+ <h3></h3>
 
 <form action="/reception/plan/{{ d.id }}/" method="post">{% csrf_token %}
  <div class="form-group">
@@ -55,29 +81,17 @@ jQuery(document).ready(function($) {
 
 </div>
 <div class="modal-footer">
- <a href="/reception/plan/{{ d.id }}/"><button type="button" class="btn btn-danger">Izņemt nodarbību no Plānotāja</button></a>
- <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
+ <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes">
+ <button type="button" class="btn btn-danger" onclick="apply();" id="ok">Veikt izmaiņas</button>
+ <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel();">Aizvērt</button>
 </div></div></div></div>
-{% endfor %}{% endfor %}
-
-
-<div class="modal fade" id="Check" tabindex="-10" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
- <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:1.5em;"></span>
- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
-<div class="modal-body">
- <h3>Vai esat pārliecināts</h3>
-</div>
-<div class="modal-footer">
- <a href="/reception/plan/{{ d.id }}/"><button type="button" class="btn btn-danger">Jā</button></a>
- <button type="button" class="btn btn-default" data-dismiss="modal">Atcelt</button>
-</div></div></div></div>
-
+<!-- Planotajs Modal END -->
 
 
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
-<thead><tr>
- <th colspan="2">Diena</th>
+<thead><tr style="background: #aaa;">
+<!-- <th>Diena</th> -->
  <th>Sakums</th>
  <th>Ilgums</th>
  <th>Nodarbība</th>
@@ -88,20 +102,24 @@ jQuery(document).ready(function($) {
  <th>Beigu datums</th>
 </tr></thead>
 <tbody>
+
 {% for dat in data %}
-<tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="10"></td></tr>
+<tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="8"><center><b><p style="margin-bottom: 0px;"></p></b></center></td></tr>
+
 {% for d in dat %}
-<tr>
- <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Plan{{ d.id }}">Izņemt no Plānotāja</button></td>
- <td>{{ d.get_diena_display }}</td>
+{% if d.end_date < max_date %}<tr class="danger" class="clickable-row">
+<!-- <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Plan{{ d.id }}">Izņemt no Plānotāja</button></td> -->
+{% else %}<tr class="clickable-row">{% endif %}
+ <td style="display:none;">{{ d.id }}</>
+<!-- <td id="dienas">{{ d.get_diena_display }}</td> -->
  <td>{{ d.laiks|date:"H:i" }}</td>
  <td>{{ d.ilgums }}</td>
  <td>{{ d.nodarbiba }}</td>
  <td>{{ d.treneris }}</td>
  <td>{{ d.telpa }}</td>
  <td>{{ d.vietas }}</td>
- <td>{{ d.start_date }}</td>
- <td>{% if d.end_date %}{{ d.end_date }}{% else %}-{% endif %}</td>
+ <td>{{ d.start_date|date:"d/m/Y" }}</td>
+ <td>{% if d.end_date %}{{ d.end_date|date:"d/m/Y" }}{% else %}-{% endif %}</td>
 </tr>
 {% endfor %}{% endfor %}
 </tbody>

@@ -1,3 +1,5 @@
+klienti.html	- Django tipa Klientu saraksts/meklēšana + POST edit Klienta datiem
+
 add_plan.html	- Nodarbības pievienošanas forma
 
 tren_aizv.html	- Nodarbības izvēle + Treneru aizvietošana forma

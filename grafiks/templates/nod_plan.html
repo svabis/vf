@@ -4,6 +4,18 @@
 {% endblock %}
 
 {% block content %}
+<script>
+// dienas
+var days = ['Pirmdiena', 'Otrdiena', 'Trešdiena', 'Ceturtdiena', 'Piektdiena', 'Sestdiena', 'Svētdiena']
+$(document).ready(function(){
+  var day = document.getElementsByTagName("p");
+  var count = 6;
+  for (i = day.length-1; i > -1 ; i--) {
+    day.item(i).innerHTML = days[count];
+    count--;
+  }
+})
+</script>
 
 <div class="alert alert-danger">
   <center><strong>!!! Nodarbību atcelšana !!!</strong></center>
@@ -77,7 +89,7 @@ jQuery(document).ready(function($) {
 </tr></thead>
 <tbody>
 {% for dat in data %}
-<tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="7"></td></tr>
+<tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="7"><center><b><p style="margin-bottom: 0px;"></p></b></center></td></tr>
 {% for d in dat %}
 <tr>
  <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Graf{{ d.id }}">Atcelt nodarbību</button></td>

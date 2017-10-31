@@ -86,13 +86,13 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
 
-        'NAME': 'pieraksts',
-        'USER': 'pieraksts',
-        'PASSWORD': 'VFabrika2017',
+#        'NAME': 'pieraksts',
+#        'USER': 'pieraksts',
+#        'PASSWORD': 'VFabrika2017',
 
-#        'NAME': 'test_pieraksts',
-#        'USER': 'root',
-#        'PASSWORD': 'hlu8Jmhq',
+        'NAME': 'test_pieraksts',
+        'USER': 'root',
+        'PASSWORD': 'hlu8Jmhq',
 
         'HOST': 'localhost',
         'PORT': '3306',

@@ -119,7 +119,8 @@ def nod_atcelshana(g_id):
         klienti = nodarb.nod.all()
         for k in klienti:
             try: # reception Pieraksts may not include e-mail
-                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
+                pass
+#                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
             except:
                 pass
         nodarb.delete()
@@ -340,8 +341,9 @@ def plan_list( request ):
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args['super'] = True
-        days = []
+        args['max_date'] = today + datetime.timedelta(days=28+28)
 
+        days = []
         for i in range (0,7):
             day = Planotajs.objects.filter( diena=i ).order_by( 'laiks' )
             days.append(day)
