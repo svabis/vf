@@ -108,8 +108,8 @@ def graf_cancel(request, w_id, g_id):
         nod_atcelshana(g_id)	# nodarbības atcelšana
 
        # UPDATE Relations and Nodarbības redz
-        os.system('python /pieraksts/manage.py chk_rel')
-        os.system('python /pieraksts/manage.py chk_redz')
+#        os.system('python /pieraksts/manage.py chk_rel')
+#        os.system('python /pieraksts/manage.py chk_redz')
         return redirect ( 'nod_plan', w_id=w_id )
     return redirect('/reception/login/')
 
@@ -191,8 +191,8 @@ def graf_add(request):
                         args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi"
 
                        # UPDATE Relations and Nodarbības redz
-                        os.system('python /pieraksts/manage.py chk_rel')
-                        os.system('python /pieraksts/manage.py chk_redz')
+#                        os.system('python /pieraksts/manage.py chk_rel')
+#                        os.system('python /pieraksts/manage.py chk_redz')
                         return render_to_response('add_plan.html', args)
 
                 else:	# ja atkārtojās, tad  veidojam Planotāja ierakstu
@@ -243,8 +243,8 @@ def graf_add(request):
                     args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi" Plānotājam
 
                    # UPDATE Relations and Nodarbības redz
-                    os.system('python /pieraksts/manage.py chk_rel')
-                    os.system('python /pieraksts/manage.py chk_redz')
+#                    os.system('python /pieraksts/manage.py chk_rel')
+#                    os.system('python /pieraksts/manage.py chk_redz')
                     return render_to_response('add_plan.html', args)
 
             else: # form is not valid
@@ -329,6 +329,9 @@ def tren_aizv( request, w_id, g_id ):
                 change.treneris = treneris
                 change.save()
 
+        # UPDATE Relations and Nodarbības redz
+#        os.system('python /pieraksts/manage.py chk_rel')
+#        os.system('python /pieraksts/manage.py chk_redz')
         return redirect ( 'tren_week_list', w_id=w_id )
     return redirect('/reception/login/')
 
@@ -340,8 +343,26 @@ def plan_list( request ):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
+        args.update(csrf(request))      # ADD CSRF TOKEN
         args['super'] = True
         args['max_date'] = today + datetime.timedelta(days=28+28)
+
+        if request.POST: # Edit Post Submited...
+            # Planotajs Modal dati
+             p_id = int(request.POST.get('p_id', ''))
+             date_str = request.POST.get('date', '')
+             date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
+
+             if date < today: # Datums pagājis... ERROR
+                 args['date_error'] = True
+             else: # Datums - ok...
+                 plan = Planotajs.objects.get(id=p_id)
+                 plan.end_date = date
+                 plan.save()
+# remove Grafiks objects...
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!! INSERT BRAIN HERE !!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         days = []
         for i in range (0,7):
@@ -349,26 +370,9 @@ def plan_list( request ):
             days.append(day)
 
         args['data'] = days
+
+       # UPDATE Relations and Nodarbības redz
+#        os.system('python /pieraksts/manage.py chk_rel')
+#        os.system('python /pieraksts/manage.py chk_redz')
         return render_to_response ( 'del_plan.html', args )
     return redirect('/reception/login/')
-
-# !!!!! PLANOTAJS REMOVE STARTING WITH DATE !!!!!
-def plan_remove(request, p_id):
-    username = auth.get_user(request)
-    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-        args = {}
-        args.update(csrf(request))      # ADD CSRF TOKEN
-        args['super'] = True
-
-        if request.POST:
-            pass
-#            new_tren = request.POST.get('treneris', '')
-#            if new_tren != '':
-#                treneris = Treneris.objects.get( id = int( new_tren ) )
-#                change = Grafiks.objects.get( id=g_id )
-#                change.treneris = treneris
-#                change.save()
-
-        return redirect ( 'plan_list' )
-    return redirect('/reception/login/')
-

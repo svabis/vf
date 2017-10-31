@@ -56,7 +56,6 @@ urlpatterns = [
 
 # Grafika izmaiņas - Atcelšana
     url(r'^plan/$', 'grafiks.views.plan_list', name="plan_list"),
-    url(r'^plan/(?P<p_id>\d+)/$', 'grafiks.views.plan_remove'),
 
 # Kalendāra skats
     url(r'^kalendar/$', 'grafiks.views.kalend'),

@@ -6,7 +6,7 @@ tren_aizv.html	- Nodarbības izvēle + Treneru aizvietošana forma
 
 nod_plan.html	- Nodarbības atcelšana
 
-del_plan.html	- Nodarbības dzēšana no plānotāja	- NOPE
+del_plan.html	- Nodarbības dzēšana no plānotāja + POST edit Planotajs objekts - SLOW...
 
 
 day_header.html		- Pierakstu dienu Tabi

@@ -19,19 +19,21 @@ $(document).ready(function(){
 // clickable row
 var days = ['Pirmdiena', 'Otrdiena', 'Trešdiena', 'Ceturtdiena', 'Piektdiena', 'Sestdiena', 'Svētdiena']
 jQuery(document).ready(function($) {
-    $(".clickable-row").click(function(e) {
+ $(".clickable-row").click(function(e) {
 // open modal
-        $("#Planotajs").modal('show');
-// fill Form
-//        document.getElementById('k_id').value=$(this).children('td')[0].innerHTML;
-//        document.getElementById('vards').value=$(this).children('td')[1].innerHTML;
-//        document.getElementById('e_pasts').value=$(this).children('td')[2].innerHTML;
-//        document.getElementById('tel').value=$(this).children('td')[3].innerHTML;
+  $("#Planotajs").modal('show');
 // fill text
-//        document.getElementById('kvards').innerHTML = $(this).children('td')[1].innerHTML;
-//        document.getElementById('ke_pasts').innerHTML = $(this).children('td')[2].innerHTML;
-//        document.getElementById('ktel').innerHTML = $(this).children('td')[3].innerHTML;
-    });
+  document.getElementById('1').innerHTML = days[$(this).children('td')[1].innerHTML]; // 1 diena
+  document.getElementById('2').innerHTML = "Nodarbības sākums: <b>" + $(this).children('td')[2].innerHTML + "</b>"; // 2 laiks
+  document.getElementById('3').innerHTML = "Nodarbības ilgums: <b>" + $(this).children('td')[3].innerHTML + " minūtes</b>"; // 3 ilgums
+  document.getElementById('4').innerHTML = "<b>" + $(this).children('td')[4].innerHTML + " - " + $(this).children('td')[5].innerHTML + "</b>";
+  document.getElementById('6').innerHTML = "Zāle: <b>" + $(this).children('td')[6].innerHTML + "</b>"; // 6 telpa
+  document.getElementById('7').innerHTML = "Vietu skaits: <b>" + $(this).children('td')[7].innerHTML + "</b>"; // 7 vietas
+  document.getElementById('8').innerHTML = "Nodarbība notiek no <b>" + $(this).children('td')[8].innerHTML + "</b> līdz <b>" + $(this).children('td')[9].innerHTML + "</b> datumiem";
+// fill Form
+  document.getElementById('date').value=$(this).children('td')[9].innerHTML;
+  document.getElementById('p_id').value=$(this).children('td')[0].innerHTML;
+ });
 });
 var countdown;
 function cancel() { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
@@ -55,14 +57,12 @@ function startTimer(duration, display) {
 
 {% block content %}
 
+{% if date_error %}
 <div class="alert alert-danger">
-  <center><strong>!!! Nodarbību Izņemšanas no Plānotāja !!!</strong></center>
+  <center><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+  <strong> Izvēlētais datums jau ir pagājis, izmaiņas netika veiktas!</strong></center>
 </div>
-
-<div class="alert alert-warning">
-  <center><strong>!!! Nodarbību sākuma un beigu datumi ir <i><u>IESKAITOT</u></i> !!!</strong></center>
-  <center><strong>Ja beigu datums nav norādīts tad sistēma turpinās pievienot nodarbību "bezgalīgi"</strong></center>
-</div>
+{% endif %}
 
 <!-- Planotajs Modal START -->
 <div class="modal fade" id="Planotajs" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
@@ -70,20 +70,26 @@ function startTimer(duration, display) {
  <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;Izņemt nodarbību no plānotāja</h3>
 </div>
 <div class="modal-body">
- <h3></h3>
- <h3></h3>
+<form action="/reception/plan/" method="post">{% csrf_token %}
+ <input type="hidden" id="p_id" name="p_id">
+ <h2 id="4"></h2> <!-- nodarbiba treneris -->
+ <h4 id="1"></h4> <!-- diena -->
+ <h4 id="2"></h4> <!-- laiks -->
+ <h4 id="3"></h4> <!-- ilgums -->
+ <h4 id="6"></h4>
+ <h4 id="7"></h4>
+ <h4 id="8"></h4> <!-- no start_date līdz end_date -->
 
-<form action="/reception/plan/{{ d.id }}/" method="post">{% csrf_token %}
  <div class="form-group">
   <input class="form-control" id="date" name="date" placeholder="spied šeit lai izvēlētos datumu" type="text"/>
  </div>
-</form>
 
 </div>
 <div class="modal-footer">
  <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes">
  <button type="button" class="btn btn-danger" onclick="apply();" id="ok">Veikt izmaiņas</button>
  <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel();">Aizvērt</button>
+</form>
 </div></div></div></div>
 <!-- Planotajs Modal END -->
 
@@ -91,7 +97,6 @@ function startTimer(duration, display) {
 <div class="container">
 <table class="table table-hover table-striped table-condensed">
 <thead><tr style="background: #aaa;">
-<!-- <th>Diena</th> -->
  <th>Sakums</th>
  <th>Ilgums</th>
  <th>Nodarbība</th>
@@ -110,8 +115,8 @@ function startTimer(duration, display) {
 {% if d.end_date < max_date %}<tr class="danger" class="clickable-row">
 <!-- <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Plan{{ d.id }}">Izņemt no Plānotāja</button></td> -->
 {% else %}<tr class="clickable-row">{% endif %}
- <td style="display:none;">{{ d.id }}</>
-<!-- <td id="dienas">{{ d.get_diena_display }}</td> -->
+ <td style="display:none;">{{ d.id }}</td>
+ <td style="display:none;">{{ d.diena }}</td>
  <td>{{ d.laiks|date:"H:i" }}</td>
  <td>{{ d.ilgums }}</td>
  <td>{{ d.nodarbiba }}</td>
