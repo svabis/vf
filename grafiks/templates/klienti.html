@@ -20,7 +20,9 @@ jQuery(document).ready(function($) {
         document.getElementById('ktel').innerHTML = $(this).children('td')[3].innerHTML;
     });
 });
+
 var countdown;
+function submit_changes() { clearInterval(countdown); document.querySelector('#yes').value = "Izmaiņas tiek apstiprinātas"; }
 function cancel() { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
 function apply() {
   $("#yes").show(); $("#ok").hide(); var slidetime = 14,
@@ -57,7 +59,7 @@ function startTimer(duration, display) {
   </table>
 </div>
 <div class="modal-footer">
- <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes">
+ <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes" onclick="submit_changes();">
  <button type="button" class="btn btn-danger" onclick="apply();" id="ok">Veikt izmaiņas</button>
  <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel();">Aizvērt</button>
 </form>
