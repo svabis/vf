@@ -39,7 +39,7 @@
   <li><a href="/reception/hist/"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span> &nbsp;Vēsture</a></li>
   <li><a href="/reception/"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span> &nbsp;Nodarbību pieraksti</a></li>
   <li><a href="/reception/klienti/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> &nbsp;Klientu dati</a></li>
-{% if super %}
+{% if admin %}
   <li class="divider-vertical"></li>
 <!--  <li><a href="/admin/nodarb/" target="_blank" style="background-color: #FF8080;"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> &nbsp;Nodarbību veidi/Treneri</a></li> -->
   <li style="background-color: #FF8080;" class="dropdown">
@@ -79,6 +79,9 @@
  </ul>
 
  <ul class="nav navbar-nav navbar-right">
+{% if super %}
+  <li><a href="/admin/"><span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color: #CC0000;"></span> &nbsp;Django</a></li>
+{% endif %}
   <li><a href="#" style="color: #CC0000;" data-toggle="modal" data-target="#Help"><span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="color: #CC0000;"></span> &nbsp;Palīdzība</a></li>
   <li><a href="/reception/logout/"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> &nbsp;Iziet no sistēmas</a></li>
  </ul>

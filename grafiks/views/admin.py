@@ -25,7 +25,7 @@ def kalend(request):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
-        args['super'] = True
+        args['admin'] = True
         args['today'] = today
 #        weeks = []
 #        weeks.append(today)
@@ -47,7 +47,7 @@ def graf_list(request):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
-        args['super'] = True
+        args['admin'] = True
         weeks = []
         weeks.append(today)
 
@@ -66,7 +66,7 @@ def week_list(request, w_id):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
-        args['super'] = True
+        args['admin'] = True
         weeks = []
         weeks.append(today)
         next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
@@ -103,7 +103,7 @@ def graf_cancel(request, w_id, g_id):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
-        args['super'] = True
+        args['admin'] = True
 
         nod_atcelshana(g_id)	# nodarbības atcelšana
 
@@ -134,7 +134,7 @@ def graf_add(request):
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args.update(csrf(request))      # ADD CSRF TOKEN
-        args['super'] = True
+        args['admin'] = True
         args['form'] = PlanotajsForm
         args['success'] = 'false'	# Modal never vaļā
 
@@ -259,7 +259,7 @@ def tren_list( request ):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
-        args['super'] = True
+        args['admin'] = True
         weeks = []
         weeks.append(today)
 
@@ -278,7 +278,7 @@ def tren_week_list( request, w_id ):
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args.update(csrf(request))      # ADD CSRF TOKEN
-        args['super'] = True
+        args['admin'] = True
         args['form'] = TrenRelForm
         weeks = []
         weeks.append(today)
@@ -344,7 +344,7 @@ def plan_list( request ):
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args.update(csrf(request))      # ADD CSRF TOKEN
-        args['super'] = True
+        args['admin'] = True
         args['max_date'] = today + datetime.timedelta(days=28+28)
 
         if request.POST: # Edit Post Submited...

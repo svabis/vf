@@ -52,7 +52,7 @@ jQuery(document).ready(function($) {
 
 {% for dat in data %}{% for d in dat %}
 <div class="modal fade" id="Tren{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
- <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:1.5em;"></span>
+ <span class="glyphicon glyphicon-refresh" aria-hidden="true" style="font-size:1.5em;"></span>
  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
 
 <form action="/reception/tren/{{ w_id }}/replace/{{ d.id }}/" method="post">{% csrf_token %}

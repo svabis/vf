@@ -67,7 +67,7 @@ def day_list(request, d_id):
     args = {}
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-        args['super'] = True
+        args['admin'] = True
 
     dienas = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28] # DIENAS 0 --> SHODIENA
     datumi = []
@@ -93,7 +93,7 @@ def nod_list(request, d_id, g_id):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
 #    if auth.get_user(request).is_superuser: # superuser --> Left menu available
-        args['super'] = True
+        args['admin'] = True
 
     args['title'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
     args['subtitle'] = getattr(Grafiks.objects.get( id=g_id ), 'sakums')
@@ -116,7 +116,7 @@ def cancel_list(request, d_id, g_id):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
 #    if auth.get_user(request).is_superuser: # superuser --> Left menu available
-        args['super'] = True
+        args['admin'] = True
 
     args['title'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
     args['subtitle'] = getattr(Grafiks.objects.get( id=g_id ), 'sakums')
@@ -136,7 +136,7 @@ def print_nod(request, d_id, g_id):
     args = {}
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-        args['super'] = True
+        args['admin'] = True
 
     args['title'] = datetime.datetime.now()
     args['title2'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
@@ -184,7 +184,7 @@ def reception_pieraksts(request, d_id, n_id):
     args = {}
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-        args['super'] = True
+        args['admin'] = True
         super = True
     else:
         super = False
@@ -319,7 +319,7 @@ def klienti(request, search=''):
 
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-        args['super'] = True
+        args['admin'] = True
 
     if request.POST: # POST Search --> SEARCH FROM POST
         to_find = request.POST.get('search', '')
@@ -360,5 +360,6 @@ def klients_edit(request):
         kli.e_pasts = k_e_pasts
         kli.tel = k_tel
         kli.save()
-
+    if search == '':
+        return redirect ( 'klienti' )
     return redirect ( 'klienti', search=search )

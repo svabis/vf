@@ -20,7 +20,7 @@ def login(request):
                 if user is not None:    # auth return None if this user does not exit, if not then:
                         auth.login( request, user )     # authorizate user from Form
                         if user.is_superuser or user.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-                            args['super'] = True
+                            args['admin'] = True
 		        return redirect ("/reception/")
 
                 else:   # if user does not exist:

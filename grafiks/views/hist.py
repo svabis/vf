@@ -21,7 +21,7 @@ def history(request):
     args = {}
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-        args['super'] = True
+        args['admin'] = True
 
     args.update(csrf(request)) # ADD CSRF TOKEN
 #    args['title'] = u'Izvēlies datumu'
@@ -39,7 +39,7 @@ def hist_date(request, date):
     args = {}
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-        args['super'] = True
+        args['admin'] = True
 
     datums = datetime.datetime.strptime( date, '%d/%m/%Y').date()
     dienas_nodarb = Grafiks.objects.filter(sakums__startswith=datums).order_by('sakums') # datuma nodarbibas
@@ -58,7 +58,7 @@ def hist_date_kli(request, date, g_id):
     args = {}
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-        args['super'] = True
+        args['admin'] = True
 
     args.update(csrf(request)) # ADD CSRF TOKEN
     klienti = Grafiks.objects.get(id=g_id).hist.all()
@@ -79,7 +79,7 @@ def hist_date_cancel(request, date, g_id):
     args = {}
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-        args['super'] = True
+        args['admin'] = True
 
     args.update(csrf(request)) # ADD CSRF TOKEN
     klienti = Grafiks.objects.get(id=g_id).hist_cancel.all()
