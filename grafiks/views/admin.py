@@ -108,8 +108,8 @@ def graf_cancel(request, w_id, g_id):
         nod_atcelshana(g_id)	# nodarbības atcelšana
 
        # UPDATE Relations and Nodarbības redz
-#        os.system('python /pieraksts/manage.py chk_rel')
-#        os.system('python /pieraksts/manage.py chk_redz')
+        os.system('python /pieraksts/manage.py chk_rel')
+        os.system('python /pieraksts/manage.py chk_redz')
         return redirect ( 'nod_plan', w_id=w_id )
     return redirect('/reception/login/')
 
@@ -119,8 +119,8 @@ def nod_atcelshana(g_id):
         klienti = nodarb.nod.all()
         for k in klienti:
             try: # reception Pieraksts may not include e-mail
-                pass
-#                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
+#                pass
+                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
             except:
                 pass
         nodarb.delete()
@@ -191,8 +191,8 @@ def graf_add(request):
                         args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi"
 
                        # UPDATE Relations and Nodarbības redz
-#                        os.system('python /pieraksts/manage.py chk_rel')
-#                        os.system('python /pieraksts/manage.py chk_redz')
+                        os.system('python /pieraksts/manage.py chk_rel')
+                        os.system('python /pieraksts/manage.py chk_redz')
                         return render_to_response('add_plan.html', args)
 
                 else:	# ja atkārtojās, tad  veidojam Planotāja ierakstu
@@ -243,8 +243,8 @@ def graf_add(request):
                     args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi" Plānotājam
 
                    # UPDATE Relations and Nodarbības redz
-#                    os.system('python /pieraksts/manage.py chk_rel')
-#                    os.system('python /pieraksts/manage.py chk_redz')
+                    os.system('python /pieraksts/manage.py chk_rel')
+                    os.system('python /pieraksts/manage.py chk_redz')
                     return render_to_response('add_plan.html', args)
 
             else: # form is not valid
@@ -329,9 +329,9 @@ def tren_aizv( request, w_id, g_id ):
                 change.treneris = treneris
                 change.save()
 
-        # UPDATE Relations and Nodarbības redz
-#        os.system('python /pieraksts/manage.py chk_rel')
-#        os.system('python /pieraksts/manage.py chk_redz')
+               # UPDATE Relations and Nodarbības redz
+                os.system('python /pieraksts/manage.py chk_rel')
+                os.system('python /pieraksts/manage.py chk_redz')
         return redirect ( 'tren_week_list', w_id=w_id )
     return redirect('/reception/login/')
 
@@ -350,6 +350,10 @@ def plan_list( request ):
         if request.POST: # Edit Post Submited...
             # Planotajs Modal dati
              p_id = int(request.POST.get('p_id', ''))
+             diena = request.POST.get('diena', '')
+             laiks_str = request.POST.get('laiks', '')
+             laiks = datetime.datetime.strptime( laiks_str, '%H:%M')
+
              date_str = request.POST.get('date', '')
              date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
 
@@ -359,13 +363,25 @@ def plan_list( request ):
                  plan = Planotajs.objects.get(id=p_id)
                  plan.end_date = date
                  plan.save()
-                # UPDATE Relations and Nodarbības redz
-#               os.system('python /pieraksts/manage.py chk_rel')
-#               os.system('python /pieraksts/manage.py chk_redz')
-# remove Grafiks objects...
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# !!!!! INSERT BRAIN HERE !!!!!
-# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+                 after_month = (datetime.datetime.today() + datetime.timedelta(days=28+28)).date()
+                 if date <= after_month:
+                     days_to_remove = []
+                     d = date
+                     while d <= after_month: # veido masīvu no datumiem sākot ar izvēlēto, beidzot ar pēdējo pieraksta (ieskaitot)
+                         if int(d.weekday()) == int(diena):
+                             temp_date = datetime.datetime.combine(d, datetime.datetime.min.time())	# Date to DateTime
+                             new_sakums = temp_date.replace(hour=laiks.hour, minute=laiks.minute)
+
+                             try:
+                                 temp_graf = Grafiks.objects.get(sakums = new_sakums, nodarbiba = plan.nodarbiba, treneris = plan.treneris)
+                                 nod_atcelshana( temp_graf.id )
+                             except:
+                                 pass
+                         d += datetime.timedelta(days=1)
+                    # UPDATE Relations and Nodarbības redz
+                     os.system('python /pieraksts/manage.py chk_rel')
+                     os.system('python /pieraksts/manage.py chk_redz')
 
         days = []
         for i in range (0,7):
@@ -374,6 +390,5 @@ def plan_list( request ):
 
         args['data'] = days
 
-#        return render_to_response ( 'kalend.html', args )
         return render_to_response ( 'del_plan.html', args )
     return redirect('/reception/login/')

@@ -33,6 +33,8 @@ jQuery(document).ready(function($) {
 // fill Form
   document.getElementById('date').value=$(this).children('td')[9].innerHTML;
   document.getElementById('p_id').value=$(this).children('td')[0].innerHTML;
+  document.getElementById('laiks').value=$(this).children('td')[2].innerHTML;
+  document.getElementById('diena').value=$(this).children('td')[1].innerHTML;
  });
 });
 var countdown;
@@ -57,11 +59,6 @@ function startTimer(duration, display) {
 
 {% block content %}
 
-<div class="alert alert-danger">
-  <center><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-  <strong> NAV GATAVS, NEAIZTIKT :)</strong></center>
-</div>
-
 {% if date_error %}
 <div class="alert alert-danger">
   <center><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -77,6 +74,8 @@ function startTimer(duration, display) {
 <div class="modal-body">
 <form action="/reception/plan/" method="post">{% csrf_token %}
  <input type="hidden" id="p_id" name="p_id">
+ <input type="hidden" id="diena" name="diena">
+ <input type="hidden" id="laiks" name="laiks">
  <h2 id="4"></h2> <!-- nodarbiba treneris -->
  <h4 id="1"></h4> <!-- diena -->
  <h4 id="2"></h4> <!-- laiks -->
