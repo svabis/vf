@@ -66,6 +66,8 @@ def day_list(request, d_id):
         return redirect ("/reception/login/")
     args = {}
     username = auth.get_user(request)
+    if username.is_superuser:
+        args['django'] = True
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['admin'] = True
 
@@ -91,8 +93,9 @@ def nod_list(request, d_id, g_id):
         return redirect ("/reception/login/")
     args = {}
     username = auth.get_user(request)
+    if username.is_superuser:
+        args['django'] = True
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-#    if auth.get_user(request).is_superuser: # superuser --> Left menu available
         args['admin'] = True
 
     args['title'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
@@ -114,8 +117,9 @@ def cancel_list(request, d_id, g_id):
         return redirect ("/reception/login/")
     args = {}
     username = auth.get_user(request)
+    if username.is_superuser:
+        args['django'] = True
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
-#    if auth.get_user(request).is_superuser: # superuser --> Left menu available
         args['admin'] = True
 
     args['title'] = getattr(Grafiks.objects.get( id=g_id ), 'nodarbiba')
@@ -135,6 +139,8 @@ def print_nod(request, d_id, g_id):
         return redirect ("/reception/login/")
     args = {}
     username = auth.get_user(request)
+    if username.is_superuser:
+        args['django'] = True
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['admin'] = True
 
@@ -156,7 +162,7 @@ def reception_cancel(request, d_id, g_id, p_id):
 
     try:
         pieraksts = Pieraksti.objects.get(id=p_id)
-# ADD VIETAS uznodarbību
+# ADD VIETAS uz nodarbību
         pieraksts.nodarbiba.vietas += 1
         pieraksts.nodarbiba.save()
 # Create Atteikums object
@@ -183,6 +189,8 @@ def reception_pieraksts(request, d_id, n_id):
         return redirect ('day_list', d_id=d_id)
     args = {}
     username = auth.get_user(request)
+    if username.is_superuser:
+        args['django'] = True
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['admin'] = True
         super = True
@@ -318,6 +326,8 @@ def klienti(request, search=''):
     args.update(csrf(request))
 
     username = auth.get_user(request)
+    if username.is_superuser:
+        args['django'] = True
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['admin'] = True
 

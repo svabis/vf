@@ -22,9 +22,10 @@ def history(request):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['admin'] = True
+    if username.is_superuser:
+        args['django'] = True
 
     args.update(csrf(request)) # ADD CSRF TOKEN
-#    args['title'] = u'Izvēlies datumu'
     if request.POST:
         datums = request.POST.get('date', '')
         if datums != "":
@@ -38,6 +39,8 @@ def hist_date(request, date):
         return redirect ("/reception/login/")
     args = {}
     username = auth.get_user(request)
+    if username.is_superuser:
+        args['django'] = True
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['admin'] = True
 
@@ -57,6 +60,8 @@ def hist_date_kli(request, date, g_id):
         return redirect ("/reception/login/")
     args = {}
     username = auth.get_user(request)
+    if username.is_superuser:
+        args['django'] = True
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['admin'] = True
 
@@ -78,6 +83,8 @@ def hist_date_cancel(request, date, g_id):
         return redirect ("/reception/login/")
     args = {}
     username = auth.get_user(request)
+    if username.is_superuser:
+        args['django'] = True
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args['admin'] = True
 
