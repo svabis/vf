@@ -15,7 +15,7 @@
 
   # Pieraksts no recepcijas
     rec_pierakst.html	- Reception pieraksta forma
-    rec_pier_success.html	- Reception pieraksts... Succsess
+    rec_pier_success.html - Reception pieraksts... Succsess
 
 
 # Klientu dati
@@ -35,7 +35,7 @@
 
 # Pievienot
   add_plan.html	- Nodarbības pievienošanas forma
-  nod_list.html	- Nodarbibu kartiņas edit	- NOPE
+  nod_list.html	- Nodarbibu kartiņas POST edit + POST Add new izmantojot Formu
 
 
 # Login/ Logaout
