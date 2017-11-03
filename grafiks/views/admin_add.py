@@ -7,18 +7,16 @@ from django.contrib.auth.models import User, Group
 
 from django.core.context_processors import csrf
 
-#from pieraksts.models import *
 from grafiks.models import Grafiks, Planotajs
 from grafiks.forms import *
+
+from nodarb.forms import Nodarb_tipsForm
 from nodarb.models import Nodarb_tips
 
-#from main import mail
 
-from datetime import date as date_class
+from datetime import date as date_class # to test if end_date is entered using date class test
 import datetime
-import pytz
 today = datetime.date.today()
-tz = pytz.timezone('UTC')
 
 import os
 
@@ -140,12 +138,42 @@ def nodarbibas_edit(request):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
+        args['form'] = Nodarb_tipsForm  # add Nodarbibas form to args
+
         args.update(csrf(request))      # ADD CSRF TOKEN
         if username.is_superuser:
             args['django'] = True
         args['admin'] = True
 
         args['nodarbibas'] = Nodarb_tips.objects.all().order_by('nos')
+
+        if request.POST:
+           # test POST for Nodarb_tips changes...
+            try:
+                n_id = request.POST.get('n_id', '')
+                n_slug = request.POST.get('n_slug', '')
+                n_nos = request.POST.get('n_nos', '')
+                n_apraksts = request.POST.get('n_apraksts', '')
+
+                nod_edit = Nodarb_tips.objects.get(slug=n_slug)
+                nod_edit.nos = n_nos
+                nod_edit.apraksts = n_apraksts
+                nod_edit.save()
+               # if no errors...
+                return redirect ('nodarbibas')
+            except:
+                pass
+
+           # Check ADD FORM...
+            form = Nodarb_tipsForm( request.POST )
+            if form.is_valid(): # create new Nodarb_tips...
+                nod_new = Nodarb_tips(**form.cleaned_data)
+                nod_new.save()
+                return redirect ('nodarbibas')
+
+            else: # Form not valid...
+                args['form'] = form
+                args['add_error'] = True
 
         return render_to_response ( 'nod_list.html', args )
     return redirect('/reception/login/')

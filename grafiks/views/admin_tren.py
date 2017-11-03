@@ -104,9 +104,11 @@ def tren_aizv( request, w_id, g_id ):
                 change.treneris = treneris
                 change.save()
 
-               # UPDATE Relations and Nodarbības redz
-#                os.system('python /pieraksts/manage.py chk_rel')
-#                os.system('python /pieraksts/manage.py chk_redz')
+                after_month = (datetime.datetime.today() + datetime.timedelta(days=28)).date()
+                if change.sakums.date() <= after_month:
+                   # UPDATE Relations and Nodarbības redz
+                    os.system('python /pieraksts/manage.py chk_rel')
+                    os.system('python /pieraksts/manage.py chk_redz')
         return redirect ( 'tren_week_list', w_id=w_id )
     return redirect('/reception/login/')
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 from nodarb.models import Nodarb_tips, Treneris, Telpa
 from datetime import datetime, timedelta
@@ -10,13 +11,13 @@ def default_start_time():
     return start
 
 DAY_CHOISES = (
-    ('0', 'P'),
-    ('1', 'O'),
-    ('2', 'T'),
-    ('3', 'C'),
-    ('4', 'Pk'),
-    ('5', 'S'),
-    ('6', 'Sv'),
+    ('0', 'Pirmdiena'),
+    ('1', 'Otrdiena'),
+    ('2', 'Trešdiena'),
+    ('3', 'Ceturtdiena'),
+    ('4', 'Piektdiena'),
+    ('5', 'Sestdiena'),
+    ('6', 'Svētdiena'),
 )
 
 # !!! Grafiks !!!
@@ -42,7 +43,7 @@ class Planotajs(models.Model):
     class Meta():
         db_table = "planotajs"
 
-    diena = models.CharField( max_length = 1, default = 0, choices=DAY_CHOISES )
+    diena = models.CharField( max_length = 15, default = 0, choices=DAY_CHOISES )
     laiks = models.TimeField( default=default_start_time )
 
     ilgums = models.IntegerField( default = 55 )

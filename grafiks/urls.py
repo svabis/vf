@@ -65,7 +65,7 @@ urlpatterns = [
     url(r'^add/$', 'grafiks.views.graf_add'),
 
 # Nodarbību kartiņu edit
-    url(r'^nodarbibas/$', 'grafiks.views.nodarbibas_edit'),
+    url(r'^nodarbibas/$', 'grafiks.views.nodarbibas_edit', name="nodarbibas"),
 
 
 # Kalendāra skats

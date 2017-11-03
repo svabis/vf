@@ -10,7 +10,7 @@ class Nodarb_tips(models.Model):
     nos = models.CharField( max_length = 100 )
     slug = models.SlugField( unique = True )
     apraksts = models.TextField( default = 'apraksts' )
-    redz = models.BooleanField( default = True )
+    redz = models.BooleanField( default = False )
     izcelt = models.BooleanField( default = False )
 
     def __unicode__(self):
@@ -43,11 +43,11 @@ class Tren_nodarb(models.Model):
         return u'%s' % (self.nodarb)
 
 TELPA_CHOISE = (
-    ('L', 'lielā zāle'),
-    ('M', 'mazā zāle'),
-    ('G', 'gym zāle'),
-    ('V', 'velo zāle'),
-    ('C', 'cīņu zāle'),
+    ('L', 'Lielā zāle'),
+    ('M', 'Mazā zāle'),
+    ('G', 'Gym zāle'),
+    ('V', 'Velo zāle'),
+    ('C', 'Cīņu zāle'),
 )
 
 # !!! Telpas !!!

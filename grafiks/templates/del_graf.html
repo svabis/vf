@@ -27,6 +27,20 @@ jQuery(document).ready(function($) {
         window.location = $(this).data("href");
     });
 });
+
+var countdown;
+function submit_changes(mod) { clearInterval(countdown); document.querySelector("#yes"+mod).value = "Izmaiņas tiek apstiprinātas"; }
+function cancel(mod) { $("#yes"+mod).hide(); $("#ok"+mod).show(); clearInterval(countdown); }
+function apply(mod) {
+  $("#yes"+mod).show(); $("#ok"+mod).hide(); var slidetime = 14,
+  display = document.querySelector("#yes"+mod); startTimer(slidetime, display, mod);
+}
+function startTimer(duration, display, mod) {
+  var timer = duration, seconds = 15; countdown = setInterval( function () {
+    seconds = parseInt(timer % 60, 10); // seconds = seconds < 10 ? "0" + seconds : seconds;
+    display.value = "Apstiprināt izmaiņas (" + seconds + ") ?"; --timer;
+    if (seconds < 1) { $("#yes"+mod).hide(); $("#ok"+mod).show(); clearInterval(countdown); }
+  }, 1000);}
 </script>
 {% if week %}
 <div class="container">
@@ -47,13 +61,15 @@ jQuery(document).ready(function($) {
 
 
 {% for dat in data %}{% for d in dat %}
-<div class="modal fade" id="Graf{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header">
- <span class="glyphicon glyphicon-trash" aria-hidden="true" style="font-size:1.5em;"></span>
- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button></div>
+<div class="modal fade" id="Graf{{ d.id }}" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content">
+<div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;&nbsp;Atcelt nodarbību</h3>
+</div>
 <div class="modal-body"><h4>{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h4><h4>{{ d.sakums|date:"d/M/Y H:i" }}</h4></div>
 <div class="modal-footer">
- <a href="/reception/graf/{{ w_id }}/cancel/{{ d.id }}/"><button type="button" class="btn btn-danger">Atcelt nodarbību</button></a>
- <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
+ <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes{{ d.id }}" onclick="submit_changes({{ d.id }});">
+ <button type="button" class="btn btn-danger" onclick="apply({{ d.id }});" id="ok{{ d.id }}">Veikt izmaiņas</button>
+ <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel({{ d.id }});">Aizvērt</button>
 </div></div></div></div>
 {% endfor %}{% endfor %}
 

@@ -7,6 +7,9 @@
 {% block content %}
 <script>
 jQuery(document).ready(function($) {
+
+{% if add_error %}$("#Nodarbiba_create").modal('show');{% endif %}
+
   $("input.chk").prop("disabled", true);
   $(".clickable-row").click(function(e) {
 // open modal
@@ -24,21 +27,21 @@ jQuery(document).ready(function($) {
 });
 
 var countdown;
-function submit_changes() { clearInterval(countdown); document.querySelector('#yes').value = "Izmaiņas tiek apstiprinātas"; }
-function cancel() { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
-function apply() {
-  $("#yes").show(); $("#ok").hide(); var slidetime = 14,
-  display = document.querySelector('#yes'); startTimer(slidetime, display);
+function submit_changes(mod) { clearInterval(countdown); document.querySelector("#yes"+mod).value = "Izmaiņas tiek apstiprinātas"; }
+function cancel(mod) { $("#yes"+mod).hide(); $("#ok"+mod).show(); clearInterval(countdown); }
+function apply(mod) {
+  $("#yes"+mod).show(); $("#ok"+mod).hide(); var slidetime = 14,
+  display = document.querySelector("#yes"+mod); startTimer(slidetime, display);
 }
-function startTimer(duration, display) {
+function startTimer(duration, display, mod) {
   var timer = duration, seconds = 15; countdown = setInterval( function () {
     seconds = parseInt(timer % 60, 10); // seconds = seconds < 10 ? "0" + seconds : seconds;
     display.value = "Apstiprināt izmaiņas (" + seconds + ") ?"; --timer;
-    if (seconds < 1) { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
+    if (seconds < 1) { $("#yes"+mod).hide(); $("#ok"+mod).show(); clearInterval(countdown); }
   }, 1000);}
 </script>
 
-<!-- klienta edit modal START -->
+<!-- Nodarb_tips edit modal START -->
 <div class="modal fade" id="Nodarbiba" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
 <div class="modal-header">
  <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;&nbsp;Nodarbības kartiņa</h3>
@@ -62,12 +65,48 @@ function startTimer(duration, display) {
   </table>
 </div>
 <div class="modal-footer">
- <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes" onclick="submit_changes();">
- <button type="button" class="btn btn-danger" onclick="apply();" id="ok">Veikt izmaiņas</button>
- <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel();">Aizvērt</button>
+ <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes1" onclick="submit_changes(1);">
+ <button type="button" class="btn btn-danger" onclick="apply(1);" id="ok1">Veikt izmaiņas</button>
+ <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel(1);">Aizvērt</button>
 </form>
 </div></div></div></div>
-<!-- klienta edit modal END -->
+<!-- Nodarb_tips edit modal END -->
+
+<!-- NEW Nodarb_tips CREAT modal START -->
+<div class="modal fade" id="Nodarbiba_create" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;Izveidot jaunu Nodarbību</h3>
+</div>
+<div class="modal-body">
+ <form action="/reception/nodarbibas/" method=POST>{% csrf_token %}
+  <table class="table table-condensed">
+   <thead><tr><th style="width:30%;">Nodarbība</th><th>Apraksts</th></tr></thead>
+   <tbody>
+    <tr>
+     <td>
+      <label for="{{ form.nos.id_for_label }}">Nosaukums:</label>
+      {{ form.nos }}
+      {{ form.nos.errors }}
+      <br><label for="{{ form.izcelt.id_for_label }}">Izcelt ?</label>
+      {{ form.izcelt }}
+     </td>
+     <td>
+      <label for="{{ form.apraksts.id_for_label }}">Nodarbības apraksts:</label>
+      {{ form.apraksts.errors }}
+      {{ form.apraksts }}
+     </td>
+    </tr>
+   </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+ <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes2" onclick="submit_changes(2);">
+ <button type="button" class="btn btn-danger" onclick="apply(2);" id="ok2">Veikt izmaiņas</button>
+ <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel(2);">Aizvērt</button>
+</form>
+</div></div></div></div>
+<!-- NEW Nodarb_tips CREATE modal END -->
+
 
 <script>
 </script>
@@ -78,7 +117,9 @@ function startTimer(duration, display) {
 </style>
 
 <div class="container">
- <button type="button" class="btn btn-success pull-right" style="margin-bottom: 5px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> &nbsp;Pievienot jaunu Nodarbību</button>
+ <button type="button" class="btn btn-success pull-right" style="margin-bottom: 5px;" data-toggle="modal" data-target="#Nodarbiba_create">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> &nbsp;Pievienot jaunu Nodarbību
+ </button>
   <table class="table table-hover table-striped table-condensed">
     <thead>
       <tr style="background: #aaa;">

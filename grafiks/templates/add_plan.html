@@ -24,7 +24,7 @@
 <h4><strong>Nodarbību sākums</strong> - {{ nodarbiba.start_date|date:"d/m/Y" }}</h4>
 {% if nodarbiba.end_date %}<h4><strong>Nodarbība notiks līdz</strong> - {{ nodarbiba.end_date|date:"d/m/Y" }}</h4>{% endif %}
 <h4><strong>Treneris</strong> - {{ nodarbiba.treneris }}</h4>
-<h4><strong>Zāle</strong> - {{ nodarbiba.telpa }}</h4>
+<h4><strong>Zāle</strong> - {{ nodarbiba.get_telpa_display }}</h4>
 <h4><strong>Nodarbības ilgums</strong> - {{ nodarbiba.ilgums }}</h4>
 <h4><strong>Vietus skaits</strong> - {{ nodarbiba.vietas }}</h4>
 {% endif %}
