@@ -1,31 +1,45 @@
-klienti.html	- Django tipa Klientu saraksts/meklēšana + POST edit Klienta datiem
-
-add_plan.html	- Nodarbības pievienošanas forma
-
-tren_aizv.html	- Nodarbības izvēle + Treneru aizvietošana forma
-
-nod_plan.html	- Nodarbības atcelšana
-
-del_plan.html	- Nodarbības dzēšana no plānotāja + POST edit Planotajs objekts
+# VESTURE
+  history.html		- Vēstures Datepicker
+  hist_date.html	- Vēstures dienas skats
+  hist_date_kli.html	- Vēstures...Nodarbības pieraksti
+  hist_date_cancel.html	- Vēstures...Nodarbības atteikumi
 
 
-day_header.html		- Pierakstu dienu Tabi
-day_data.html		- Pieraksta dienas skats
-day_kli_data.html	- Nodarbības pieraksti
-day_cancel_data.html	- Nodarbības atteikumi
+# Nodarbibu pieraksti
+  day_header.html	- Pierakstu dienu Tabi
+  day_data.html		- Pieraksta dienas skats
+  day_kli_data.html	- Nodarbības pieraksti
+  day_cancel_data.html	- Nodarbības atteikumi
 
-day_kli_print.html	- Nodarbības apmeklētāju PRINT skats
+  day_kli_print.html	- Nodarbības apmeklētāju PRINT skats
 
-
-history.html		- Vēstures Datepicker
-hist_date.html		- Vēstures dienas skats
-hist_date_kli.html	- Vēstures...Nodarbības pieraksti
-hist_date_cancel.html	- Vēstures...Nodarbības atteikumi
-
-
-login.html		- Autorizācijas skats
+  # Pieraksts no recepcijas
+    rec_pierakst.html	- Reception pieraksta forma
+    rec_pier_success.html	- Reception pieraksts... Succsess
 
 
-rec_pierakst.html	- Reception pieraksta forma
-rec_pier_success.html	- Reception pieraksts... Succsess
+# Klientu dati
+  klienti.html	- Klientu saraksts/meklēšana + POST edit Klienta datiem
+
+
+# Izmaiņas grafikā
+  del_graf.html	- Nodarbības atcelšana
+  del_plan.html	- Nodarbības dzēšana no plānotāja + POST edit Planotajs objekts
+
+
+# Treneri
+  tren_aizv.html - Nodarbības izvēle + Treneru aizvietošana forma
+
+  tren_list.html - Treneru kartiņas edit	- NOPE
+
+
+# Pievienot
+  add_plan.html	- Nodarbības pievienošanas forma
+  nod_list.html	- Nodarbibu kartiņas edit	- NOPE
+
+
+# Login/ Logaout
+  login.html	- Autorizācijas skats
+
+
 

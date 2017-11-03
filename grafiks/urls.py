@@ -46,16 +46,27 @@ urlpatterns = [
     url(r'^graf/(?P<w_id>\d+)/cancel/(?P<g_id>\d+)/$', 'grafiks.views.graf_cancel'),
     url(r'^graf/$', 'grafiks.views.graf_list'),
 
-# Nodarbibas pievienoshana
-    url(r'^add/$', 'grafiks.views.graf_add'),
+# Grafika izmaiņas - Atcelšana
+    url(r'^plan/$', 'grafiks.views.plan_list', name="plan_list"),
+
 
 # Treneru aizvietosan
     url(r'^tren/(?P<w_id>\d+)/$', 'grafiks.views.tren_week_list', name="tren_week_list"),
     url(r'^tren/(?P<w_id>\d+)/replace/(?P<g_id>\d+)/$', 'grafiks.views.tren_aizv'),
     url(r'^tren/$', 'grafiks.views.tren_list'),
 
-# Grafika izmaiņas - Atcelšana
-    url(r'^plan/$', 'grafiks.views.plan_list', name="plan_list"),
+# Treneru aizvietošana sākot no datuma + Planotājā
+
+# Treneru kartiņas edit
+    url(r'^treneri/$', 'grafiks.views.treneri_edit'),
+
+
+# Nodarbibas pievienoshana
+    url(r'^add/$', 'grafiks.views.graf_add'),
+
+# Nodarbību kartiņu edit
+    url(r'^nodarbibas/$', 'grafiks.views.nodarbibas_edit'),
+
 
 # Kalendāra skats
     url(r'^kalendar/$', 'grafiks.views.kalend'),

@@ -85,7 +85,7 @@ jQuery(document).ready(function($) {
 
 <a href="/reception/tren/"><button type="button" class="btn btn" style="colour: black;"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Atpakaļ pie nedēļu izvēles</button></a><br>
 
-{% if pw_id %}
+{% if pw_id or pw_id == 0 %}
 <center><a href="/reception/tren/{{ pw_id }}/"><button type="button" class="btn btn" style="colour: black;">
 <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span> Uz iepriekšējo nedēļu</button></a></center><br>
 {% endif %}

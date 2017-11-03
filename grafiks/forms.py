@@ -31,6 +31,12 @@ class PlanotajsForm(ModelForm):
 
 # !!!!! TrenRelForm !!!!!
 class TrenRelForm(ModelForm):
+
+    nodarb = forms.ModelChoiceField( queryset = Nodarb_tips.objects.all().order_by('nos') )
+
+    treneris = forms.ModelChoiceField( queryset = Treneris.objects.all().order_by('vards') )
+
     class Meta:
         model = Tren_nodarb
         fields = ( 'treneris', 'nodarb' )
+        exclude = ( 'treneris', 'nodarb' )

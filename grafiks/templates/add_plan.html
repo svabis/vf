@@ -58,18 +58,6 @@ function showMe (box) {
  </div>
 {% endif %}
 
-<div class="alert alert-warning" style="margin-top:10px;">
- <center><strong>Svarīgi!</strong> Ja nodarbība tiek pievienota <b><i>Vienu reizi</i></b>, tad nodarbība notiks <b>izvēlētajā datumā</b>
- un <i>Beigu datums</i>, kā arī <i>Diena</i> netiek ņemts vērā</center><br>
- <center>Pretējā gadījumā - <i>Sākuma datums</i> nozīmē pēc kura datuma <b><i>(ieskaitot)</i></b> nodarbības tiks pievienotas, 
- norādītajā <i>Dienā</i> līdz norādītajam <i>Beigu datumam</i> <b>(ja tāds tiek norādīts)</b> <b><i>(ieskaitot)</i></b></center>
-</div>
-
-<div class="alert alert-danger">
-  <center><strong>!!! Pirms pievienot nodarbību jāpārliecinās vai tajā laikā jau nenotiek cita nodarbība !!!</strong></center>
-  <center><strong>!!! Sistēmai tādas pārbaudes nav !!!</strong></center>
-</div>
-
 <div class="bootstrap-iso"><div class="fieldWrapper">
  <label style="margin-left:10px;">{{ form.chk }} Vienu reizi</label>
 </div>
@@ -117,11 +105,6 @@ $(document).ready(function(){ var date_input=$('input[name="end_date"]');
   {{ form.ilgums }}
   {{ form.ilgums.errors }}
  </div>
-
-<div class="alert alert-warning" style="margin-top:10px;">
- <center><strong>Svarīgi!</strong> Nodarbības ilgums jāliek tā lai nepārklātos ar nākamajām nodarbībām</center>
- <center><strong>Piemērs:</strong> Nodarbība notiek reizi pusstundā, tad ilgums = <b>29</b> minūtes</center>
-</div>
 
  <div class="fieldWrapper">
   <label for="{{ form.nodarbiba.id_for_label }}">Nodarbība:</label>

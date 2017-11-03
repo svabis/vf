@@ -14,8 +14,6 @@ class Command(BaseCommand):
         today = datetime.datetime.now()
         start = datetime.datetime(today.year, today.month, today.day, today.hour, today.minute)
         end = today.replace(hour=23, minute=59, second=59) + datetime.timedelta(days=28)
-        print start
-        print end
 
        # All relations
         rel_exist = Tren_nodarb.objects.all()
@@ -29,11 +27,8 @@ class Command(BaseCommand):
             temp_rel.append([n,t])
 
         rel_fakt = set(tuple(element) for element in temp_rel) # extract unique from all
-        print graf.count() # grafiks count
-        print len(rel_fakt) # relation count
 
        # Create relations if not exist
-        print 'creating relations...'
         temp_rel = []
         for r in list(rel_fakt):
             try:
@@ -43,11 +38,10 @@ class Command(BaseCommand):
                 new_rel = Tren_nodarb( nodarb=r[0], treneris=r[1])
                 new_rel.save()
                 temp_rel.append(new_rel) # add to list
+                print 'creating relations:'
                 print r
-        print '...done\n'
 
        # Remove not needed relations
-        print 'deleting unused relations...'
         temp_rel2 = []
         for r in rel_exist:
             temp_rel2.append(r)
@@ -55,5 +49,5 @@ class Command(BaseCommand):
         unused = list(set(temp_rel2) - set(temp_rel))
         for u in unused:
             u.delete()
+            print 'deleting unused relations:'
             print u
-        print '...done\n'

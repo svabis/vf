@@ -1,0 +1,105 @@
+{% extends 'admin.html' %}
+{% load staticfiles %}
+{% block style %}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
+{% endblock %}
+
+{% block content %}
+<script>
+jQuery(document).ready(function($) {
+  $("input.chk").prop("disabled", true);
+  $(".clickable-row").click(function(e) {
+// open modal
+    $("#Nodarbiba").modal('show');
+// fill Form
+    document.getElementById('n_id').value = $(this).children('td')[0].innerHTML;
+    document.getElementById('n_slug').value = $(this).children('td')[1].innerHTML;
+    var temp_v = $(this).children('td')[2].innerHTML;
+    document.getElementById('n_nos').value = temp_v.substring(4, temp_v.length - 5);
+    document.getElementById('n_apraksts').value = $(this).children('td')[5].innerHTML;
+// fill text
+    document.getElementById('nos').innerHTML = temp_v.substring(4, temp_v.length - 5);
+    document.getElementById('apraksts').innerHTML = $(this).children('td')[5].innerHTML;
+  });
+});
+
+var countdown;
+function submit_changes() { clearInterval(countdown); document.querySelector('#yes').value = "Izmaiņas tiek apstiprinātas"; }
+function cancel() { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
+function apply() {
+  $("#yes").show(); $("#ok").hide(); var slidetime = 14,
+  display = document.querySelector('#yes'); startTimer(slidetime, display);
+}
+function startTimer(duration, display) {
+  var timer = duration, seconds = 15; countdown = setInterval( function () {
+    seconds = parseInt(timer % 60, 10); // seconds = seconds < 10 ? "0" + seconds : seconds;
+    display.value = "Apstiprināt izmaiņas (" + seconds + ") ?"; --timer;
+    if (seconds < 1) { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
+  }, 1000);}
+</script>
+
+<!-- klienta edit modal START -->
+<div class="modal fade" id="Nodarbiba" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span>&nbsp;&nbsp;Nodarbības kartiņa</h3>
+</div>
+<div class="modal-body">
+ <form action="/reception/nodarbibas/" method=POST>{% csrf_token %}
+  <input type="hidden" id="n_id" name="n_id">
+  <input type="hidden" id="n_slug" name="n_slug">
+  <table class="table table-condensed">
+   <thead><tr><th style="width:30%;">Nodarbība</th><th>Apraksts</th></tr></thead>
+   <tbody>
+<!--    <tr><td id="nos"></td>
+    <td id="apraksts"></td></tr> -->
+    <tr>
+    <td><div class="form-group"><input type="text" id="n_nos" name="n_nos" class="form-control"></div></td>
+    <td><div class="form-group">
+<!-- <input type="textbox" id="n_apraksts" name="n_apraksts" class="form-control"> -->
+     <textarea id="n_apraksts" name="n_apraksts" class="form-control" rows="10"></textarea>
+    </div></td>
+   </tr></tbody>
+  </table>
+</div>
+<div class="modal-footer">
+ <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes" onclick="submit_changes();">
+ <button type="button" class="btn btn-danger" onclick="apply();" id="ok">Veikt izmaiņas</button>
+ <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel();">Aizvērt</button>
+</form>
+</div></div></div></div>
+<!-- klienta edit modal END -->
+
+<script>
+</script>
+
+<style>
+.table.table-condensed tr th { border-bottom: 1px solid #f00; }
+.table.table-condensed tr td { border-bottom: 1px solid #f00; }
+</style>
+
+<div class="container">
+ <button type="button" class="btn btn-success pull-right" style="margin-bottom: 5px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> &nbsp;Pievienot jaunu Nodarbību</button>
+  <table class="table table-hover table-striped table-condensed">
+    <thead>
+      <tr style="background: #aaa;">
+        <th style="vertical-align: top;">Nosaukums</th>
+        <th style="vertical-align: top; text-align: center;">Redzams</th>
+        <th style="vertical-align: top; text-align: center;">Izcelts</th>
+        <th style="vertical-align: top;">Apraksts</th>
+      </tr>
+    </thead>
+    <tbody>
+{% for n in nodarbibas %}
+      <tr class="clickable-row">
+        <td style="display:none;">{{ n.id }}</>
+        <td style="display:none;">{{ n.slug }}</td>
+        <td><h4>{{ n.nos }}</h4></td>
+        <td style="text-align: center;"><input type="checkbox" class="chk" {% if n.redz %}checked{% endif %}></td>
+        <td style="text-align: center;"><input type="checkbox" class="chk" {% if n.izcelt %}checked{% endif %}></td>
+        <td>{{ n.apraksts|safe }}</td>
+      </tr>
+{% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
