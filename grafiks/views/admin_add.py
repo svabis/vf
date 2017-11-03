@@ -153,10 +153,12 @@ def nodarbibas_edit(request):
                 n_id = request.POST.get('n_id', '')
                 n_slug = request.POST.get('n_slug', '')
                 n_nos = request.POST.get('n_nos', '')
+                n_izcelt = request.POST.get('n_izcelt', '')
                 n_apraksts = request.POST.get('n_apraksts', '')
 
                 nod_edit = Nodarb_tips.objects.get(slug=n_slug)
                 nod_edit.nos = n_nos
+                nod_edit.izcelt = n_izcelt
                 nod_edit.apraksts = n_apraksts
                 nod_edit.save()
                # if no errors...

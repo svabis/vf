@@ -20,9 +20,9 @@ jQuery(document).ready(function($) {
     var temp_v = $(this).children('td')[2].innerHTML;
     document.getElementById('n_nos').value = temp_v.substring(4, temp_v.length - 5);
     document.getElementById('n_apraksts').value = $(this).children('td')[5].innerHTML;
-// fill text
-    document.getElementById('nos').innerHTML = temp_v.substring(4, temp_v.length - 5);
-    document.getElementById('apraksts').innerHTML = $(this).children('td')[5].innerHTML;
+    var temp_i = $(this).children('td')[6].innerHTML;
+    if (temp_i == 'False') { var izcelt = false; } else { var izcelt = true; }
+    document.getElementById('n_izcelt').checked = izcelt;
   });
 });
 
@@ -53,14 +53,13 @@ function startTimer(duration, display, mod) {
   <table class="table table-condensed">
    <thead><tr><th style="width:30%;">Nodarbība</th><th>Apraksts</th></tr></thead>
    <tbody>
-<!--    <tr><td id="nos"></td>
-    <td id="apraksts"></td></tr> -->
     <tr>
-    <td><div class="form-group"><input type="text" id="n_nos" name="n_nos" class="form-control"></div></td>
-    <td><div class="form-group">
-<!-- <input type="textbox" id="n_apraksts" name="n_apraksts" class="form-control"> -->
-     <textarea id="n_apraksts" name="n_apraksts" class="form-control" rows="10"></textarea>
-    </div></td>
+     <td><div class="form-group">
+       <input type="text" id="n_nos" name="n_nos" class="form-control"><br>
+       <label>Izcelt ?</label>
+       <input class="form-control" id="n_izcelt" name="n_izcelt" type="checkbox">
+     </div></td>
+     <td><div class="form-group"><textarea id="n_apraksts" name="n_apraksts" class="form-control" rows="10"></textarea></div></td>
    </tr></tbody>
   </table>
 </div>
@@ -138,6 +137,7 @@ function startTimer(duration, display, mod) {
         <td style="text-align: center;"><input type="checkbox" class="chk" {% if n.redz %}checked{% endif %}></td>
         <td style="text-align: center;"><input type="checkbox" class="chk" {% if n.izcelt %}checked{% endif %}></td>
         <td>{{ n.apraksts|safe }}</td>
+        <td style="display:none;">{{ n.izcelt }}</td>
       </tr>
 {% endfor %}
     </tbody>
