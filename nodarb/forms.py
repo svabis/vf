@@ -17,7 +17,7 @@ class TrenerisForm(ModelForm):
         widgets = {
             'vards': forms.TextInput( attrs={'class': 'form-control', 'size': 30 }),
             'apraksts': forms.Textarea(attrs={'class': 'form-control', 'rows' : '3'}),
-#            'avatar': forms.Select(attrs={'class': 'form-control'}),
+            'avatar': forms.FileInput(attrs={'class': 'btn btn-success'}),
             }
 
 

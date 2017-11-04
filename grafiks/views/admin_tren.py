@@ -1,23 +1,20 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response, redirect	# response to template, redirect to another view
-from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib import auth # autorisation library
 from django.contrib.auth.models import User, Group
 
 from django.core.context_processors import csrf
 
-#from pieraksts.models import *
-from grafiks.models import Grafiks, Planotajs
-from grafiks.forms import *
-from nodarb.models import Treneris
+from grafiks.models import Grafiks
+from grafiks.forms import TrenRelForm
 
-#from main import mail
+from nodarb.forms import TrenerisForm
+from nodarb.models import *
+
 
 import datetime
-import pytz
 today = datetime.date.today()
-tz = pytz.timezone('UTC')
 
 import os
 
@@ -48,11 +45,13 @@ def tren_week_list( request, w_id ):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
+        args['form'] = TrenRelForm
+
         args.update(csrf(request))      # ADD CSRF TOKEN
         if username.is_superuser:
             args['django'] = True
         args['admin'] = True
-        args['form'] = TrenRelForm
+
         weeks = []
         weeks.append(today)
         next = today + datetime.timedelta( days=7 - int( today.weekday()) ) # next week monday
@@ -120,12 +119,43 @@ def treneri_edit(request):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
+        args['form'] = TrenerisForm  # add Nodarbibas form to args
+
         args.update(csrf(request))      # ADD CSRF TOKEN
         if username.is_superuser:
             args['django'] = True
         args['admin'] = True
 
         args['treneri'] = Treneris.objects.all().order_by('vards')
+
+        if request.POST:
+           # test POST for Nodarb_tips changes...
+            try:
+#                t_id = request.POST.get('t_id', '')
+                t_slug = request.POST.get('t_slug', '')
+                t_vards = request.POST.get('t_vards', '')
+                t_apraksts = request.POST.get('t_apraksts', '')
+
+                tren_edit = Treneris.objects.get(slug=t_slug)
+                tren_edit.vards = t_vards
+                tren_edit.apraksts = t_apraksts
+# !!!!! tren_edit.avatar !!!!!
+                tren_edit.save()
+               # if no errors...
+                return redirect ('treneri')
+            except:
+                pass
+
+           # Check ADD FORM...
+            form = TrenerisForm( request.POST, request.FILES )
+            if form.is_valid(): # create new Nodarb_tips...
+                tren_new = Treneris(**form.cleaned_data)
+                tren_new.save()
+                return redirect ('treneri')
+
+            else: # Form not valid...
+                args['form'] = form
+                args['add_error'] = True
 
         return render_to_response ( 'tren_list.html', args )
     return redirect('/reception/login/')

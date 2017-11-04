@@ -7,6 +7,9 @@
 {% block content %}
 <script>
 jQuery(document).ready(function($) {
+
+{% if add_error %}$("#Treneris_create").modal('show');{% endif %}
+
   $(".clickable-row").click(function(e) {
 // open modal
     $("#Treneris").modal('show');
@@ -17,6 +20,7 @@ jQuery(document).ready(function($) {
     document.getElementById('t_vards').value = temp_v.substring(4, temp_v.length - 5);
     var temp_a = $(this).children('td')[4].innerHTML;
     document.getElementById('t_apraksts').value = temp_a.substring(4, temp_a.length - 5);
+
 // fill text
     var img = $(this).children('td')[5].innerHTML;
     if (img != '') {
@@ -30,17 +34,17 @@ jQuery(document).ready(function($) {
 });
 
 var countdown;
-function submit_changes() { clearInterval(countdown); document.querySelector('#yes').value = "Izmaiņas tiek apstiprinātas"; }
-function cancel() { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
-function apply() {
-  $("#yes").show(); $("#ok").hide(); var slidetime = 14,
-  display = document.querySelector('#yes'); startTimer(slidetime, display);
+function submit_changes(mod) { clearInterval(countdown); document.querySelector("#yes"+mod).value = "Izmaiņas tiek apstiprinātas"; }
+function cancel(mod) { $("#yes"+mod).hide(); $("#ok"+mod).show(); clearInterval(countdown); }
+function apply(mod) {
+  $("#yes"+mod).show(); $("#ok"+mod).hide(); var slidetime = 14,
+  display = document.querySelector("#yes"+mod); startTimer(slidetime, display);
 }
-function startTimer(duration, display) {
+function startTimer(duration, display, mod) {
   var timer = duration, seconds = 15; countdown = setInterval( function () {
     seconds = parseInt(timer % 60, 10); // seconds = seconds < 10 ? "0" + seconds : seconds;
     display.value = "Apstiprināt izmaiņas (" + seconds + ") ?"; --timer;
-    if (seconds < 1) { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
+    if (seconds < 1) { $("#yes"+mod).hide(); $("#ok"+mod).show(); clearInterval(countdown); }
   }, 1000);}
 </script>
 
@@ -66,18 +70,57 @@ function startTimer(duration, display) {
   </table>
 </div>
 <div class="modal-footer">
- <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes" onclick="submit_changes();">
- <button type="button" class="btn btn-danger" onclick="apply();" id="ok">Veikt izmaiņas</button>
- <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel();">Aizvērt</button>
+ <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes1" onclick="submit_changes(1);">
+ <button type="button" class="btn btn-danger" onclick="apply(1);" id="ok1">Veikt izmaiņas</button>
+ <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel(1);">Aizvērt</button>
 </form>
 </div></div></div></div>
 <!-- klienta edit modal END -->
 
-<script>
-</script>
+<!-- NEW Treneris CREAT modal START -->
+<div class="modal fade" id="Treneris_create" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;&nbsp;Pievienot jaunu Treneri</h3>
+</div>
+<div class="modal-body">
+ <form action="/reception/treneri/" method=POST enctype="multipart/form-data">{% csrf_token %}
+  <table class="table table-condensed">
+   <thead><tr><th style="width:30%;">Vārds</th><th>Apraksts</th></tr></thead>
+   <tbody>
+    <tr>
+     <td>
+      <label for="{{ form.vards.id_for_label }}">Nosaukums:</label>
+      {{ form.vards }}
+      {{ form.vards.errors }}
+<!--      <br><label for="{{ form.izcelt.id_for_label }}">Izcelt ?</label> -->
+      {{ form.avatar }}
+     </td>
+     <td>
+      <label for="{{ form.apraksts.id_for_label }}">Trenera apraksts:</label>
+      {{ form.apraksts.errors }}
+      {{ form.apraksts }}
+     </td>
+    </tr>
+   </tbody>
+  </table>
+</div>
+<div class="modal-footer">
+ <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes2" onclick="submit_changes(2);">
+ <button type="button" class="btn btn-danger" onclick="apply(2);" id="ok2">Veikt izmaiņas</button>
+ <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel(2);">Aizvērt</button>
+</form>
+</div></div></div></div>
+<!-- NEW Treneris CREATE modal END -->
+
+<style>
+.table.table-condensed tr th { border-bottom: 1px solid #f00; }
+.table.table-condensed tr td { border-bottom: 1px solid #f00; }
+</style>
 
 <div class="container">
-<button type="button" class="btn btn-success pull-right" style="margin-bottom: 5px;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> &nbsp;Pievienot jaunu Treneri</button>
+ <button type="button" class="btn btn-success pull-right" style="margin-bottom: 5px;" data-toggle="modal" data-target="#Treneris_create">
+  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> &nbsp;Pievienot jaunu Treneri
+ </button>
   <table class="table table-hover table-striped table-condensed">
     <thead>
       <tr style="background: #aaa;">

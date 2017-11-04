@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response, redirect	# response to template, redirect to another view
-from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib import auth # autorisation library
 from django.contrib.auth.models import User, Group
@@ -8,10 +7,10 @@ from django.contrib.auth.models import User, Group
 from django.core.context_processors import csrf
 
 from grafiks.models import Grafiks, Planotajs
-from grafiks.forms import *
+from grafiks.forms import PlanotajsForm
 
 from nodarb.forms import Nodarb_tipsForm
-from nodarb.models import Nodarb_tips
+from nodarb.models import *
 
 
 from datetime import date as date_class # to test if end_date is entered using date class test
@@ -27,11 +26,13 @@ def graf_add(request):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
+        args['form'] = PlanotajsForm
+
         args.update(csrf(request))      # ADD CSRF TOKEN
         if username.is_superuser:
             args['django'] = True
         args['admin'] = True
-        args['form'] = PlanotajsForm
+
         args['success'] = 'false'	# Modal never vaļā
 
         if request.POST:
@@ -133,7 +134,7 @@ def graf_add(request):
 
 
 # =======================================================================================================
-# !!!!! Nodarbību Kartiņa !!!!!
+# !!!!! Nodarbību Kartiņa EDIT !!!!!
 def nodarbibas_edit(request):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
@@ -179,4 +180,3 @@ def nodarbibas_edit(request):
 
         return render_to_response ( 'nod_list.html', args )
     return redirect('/reception/login/')
-

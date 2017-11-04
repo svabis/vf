@@ -1,23 +1,18 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response, redirect	# response to template, redirect to another view
-from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib import auth # autorisation library
 from django.contrib.auth.models import User, Group
 
 from django.core.context_processors import csrf
 
-#from pieraksts.models import *
 from grafiks.models import Grafiks, Planotajs
 from grafiks.forms import *
-#from nodarb.models import *
 
 from main import mail
 
 import datetime
-import pytz
 today = datetime.date.today()
-tz = pytz.timezone('UTC')
 
 import os
 

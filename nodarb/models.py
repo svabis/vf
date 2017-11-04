@@ -1,6 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
+import random
+import string
+
+def rand_slug():
+     add = ''.join(random.choice(string.ascii_letters) for _ in range(8))
+     new_slug = add.lower()
+     return new_slug
+
+
 # !!! Nodarb_tips !!!
 class Nodarb_tips(models.Model):
     class Meta():
@@ -8,7 +17,7 @@ class Nodarb_tips(models.Model):
         db_table = "nodarb_tips"
 
     nos = models.CharField( max_length = 100 )
-    slug = models.SlugField( unique = True )
+    slug = models.SlugField( unique = True, default=rand_slug() )
     apraksts = models.TextField( default = 'apraksts' )
     redz = models.BooleanField( default = False )
     izcelt = models.BooleanField( default = False )
@@ -23,7 +32,7 @@ class Treneris(models.Model):
         db_table = "treneris"
 
     vards = models.CharField( max_length = 100 )
-    slug = models.SlugField( unique = True )
+    slug = models.SlugField( unique = True, default=rand_slug() )
     apraksts = models.TextField( default = 'apraksts' )
     avatar = models.ImageField( blank = True, null=True, upload_to = "treneri/" )
 

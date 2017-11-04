@@ -40,7 +40,7 @@ urlpatterns = [
 
 
 # -------------------------------------- SUPERUSER SADAĻA --------------------------------------------
-
+# ===
 # Nodarbibu ATCELŠANA
     url(r'^graf/(?P<w_id>\d+)/$', 'grafiks.views.week_list', name="nod_plan"),
     url(r'^graf/(?P<w_id>\d+)/cancel/(?P<g_id>\d+)/$', 'grafiks.views.graf_cancel'),
@@ -50,6 +50,7 @@ urlpatterns = [
     url(r'^plan/$', 'grafiks.views.plan_list', name="plan_list"),
 
 
+# ===
 # Treneru aizvietosan
     url(r'^tren/(?P<w_id>\d+)/$', 'grafiks.views.tren_week_list', name="tren_week_list"),
     url(r'^tren/(?P<w_id>\d+)/replace/(?P<g_id>\d+)/$', 'grafiks.views.tren_aizv'),
@@ -58,14 +59,16 @@ urlpatterns = [
 # Treneru aizvietošana sākot no datuma + Planotājā
 
 # Treneru kartiņas edit
-    url(r'^treneri/$', 'grafiks.views.treneri_edit'),
+    url(r'^treneri/$', 'grafiks.views.treneri_edit', name="treneri"),
 
 
+# ===
 # Nodarbibas pievienoshana
     url(r'^add/$', 'grafiks.views.graf_add'),
 
-# Nodarbību kartiņu edit
+# Nodarbību kartiņu edit / create new
     url(r'^nodarbibas/$', 'grafiks.views.nodarbibas_edit', name="nodarbibas"),
+
 
 
 # Kalendāra skats
