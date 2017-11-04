@@ -1,5 +1,9 @@
 {% extends 'admin.html' %}
 {% load staticfiles %}
+{% block javascript %}
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+{% endblock %}
+
 {% block style %}
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
 {% endblock %}
@@ -7,6 +11,11 @@
 {% block content %}
 <script>
 jQuery(document).ready(function($) {
+
+// IMAGE ADD BUTTON
+$("#browse").click(function(){
+    $(this).parent().find("input").click();
+});
 
 {% if add_error %}$("#Treneris_create").modal('show');{% endif %}
 
@@ -32,6 +41,21 @@ jQuery(document).ready(function($) {
     document.getElementById('apraksts').innerHTML = temp_a.substring(4, temp_a.length - 5);
   });
 });
+
+// IMAGE PREVIEW
+function readURL(input, display) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $("#" + display)
+        .attr("src", e.target.result)
+        .width(150)
+        .height(150);
+      };
+    $("#" + display).css("display", "block");
+    reader.readAsDataURL(input.files[0]);
+  }
+};
 
 var countdown;
 function submit_changes(mod) { clearInterval(countdown); document.querySelector("#yes"+mod).value = "Izmaiņas tiek apstiprinātas"; }
@@ -77,6 +101,7 @@ function startTimer(duration, display, mod) {
 </div></div></div></div>
 <!-- klienta edit modal END -->
 
+
 <!-- NEW Treneris CREAT modal START -->
 <div class="modal fade" id="Treneris_create" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
 <div class="modal-header">
@@ -85,22 +110,32 @@ function startTimer(duration, display, mod) {
 <div class="modal-body">
  <form action="/reception/treneri/" method=POST enctype="multipart/form-data">{% csrf_token %}
   <table class="table table-condensed">
-   <thead><tr><th style="width:30%;">Vārds</th><th>Apraksts</th></tr></thead>
+   <thead>
+    <tr>
+     <th style="width:30%;"><label for="{{ form.vards.id_for_label }}">Treneris:</label></th>
+     <th><label for="{{ form.apraksts.id_for_label }}">Trenera apraksts:</label></th>
+    </tr>
+   </thead>
    <tbody>
     <tr>
+     <td><img id="preview" src="#" style="display: none;"/></td>
      <td>
-      <label for="{{ form.vards.id_for_label }}">Nosaukums:</label>
-      {{ form.vards }}
-      {{ form.vards.errors }}
-<!--      <br><label for="{{ form.izcelt.id_for_label }}">Izcelt ?</label> -->
-      {{ form.avatar }}
-     </td>
-     <td>
-      <label for="{{ form.apraksts.id_for_label }}">Trenera apraksts:</label>
-      {{ form.apraksts.errors }}
-      {{ form.apraksts }}
+      <div>
+       <button type="button" class="btn btn-success pull-right" id="browse" style="margin-top: 5px;">Pievienot Attēlu</button>
+       <input id="file" type="file" name="avatar" style="display: none" onchange="readURL(this, 'preview');"/>
+      </div>
      </td>
     </tr>
+    <tr>
+     <td>
+      {{ form.vards }}
+      {{ form.vards.errors }}
+     </td>
+     <td>
+      {{ form.apraksts.errors }}
+      {{ form.apraksts }}
+    </td>
+   </tr>
    </tbody>
   </table>
 </div>

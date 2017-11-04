@@ -12,12 +12,11 @@ class TrenerisForm(ModelForm):
         model = Treneris
         fields = ('vards', 'apraksts', 'avatar',) # slug
 
-        avatar = forms.ImageField()
+        avatar = forms.ImageField(label='')
 
         widgets = {
             'vards': forms.TextInput( attrs={'class': 'form-control', 'size': 30 }),
             'apraksts': forms.Textarea(attrs={'class': 'form-control', 'rows' : '3'}),
-            'avatar': forms.FileInput(attrs={'class': 'btn btn-success'}),
             }
 
 
