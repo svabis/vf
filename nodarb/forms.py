@@ -33,3 +33,10 @@ class Nodarb_tipsForm(ModelForm):
             'apraksts': forms.Textarea(attrs={'class': 'form-control', 'rows' : '10'}),
             'izcelt': forms.CheckboxInput(attrs={'class': 'form-control'})
             }
+
+
+# Treneris Avatar Form
+class TrenerisAvatarForm(forms.Form):
+    avatar = forms.ImageField(label='')
+
+

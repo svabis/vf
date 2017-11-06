@@ -19,6 +19,11 @@ $(document).ready(function(){
 // clickable row
 var days = ['Pirmdiena', 'Otrdiena', 'Trešdiena', 'Ceturtdiena', 'Piektdiena', 'Sestdiena', 'Svētdiena']
 jQuery(document).ready(function($) {
+
+{% if date_error1 %}$("#DateError1").modal('show');{% endif %}
+{% if date_error2 %}$("#DateError2").modal('show');{% endif %}
+{% if date_error3 %}$("#Error3").modal('show');{% endif %}
+
  $(".clickable-row").click(function(e) {
 // open modal
   $("#Planotajs").modal('show');
@@ -74,6 +79,49 @@ function startTimer(duration, display) {
   <strong> Izvēlētais beigu datums ir jau pagājis, izmaiņas netika veiktas!</strong></center>
 </div>
 {% endif %}
+
+<!-- DateError1 Modal START -->
+<div class="modal fade" id="DateError1" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;&nbsp;Kļūda!</h3>
+</div>
+<div class="modal-body">
+ <h4>Izvēlētais Datums ir jau pagājis, Izmaiņas netika veiktas!</h4>
+</div>
+<div class="modal-footer">
+ <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
+</form>
+</div></div></div></div>
+<!-- DateError1 Modal END -->
+
+<!-- DateError2 Modal START -->
+<div class="modal fade" id="DateError2" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;&nbsp;Kļūda!</h3>
+</div>
+<div class="modal-body">
+ <h4>Izvēlētais Datums ievadīts nekorektā formātā, Izmaiņas netika veiktas!</h4>
+</div>
+<div class="modal-footer">
+ <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
+</form>
+</div></div></div></div>
+<!-- DateError2 Modal END -->
+
+<!-- Error3 Modal START -->
+<div class="modal fade" id="Error3" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal-header">
+ <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;&nbsp;Kļūda!</h3>
+</div>
+<div class="modal-body">
+ <h4>Netika izvēlēts jaunais Treneris, Izmaiņas netika veiktas!</h4>
+</div>
+<div class="modal-footer">
+ <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
+</form>
+</div></div></div></div>
+<!-- Error3 Modal END -->
+
 
 <!-- Planotajs Modal START -->
 <div class="modal fade" id="Planotajs" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">

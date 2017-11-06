@@ -55,9 +55,11 @@ def graf_add(request):
                 end_date_str = request.POST.get('end_date', '')
 
                 date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
-                if end_date_str != "":
+#                if end_date_str != "":
+                try:
                     end_date = datetime.datetime.strptime( end_date_str, '%d/%m/%Y').date()
-                else:
+#                else:
+                except:
                     end_date = False
 
                 after_month = (datetime.datetime.today() + datetime.timedelta(days=28+28)).date()

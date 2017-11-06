@@ -58,6 +58,7 @@ urlpatterns = [
     url(r'^tren/$', 'grafiks.views.tren_list'),
 
 # Treneru aizvietošana sākot no datuma + Planotājā
+    url(r'^tren_aizv/(?P<error>\d)/$', 'grafiks.views.tren_aizv_plan', name="tren_aizv_plan"),
     url(r'^tren_aizv/$', 'grafiks.views.tren_aizv_plan', name="tren_aizv_plan"),
 
 # Treneru kartiņas edit

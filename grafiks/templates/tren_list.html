@@ -72,18 +72,19 @@ function startTimer(duration, display, mod) {
   }, 1000);}
 </script>
 
-<!-- klienta edit modal START -->
+<!-- Treneris edit modal START -->
 <div class="modal fade" id="Treneris" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
 <div class="modal-header">
  <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;Trenera kartiņa</h3>
 </div>
 <div class="modal-body">
- <form action="/reception/treneri/" method=POST>{% csrf_token %}
+ <form action="/reception/treneri/" method=POST enctype="multipart/form-data">{% csrf_token %}
   <input type="hidden" id="t_id" name="t_id">
   <input type="hidden" id="t_slug" name="t_slug">
   <img id="avatar" style="width: 150px; height: 150px;">
+  {{ avatar_form.avatar }}
   <table class="table table-condensed">
-   <thead><tr><th style="width:30%;">Vārds</th><th>Apraksts</th></tr></thead>
+   <thead><tr><th style="width:30%;">Vārds:</th><th>Apraksts:</th></tr></thead>
    <tbody><tr>
     <td id="vards"></td>
     <td id="apraksts"></td>
@@ -99,7 +100,7 @@ function startTimer(duration, display, mod) {
  <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel(1);">Aizvērt</button>
 </form>
 </div></div></div></div>
-<!-- klienta edit modal END -->
+<!-- Treneris edit modal END -->
 
 
 <!-- NEW Treneris CREAT modal START -->
@@ -109,14 +110,8 @@ function startTimer(duration, display, mod) {
 </div>
 <div class="modal-body">
  <form action="/reception/treneri/" method=POST enctype="multipart/form-data">{% csrf_token %}
-  <table class="table table-condensed">
-   <thead>
-    <tr>
-     <th style="width:30%;"><label for="{{ form.vards.id_for_label }}">Treneris:</label></th>
-     <th><label for="{{ form.apraksts.id_for_label }}">Trenera apraksts:</label></th>
-    </tr>
-   </thead>
-   <tbody>
+  <table class="table">
+   <tbody style="broder: none;">
     <tr>
      <td><img id="preview" src="#" style="display: none;"/></td>
      <td>
@@ -126,14 +121,24 @@ function startTimer(duration, display, mod) {
       </div>
      </td>
     </tr>
+   </tbody>
+  </table>
+  <table class="table table-condensed">
+   <thead>
+    <tr>
+     <th style="width:30%;"><label for="{{ form.vards.id_for_label }}">Treneris:</label></th>
+     <th><label for="{{ form.apraksts.id_for_label }}">Trenera apraksts:</label></th>
+    </tr>
+   </thead>
+   <tbody>
     <tr>
      <td>
       {{ form.vards }}
       {{ form.vards.errors }}
      </td>
      <td>
-      {{ form.apraksts.errors }}
       {{ form.apraksts }}
+      {{ form.apraksts.errors }}
     </td>
    </tr>
    </tbody>
@@ -151,6 +156,8 @@ function startTimer(duration, display, mod) {
 .table.table-condensed tr th { border-bottom: 1px solid #f00; }
 .table.table-condensed tr td { border-bottom: 1px solid #f00; }
 </style>
+
+<h3>BILDE: {{ print }}</h3>
 
 <div class="container">
  <button type="button" class="btn btn-success pull-right" style="margin-bottom: 5px;" data-toggle="modal" data-target="#Treneris_create">

@@ -51,7 +51,7 @@ function startTimer(duration, display, mod) {
   <input type="hidden" id="n_id" name="n_id">
   <input type="hidden" id="n_slug" name="n_slug">
   <table class="table table-condensed">
-   <thead><tr><th style="width:30%;">Nodarbība</th><th>Apraksts</th></tr></thead>
+   <thead><tr><th style="width:30%;">Nosaukums:</th><th>Nodarbības apraksts:</th></tr></thead>
    <tbody>
     <tr>
      <td><div class="form-group">
@@ -79,18 +79,18 @@ function startTimer(duration, display, mod) {
 <div class="modal-body">
  <form action="/reception/nodarbibas/" method=POST>{% csrf_token %}
   <table class="table table-condensed">
-   <thead><tr><th style="width:30%;">Nodarbība</th><th>Apraksts</th></tr></thead>
+   <thead><tr>
+    <th style="width:30%;"><label for="{{ form.nos.id_for_label }}">Nosaukums:</label></th>
+    <th><label for="{{ form.apraksts.id_for_label }}">Nodarbības apraksts:</label></th></tr></thead>
    <tbody>
     <tr>
      <td>
-      <label for="{{ form.nos.id_for_label }}">Nosaukums:</label>
       {{ form.nos }}
       {{ form.nos.errors }}
       <br><label for="{{ form.izcelt.id_for_label }}">Izcelt ?</label>
       {{ form.izcelt }}
      </td>
      <td>
-      <label for="{{ form.apraksts.id_for_label }}">Nodarbības apraksts:</label>
       {{ form.apraksts.errors }}
       {{ form.apraksts }}
      </td>

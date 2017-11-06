@@ -9,7 +9,7 @@ from django.core.context_processors import csrf
 from grafiks.models import Grafiks, Planotajs
 from grafiks.forms import TrenRelForm
 
-from nodarb.forms import TrenerisForm
+from nodarb.forms import TrenerisForm, TrenerisAvatarForm
 from nodarb.models import *
 
 
@@ -108,13 +108,14 @@ def tren_aizv( request, w_id, g_id ):
                    # UPDATE Relations and Nodarbības redz
                     os.system('python /pieraksts/manage.py chk_rel')
                     os.system('python /pieraksts/manage.py chk_redz')
+
         return redirect ( 'tren_week_list', w_id=w_id )
     return redirect('/reception/login/')
 
 
 # =======================================================================================================
 # !!!!! Treneru Aizvietošana sākot ar datumu !!!!!
-def tren_aizv_plan( request ):
+def tren_aizv_plan( request, error=0 ):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
@@ -126,6 +127,15 @@ def tren_aizv_plan( request ):
         args['admin'] = True
         args['max_date'] = today + datetime.timedelta(days=28+28)
 
+       # ERROR MODAL --> show
+        if int(error) == 1:
+            args['date_error1'] = True
+        if int(error) == 2:
+            args['date_error2'] = True
+        if int(error) == 3:
+            args['date_error3'] = True
+
+
         days = []
         for i in range (0,7):
             day = Planotajs.objects.filter( diena=i ).order_by( 'laiks' )
@@ -134,42 +144,32 @@ def tren_aizv_plan( request ):
         args['data'] = days
 
         if request.POST: # Edit Post Submited...
-             form = TrenRelForm( request.POST )
-#             if True:
-             if form.is_valid():
+#             form = TrenRelForm( request.POST )
+#            if True:
+#            if form.is_valid():
                 # Planotajs Modal dati
                  p_id = int(request.POST.get('p_id', ''))
 
                  date_str = request.POST.get('date', '')
-                 date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
+                 try:
+                     date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
+                 except: # DATE FORMAT ERROR
+                     return redirect('tren_aizv_plan', error=2 )
 
                  new_tren = request.POST.get('treneris', '')
-
-# !!! INSERT BRAIN HERE !!!
-#                 end_date_str = request.POST.get('end_date', '')
-#                 end_date = datetime.datetime.strptime( end_date_str, '%d/%m/%Y').date()
-# end_date var būt False
+                 if new_tren == '':
+                     return redirect('tren_aizv_plan', error=3 )
 
                  after_month = (datetime.datetime.today() + datetime.timedelta(days=28+28)).date()
 
                  plan = Planotajs.objects.get(id=p_id)
                  treneris = Treneris.objects.get( id = int( new_tren ) )
 
-                 if date < today or date > after_month: # Datumu ERROR
-# variants bez end_date pārbaudes
-#             if end_date < today or end_date > after_month:
-                     args['date_error'] = True
-                     return render_to_response ( 'tren_aizv_plan.html', args )
-
-#             if end_date == EMPTY or end_date > after_month: # Izmaiņas Planotajs
-#                 plan = Planotajs.objects.get(id=p_id)
-#                 plan.end_date = date
-#                 plan.save()
-#                 return redirect('tren_aizv_plan')
+                 if date < today or date > after_month: # Datums pagājis
+                     return redirect('tren_aizv_plan', error=1 )
 
                  d = date
-# !!!!!! INSERT COUNTER --> TRIGER UPDATE Relations and Nodarbības redz
-                 while d <= after_month: # veido masīvu no datumiem sākot ar izvēlēto, beidzot ar pēdējo pieraksta (ieskaitot)
+                 while d <= after_month:
                      if int(d.weekday()) == int(plan.diena):
                          temp_date = datetime.datetime.combine(d, datetime.datetime.min.time())	# Date to DateTime
                          new_sakums = temp_date.replace( hour = plan.laiks.hour, minute = plan.laiks.minute)
@@ -182,8 +182,12 @@ def tren_aizv_plan( request ):
                               pass
                      d += datetime.timedelta(days=1)
 
-# !!! INSERT BRAIN HERE !!!
-                 plan.treneris = treneris
+                 new_plan = Planotajs( diena = plan.diena, laiks = plan.laiks, ilgums = plan.ilgums, nodarbiba = plan.nodarbiba,
+                                       treneris = treneris, telpa = plan.telpa, vietas = plan.vietas,
+                                       start_date = date, end_date = plan.end_date )
+                 new_plan.save()
+
+                 plan.end_date = date - datetime.timedelta(days=1)
                  plan.save()
                 # UPDATE Relations and Nodarbības redz
 #                 os.system('python /pieraksts/manage.py chk_rel')
@@ -201,6 +205,7 @@ def treneri_edit(request):
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
         args['form'] = TrenerisForm  # add Nodarbibas form to args
+        args['avatar_form'] = TrenerisAvatarForm
 
         args.update(csrf(request))      # ADD CSRF TOKEN
         if username.is_superuser:
@@ -210,20 +215,26 @@ def treneri_edit(request):
         args['treneri'] = Treneris.objects.all().order_by('vards')
 
         if request.POST:
-           # test POST for Nodarb_tips changes...
             try:
-#                t_id = request.POST.get('t_id', '')
-                t_slug = request.POST.get('t_slug', '')
-                t_vards = request.POST.get('t_vards', '')
-                t_apraksts = request.POST.get('t_apraksts', '')
+                avatar_form = TrenerisAvatarForm( request.POST, request.FILES )
+                if avatar_form.is_valid():
+              #      t_id = request.POST.get('t_id', '') <-- NOT USED
+                    t_slug = request.POST.get('t_slug', '')
+                    t_vards = request.POST.get('t_vards', '')
+                    t_apraksts = request.POST.get('t_apraksts', '')
+                    t_avatar = avatar_form.cleaned_data['avatar']
+                    args['print'] = t_avatar
 
-                tren_edit = Treneris.objects.get(slug=t_slug)
-                tren_edit.vards = t_vards
-                tren_edit.apraksts = t_apraksts
-# !!!!! tren_edit.avatar !!!!!
-                tren_edit.save()
-               # if no errors...
-                return redirect ('treneri')
+                    tren_edit = Treneris.objects.get(slug=t_slug)
+
+                    if t_avatar != '':
+                        tren_edit.avatar = t_avatar
+
+                    tren_edit.vards = t_vards
+                    tren_edit.apraksts = t_apraksts
+                    tren_edit.save()
+                   # if no errors...
+                    return redirect ('treneri')
             except:
                 pass
 
