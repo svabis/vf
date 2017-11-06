@@ -47,6 +47,7 @@ urlpatterns = [
     url(r'^graf/$', 'grafiks.views.graf_list'),
 
 # Grafika izmaiņas - Atcelšana
+    url(r'^plan/(?P<error>\d)/$', 'grafiks.views.plan_list', name="plan_list"),
     url(r'^plan/$', 'grafiks.views.plan_list', name="plan_list"),
 
 
@@ -57,6 +58,7 @@ urlpatterns = [
     url(r'^tren/$', 'grafiks.views.tren_list'),
 
 # Treneru aizvietošana sākot no datuma + Planotājā
+    url(r'^tren_aizv/$', 'grafiks.views.tren_aizv_plan', name="tren_aizv_plan"),
 
 # Treneru kartiņas edit
     url(r'^treneri/$', 'grafiks.views.treneri_edit', name="treneri"),

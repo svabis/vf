@@ -21,6 +21,7 @@
 # Klientu dati
   klienti.html	- Klientu saraksts/meklēšana + POST edit Klienta datiem
 
+#--------------------------
 
 # Izmaiņas grafikā
   del_graf.html	- Nodarbības atcelšana
@@ -29,8 +30,8 @@
 
 # Treneri
   tren_aizv.html - Nodarbības izvēle + Treneru aizvietošana forma
-
-  tren_list.html - Treneru kartiņas edit	- NOPE
+  tren_aizv_plan.html - Treneru aizvietošana sākot no datuma ------ NOPE
+  tren_list.html - Treneru kartiņas POST edit + POST Add new izmantojot Formu + Upload image ar Preview !!!
 
 
 # Pievienot

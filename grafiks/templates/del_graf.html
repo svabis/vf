@@ -38,7 +38,7 @@ function apply(mod) {
 function startTimer(duration, display, mod) {
   var timer = duration, seconds = 15; countdown = setInterval( function () {
     seconds = parseInt(timer % 60, 10); // seconds = seconds < 10 ? "0" + seconds : seconds;
-    display.value = "Apstiprināt izmaiņas (" + seconds + ") ?"; --timer;
+    display.innerHTML = "Apstiprināt izmaiņas (" + seconds + ") ?"; --timer;
     if (seconds < 1) { $("#yes"+mod).hide(); $("#ok"+mod).show(); clearInterval(countdown); }
   }, 1000);}
 </script>
@@ -67,7 +67,9 @@ function startTimer(duration, display, mod) {
 </div>
 <div class="modal-body"><h4>{{ d.nodarbiba }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ d.treneris }}</h4><h4>{{ d.sakums|date:"d/M/Y H:i" }}</h4></div>
 <div class="modal-footer">
- <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt izmaiņas (15) ?" style="display: none;" id="yes{{ d.id }}" onclick="submit_changes({{ d.id }});">
+ <a href="/reception/graf/{{ w_id }}/cancel/{{ d.id }}/">
+  <button type="button" class="btn btn-danger pull-left" style="display: none;" id="yes{{ d.id }}" onclick="submit_changes({{ d.id }});">Apstiprināt izmaiņas (15) ?</button>
+ </a>
  <button type="button" class="btn btn-danger" onclick="apply({{ d.id }});" id="ok{{ d.id }}">Veikt izmaiņas</button>
  <button type="button" class="btn btn-default" data-dismiss="modal" onclick="cancel({{ d.id }});">Aizvērt</button>
 </div></div></div></div>

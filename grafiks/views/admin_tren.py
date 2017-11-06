@@ -6,7 +6,7 @@ from django.contrib.auth.models import User, Group
 
 from django.core.context_processors import csrf
 
-from grafiks.models import Grafiks
+from grafiks.models import Grafiks, Planotajs
 from grafiks.forms import TrenRelForm
 
 from nodarb.forms import TrenerisForm
@@ -111,6 +111,87 @@ def tren_aizv( request, w_id, g_id ):
         return redirect ( 'tren_week_list', w_id=w_id )
     return redirect('/reception/login/')
 
+
+# =======================================================================================================
+# !!!!! Treneru Aizvietošana sākot ar datumu !!!!!
+def tren_aizv_plan( request ):
+    username = auth.get_user(request)
+    if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
+        args = {}
+        args['form'] = TrenRelForm
+
+        args.update(csrf(request))      # ADD CSRF TOKEN
+        if username.is_superuser:
+            args['django'] = True
+        args['admin'] = True
+        args['max_date'] = today + datetime.timedelta(days=28+28)
+
+        days = []
+        for i in range (0,7):
+            day = Planotajs.objects.filter( diena=i ).order_by( 'laiks' )
+            days.append(day)
+
+        args['data'] = days
+
+        if request.POST: # Edit Post Submited...
+             form = TrenRelForm( request.POST )
+#             if True:
+             if form.is_valid():
+                # Planotajs Modal dati
+                 p_id = int(request.POST.get('p_id', ''))
+
+                 date_str = request.POST.get('date', '')
+                 date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
+
+                 new_tren = request.POST.get('treneris', '')
+
+# !!! INSERT BRAIN HERE !!!
+#                 end_date_str = request.POST.get('end_date', '')
+#                 end_date = datetime.datetime.strptime( end_date_str, '%d/%m/%Y').date()
+# end_date var būt False
+
+                 after_month = (datetime.datetime.today() + datetime.timedelta(days=28+28)).date()
+
+                 plan = Planotajs.objects.get(id=p_id)
+                 treneris = Treneris.objects.get( id = int( new_tren ) )
+
+                 if date < today or date > after_month: # Datumu ERROR
+# variants bez end_date pārbaudes
+#             if end_date < today or end_date > after_month:
+                     args['date_error'] = True
+                     return render_to_response ( 'tren_aizv_plan.html', args )
+
+#             if end_date == EMPTY or end_date > after_month: # Izmaiņas Planotajs
+#                 plan = Planotajs.objects.get(id=p_id)
+#                 plan.end_date = date
+#                 plan.save()
+#                 return redirect('tren_aizv_plan')
+
+                 d = date
+# !!!!!! INSERT COUNTER --> TRIGER UPDATE Relations and Nodarbības redz
+                 while d <= after_month: # veido masīvu no datumiem sākot ar izvēlēto, beidzot ar pēdējo pieraksta (ieskaitot)
+                     if int(d.weekday()) == int(plan.diena):
+                         temp_date = datetime.datetime.combine(d, datetime.datetime.min.time())	# Date to DateTime
+                         new_sakums = temp_date.replace( hour = plan.laiks.hour, minute = plan.laiks.minute)
+
+                         try:
+                             temp_graf = Grafiks.objects.get(sakums = new_sakums, nodarbiba = plan.nodarbiba, telpa = plan.telpa)
+                             temp_graf.treneris = treneris
+                             temp_graf.save()
+                         except:
+                              pass
+                     d += datetime.timedelta(days=1)
+
+# !!! INSERT BRAIN HERE !!!
+                 plan.treneris = treneris
+                 plan.save()
+                # UPDATE Relations and Nodarbības redz
+#                 os.system('python /pieraksts/manage.py chk_rel')
+#                 os.system('python /pieraksts/manage.py chk_redz')
+                 return redirect('tren_aizv_plan')
+
+        return render_to_response ( 'tren_aizv_plan.html', args )
+    return redirect('/reception/login/')
 
 # =======================================================================================================
 

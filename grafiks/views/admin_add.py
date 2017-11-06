@@ -41,7 +41,7 @@ def graf_add(request):
             if form.is_valid(): # and form2.is_valid():
                 diena = request.POST.get('diena', '')
                 laiks_str = request.POST.get('laiks', '')
-                laiks = datetime.datetime.strptime( laiks_str[:5], '%H:%M')
+                laiks = datetime.datetime.strptime( laiks_str, '%H:%M')
 
                 ilgums = int(request.POST.get('ilgums', ''))
                 vietas = int(request.POST.get('vietas', ''))

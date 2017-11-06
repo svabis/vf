@@ -98,7 +98,7 @@ def graf_cancel(request, w_id, g_id):
 
 # ========================================================================================================
 # !!!!! PLANOTĀJS IZŅEMT NODARBĪBU IZVĒLE !!!!!
-def plan_list( request ):
+def plan_list( request, error=0 ):
     username = auth.get_user(request)
     if username.is_superuser or username.groups.filter(name='administrator').exists(): # SUPERUSER vai "administrator" Grupa
         args = {}
@@ -108,6 +108,17 @@ def plan_list( request ):
         args['admin'] = True
         args['max_date'] = today + datetime.timedelta(days=28+28)
 
+        days = []
+        for i in range (0,7):
+            day = Planotajs.objects.filter( diena=i ).order_by( 'laiks' )
+            days.append(day)
+
+        args['data'] = days
+        if int(error) == 1: # datumspagājis modal --> show
+            args['date_error1'] = True
+        if int(error) == 2: # datums nav korekts modal --> show
+            args['date_error2'] = True
+
         if request.POST: # Edit Post Submited...
             # Planotajs Modal dati
              p_id = int(request.POST.get('p_id', ''))
@@ -116,10 +127,14 @@ def plan_list( request ):
              laiks = datetime.datetime.strptime( laiks_str, '%H:%M')
 
              date_str = request.POST.get('date', '')
-             date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
+             try:
+                 date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
+             except:
+                 return redirect('plan_list', error = 2)
 
              if date < today: # Datums pagājis... ERROR
-                 args['date_error'] = True
+                 return redirect('plan_list', error = 1)
+
              else: # Datums - ok...
                  plan = Planotajs.objects.get(id=p_id)
                  plan.end_date = date
@@ -145,13 +160,6 @@ def plan_list( request ):
 #                     os.system('python /pieraksts/manage.py chk_rel')
 #                     os.system('python /pieraksts/manage.py chk_redz')
                  return redirect('plan_list')
-
-        days = []
-        for i in range (0,7):
-            day = Planotajs.objects.filter( diena=i ).order_by( 'laiks' )
-            days.append(day)
-
-        args['data'] = days
 
         return render_to_response ( 'del_plan.html', args )
     return redirect('/reception/login/')

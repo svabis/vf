@@ -24,7 +24,6 @@ DAY_CHOISES = (
 class Grafiks(models.Model):
     class Meta():
         db_table = "grafiks"
-#        app_label = 'Grafiks'
 
     sakums = models.DateTimeField()
     ilgums = models.IntegerField()
@@ -36,7 +35,6 @@ class Grafiks(models.Model):
     def __unicode__(self):
         laiks = self.sakums + timedelta(hours=3)
         return laiks.strftime("%d/%m/%Y %H:%M") +' '+ self.nodarbiba.nos
-#        return self.nodarbiba.nos
 
 # !!! Planotajs !!!
 class Planotajs(models.Model):

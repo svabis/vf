@@ -41,8 +41,13 @@ function success_modal() {
 function showMe (box) {
  var chboxs = document.getElementsByName("chk");
  var vis = "block";
- for(var i=0;i<chboxs.length;i++) { if(chboxs[i].checked){ vis = "none"; break; }}
-    document.getElementById(box).style.display = vis; }
+ for(var i=0;i<chboxs.length;i++) { 
+   if(chboxs[i].checked){ vis = "none"; break; }
+ }
+ document.getElementById(box).style.display = vis;
+ if (vis == "block") { document.getElementById('id_date').innerHTML = "Sākuma datums:"; }
+ if (vis == "none") { document.getElementById('id_date').innerHTML = "Nodarbības datums:"; }
+}
 </script>
 
 <div class="col-md-6 col-md-offset-3">
@@ -58,29 +63,30 @@ function showMe (box) {
  </div>
 {% endif %}
 
-<div class="bootstrap-iso"><div class="fieldWrapper">
- <label style="margin-left:10px;">{{ form.chk }} Vienu reizi</label>
+<div class="bootstrap-iso">
+ <div class="fieldWrapper">
+  <label style="margin-left:10px;">{{ form.chk }} Vienu reizi</label>
+ </div>
+ <div class="form-group">
+  <label id="id_date" for="{{ form.date.id_for_label }}">Sākuma datums:</label>
+  {{ form.date }}
+  {{ form.date.errors }}
+ </div>
 </div>
 
-<div class="form-group">
- <label for="{{ form.date.id_for_label }}">Sākuma datums:</label>
- {{ form.date }}
- {{ form.date.errors }}
-</div>
-</div>
 
 <div class="bootstrap-iso" id="diena">
+<hr style="margin: 0px 0px 10px 0px; border-top: solid red 1px;">
  <div class="form-group">
   <label for="{{ form.end_date.id_for_label }}">Beigu datums:</label>
   {{ form.end_date }}
   {{ form.end_date.errors }}
  </div>
-
- <div class="fieldWrapper">
+ <div class="form-group">
   <label for="{{ form.diena.id_for_label }}">Diena:</label>
-  {{ form.diena }}
-  {{ form.diena.errors }}
+  {{ form.diena }}{{ form.diena.errors }}
  </div>
+<hr style="margin: 0px 0px 10px 0px; border-top: solid red 1px;">
 </div>
 
 <script>
@@ -93,44 +99,56 @@ $(document).ready(function(){ var date_input=$('input[name="end_date"]');
  var container=$('.form-group form').length>0 ? $('.bootstrap-iso form').parent() : "body";
  var options={ format: 'dd/mm/yyyy', container: container, todayHighlight: true, autoclose: true, weekStart: 1, };
  date_input.datepicker(options); })
+
+var countdown;
+function submit_changes() { clearInterval(countdown); document.querySelector('#yes').value = "Nodarbība tiek pievienota"; }
+function apply() {
+  $("#yes").show(); $("#ok").hide(); var slidetime = 14,
+  display = document.querySelector('#yes'); startTimer(slidetime, display);
+}
+function startTimer(duration, display) {
+  var timer = duration, seconds = 15; countdown = setInterval( function () {
+    seconds = parseInt(timer % 60, 10); // seconds = seconds < 10 ? "0" + seconds : seconds;
+    display.value = "Apstiprināt (" + seconds + ") ?"; --timer;
+    if (seconds < 1) { $("#yes").hide(); $("#ok").show(); clearInterval(countdown); }
+  }, 1000);}
 </script>
 
- <div class="fieldWrapper">
-  <label for="{{ form.laiks.id_for_label }}">Sākums:</label>
-  {{ form.laiks }}
-  {{ form.laiks.errors }}
- </div>
- <div class="fieldWrapper">
-  <label for="{{ form.ilgums.id_for_label }}">Nodarbības ilgums:</label>
-  {{ form.ilgums }}
-  {{ form.ilgums.errors }}
- </div>
 
- <div class="fieldWrapper">
-  <label for="{{ form.nodarbiba.id_for_label }}">Nodarbība:</label>
-  {{ form.nodarbiba }}
-  {{ form.nodarbiba.errors }}
- </div>
- <div class="fieldWrapper">
-  <label for="{{ form.treneris.id_for_label }}">Treneris:</label>
-  {{ form.treneris }}
-  {{ form.treneris.errors }}
- </div>
 
- <div class="fieldWrapper">
-  <label for="{{ form.telpa.id_for_label }}">Telpa:</label>
-  {{ form.telpa }}
-  {{ form.telpa.errors }}
- </div>
- <div class="fieldWrapper">
-  <label for="{{ form.vietas.id_for_label }}">Vietu skaits:</label>
-  {{ form.vietas }}
-  {{ form.vietas.errors }}
- </div>
+<table class="table table-condensed">
+ <tr id="diena_form">
+ <tr>
+  <td style="border-top: none;"><div class="form-group"><label for="{{ form.laiks.id_for_label }}">Sākums:</label></div></td>
+  <td style="border-top: none;">{{ form.laiks }}{{ form.laiks.errors }}</td>
+ </tr>
+ <tr>
+  <td><div class="form-group"><label for="{{ form.ilgums.id_for_label }}">Nodarbības ilgums:</label></div></td>
+  <td>{{ form.ilgums }}{{ form.ilgums.errors }}</td>
+ </tr>
+ <tr>
+  <td><div class="form-group"><label for="{{ form.nodarbiba.id_for_label }}">Nodarbība:</label></div></td>
+  <td>{{ form.nodarbiba }}{{ form.nodarbiba.errors }}</td>
+ </tr>
+ <tr>
+  <td><div class="form-group"><label for="{{ form.treneris.id_for_label }}">Treneris:</label></div></td>
+  <td>{{ form.treneris }}{{ form.treneris.errors }}</td>
+ </tr>
+ <tr>
+  <td><div class="form-group"><label for="{{ form.telpa.id_for_label }}">Telpa:</label></div></td>
+  <td>{{ form.telpa }}{{ form.telpa.errors }}</td>
+ </tr>
+ <tr>
+  <td><div class="form-group"><label for="{{ form.vietas.id_for_label }}">Vietu skaits:</label></div></td>
+  <td>{{ form.vietas }}{{ form.vietas.errors }}</td>
+ </tr>
+</table>
+
 <br>
 
  <div class="form-group text-right">
-  <input class="btn btn-success" type="submit" value="Pievienot nodarbību grafikam">
+  <input class="btn btn-danger pull-left" type="submit" value="Apstiprināt (15) ?" style="display: none;" id="yes" onclick="submit_changes();">
+  <button type="button" class="btn btn-success" onclick="apply();" id="ok">Pievienot nodarbību grafikam</button>
  </div>
 
 </div></form>
