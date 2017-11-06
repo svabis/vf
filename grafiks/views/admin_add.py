@@ -55,10 +55,8 @@ def graf_add(request):
                 end_date_str = request.POST.get('end_date', '')
 
                 date = datetime.datetime.strptime( date_str, '%d/%m/%Y').date()
-#                if end_date_str != "":
                 try:
                     end_date = datetime.datetime.strptime( end_date_str, '%d/%m/%Y').date()
-#                else:
                 except:
                     end_date = False
 
@@ -90,8 +88,8 @@ def graf_add(request):
                         args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi"
 
                        # UPDATE Relations and Nodarbības redz
-#                        os.system('python /pieraksts/manage.py chk_rel')
-#                        os.system('python /pieraksts/manage.py chk_redz')
+                        os.system('python /pieraksts/manage.py chk_rel')
+                        os.system('python /pieraksts/manage.py chk_redz')
                         return render_to_response('add_plan.html', args)
 
                 else:	# ja atkārtojās, tad  veidojam Planotāja ierakstu
@@ -125,8 +123,8 @@ def graf_add(request):
                     args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi" Plānotājam
 
                    # UPDATE Relations and Nodarbības redz
-#                    os.system('python /pieraksts/manage.py chk_rel')
-#                    os.system('python /pieraksts/manage.py chk_redz')
+                    os.system('python /pieraksts/manage.py chk_rel')
+                    os.system('python /pieraksts/manage.py chk_redz')
                     return render_to_response('add_plan.html', args)
 
             else: # form is not valid

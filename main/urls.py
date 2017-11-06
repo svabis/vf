@@ -11,9 +11,6 @@ admin.autodiscover()
 admin.site.login = login_required(admin.site.login)
 
 urlpatterns = [
-    # Examples:
-    # url(r'^$', 'main.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
 
 # STATIC AND MEDIA
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT,}),

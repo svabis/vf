@@ -32,7 +32,8 @@ class Command(BaseCommand):
                                            telpa = p.telpa,
                                            vietas = p.vietas)
                         new_graf.save()
-                    elif p.end_date >= after_month.date(): # vai arī datuma objekts un tas ir pēc tekošā datuma -->
+                   # vai arī end_date ir datuma objekts un tas ir pēc tekošā datuma -->
+                    elif p.end_date >= after_month.date():
                         sakums = today + timedelta(days=28+28, hours=p.laiks.hour, minutes=p.laiks.minute)
                         new_sakums = sakums #.replace(tzinfo=tz)
                         new_graf = Grafiks(sakums = new_sakums,
@@ -42,5 +43,9 @@ class Command(BaseCommand):
                                            telpa = p.telpa,
                                            vietas = p.vietas)
                         new_graf.save()
+                   # end_date jau ir pagājis
+                    elif p.end_date < datetime.today().date():
+                        p.delete()
+
 
 

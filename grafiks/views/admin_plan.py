@@ -90,8 +90,8 @@ def graf_cancel(request, w_id, g_id):
         nod_atcelshana(g_id)	# nodarbības atcelšana
 
        # UPDATE Relations and Nodarbības redz
-#        os.system('python /pieraksts/manage.py chk_rel')
-#        os.system('python /pieraksts/manage.py chk_redz')
+        os.system('python /pieraksts/manage.py chk_rel')
+        os.system('python /pieraksts/manage.py chk_redz')
         return redirect ( 'nod_plan', w_id=w_id )
     return redirect('/reception/login/')
 
@@ -157,8 +157,8 @@ def plan_list( request, error=0 ):
                                  pass
                          d += datetime.timedelta(days=1)
                     # UPDATE Relations and Nodarbības redz
-#                     os.system('python /pieraksts/manage.py chk_rel')
-#                     os.system('python /pieraksts/manage.py chk_redz')
+                     os.system('python /pieraksts/manage.py chk_rel')
+                     os.system('python /pieraksts/manage.py chk_redz')
                  return redirect('plan_list')
 
         return render_to_response ( 'del_plan.html', args )
@@ -172,8 +172,8 @@ def nod_atcelshana(g_id):
         klienti = nodarb.nod.all()
         for k in klienti:
             try: # reception Pieraksts may not include e-mail
-                pass
-#                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
+#                pass
+                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
             except:
                 pass
         nodarb.delete()

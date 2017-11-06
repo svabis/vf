@@ -9,9 +9,13 @@
 		reception web part
 		views/
 			login.py	- autorizācijas skati
-			reception.py	- recepcijas daļa (tabi, pieraksti, atteikumi, u.t.t.)
-			admin.py	- superuser skati (nodarbību atcelšana, izmaiņas grafikā)
 			hist.py		- sadaļa "Vēsture"
+			reception.py	- recepcijas daļa (tabi, pieraksti, atteikumi, u.t.t.)
+
+			admin.py	- superuser skati (kalendārs)
+			admin_plan.py	- superuser skati (nodarbību atcelšana, izmaiņas grafikā)
+			admin_tren.py	- superuser skati (treneru aizvietošana, treneru kartiņas)
+			admin_add.py	- superuser skati (nodarbību pievienošana, nodarbību kartiņas)
 	pieraksts
 		objects:
 			Pieraksts - datetime + Grafiks + Klients + uuid4

@@ -144,9 +144,6 @@ def tren_aizv_plan( request, error=0 ):
         args['data'] = days
 
         if request.POST: # Edit Post Submited...
-#             form = TrenRelForm( request.POST )
-#            if True:
-#            if form.is_valid():
                 # Planotajs Modal dati
                  p_id = int(request.POST.get('p_id', ''))
 
@@ -190,8 +187,8 @@ def tren_aizv_plan( request, error=0 ):
                  plan.end_date = date - datetime.timedelta(days=1)
                  plan.save()
                 # UPDATE Relations and Nodarbības redz
-#                 os.system('python /pieraksts/manage.py chk_rel')
-#                 os.system('python /pieraksts/manage.py chk_redz')
+                 os.system('python /pieraksts/manage.py chk_rel')
+                 os.system('python /pieraksts/manage.py chk_redz')
                  return redirect('tren_aizv_plan')
 
         return render_to_response ( 'tren_aizv_plan.html', args )
