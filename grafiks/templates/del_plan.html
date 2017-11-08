@@ -149,8 +149,9 @@ function startTimer(duration, display) {
 <tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="8"><center><b><p style="margin-bottom: 0px;"></p></b></center></td></tr>
 
 {% for d in dat %}
-{% if d.end_date < max_date %}<tr class="danger" class="clickable-row">
-{% else %}<tr class="clickable-row">{% endif %}
+
+{% if d.end_date < max_date %}<tr class="danger">{% elif d.start_date > today %}<tr class="success clickable-row">{% else %}<tr class="clickable-row">{% endif %}
+
  <td style="display:none;">{{ d.id }}</td>
  <td style="display:none;">{{ d.diena }}</td>
  <td>{{ d.laiks|date:"H:i" }}</td>

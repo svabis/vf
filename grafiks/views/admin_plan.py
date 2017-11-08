@@ -107,6 +107,7 @@ def plan_list( request, error=0 ):
             args['django'] = True
         args['admin'] = True
         args['max_date'] = today + datetime.timedelta(days=28+28)
+        args['today'] = today
 
         days = []
         for i in range (0,7):
