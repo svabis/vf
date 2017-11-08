@@ -20,9 +20,7 @@ $(document).ready(function(){
 var days = ['Pirmdiena', 'Otrdiena', 'Trešdiena', 'Ceturtdiena', 'Piektdiena', 'Sestdiena', 'Svētdiena']
 jQuery(document).ready(function($) {
 
-{% if date_error1 %}$("#DateError1").modal('show');{% endif %}
-{% if date_error2 %}$("#DateError2").modal('show');{% endif %}
-{% if date_error3 %}$("#Error3").modal('show');{% endif %}
+{% if error %}$("#Error").modal('show');{% endif %}
 
  $(".clickable-row").click(function(e) {
 // open modal
@@ -66,61 +64,27 @@ function startTimer(duration, display) {
 
 {% block content %}
 
-{% if date_error %}
 <div class="alert alert-danger">
-  <center><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-  <strong> Izvēlētais sākuma datums ir ārpus pierakstu sistēmas robežām, izmaiņas netika veiktas!</strong></center>
+  <center><strong>!!! Treneru aizvietošana sākot no konkrēta datuma !!!</strong></center>
 </div>
-{% endif %}
-
-{% if end_date_error %}
-<div class="alert alert-danger">
-  <center><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-  <strong> Izvēlētais beigu datums ir jau pagājis, izmaiņas netika veiktas!</strong></center>
-</div>
-{% endif %}
 
 <!-- DateError1 Modal START -->
-<div class="modal fade" id="DateError1" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
+<div class="modal fade" id="Error" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
 <div class="modal-header">
  <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;&nbsp;Kļūda!</h3>
 </div>
 <div class="modal-body">
- <h4>Izvēlētais Datums ir jau pagājis, Izmaiņas netika veiktas!</h4>
+{% if error_code_1 %}<h4>Izvēlētais Datums ir jau pagājis, Izmaiņas netika veiktas!</h4>{% endif %}
+{% if error_code_2 %}<h4>Izvēlētais Datums ievadīts nekorektā formātā, Izmaiņas netika veiktas!</h4>{% endif %}
+{% if error_code_3 %}<h4>Netika izvēlēts jaunais Treneris, Izmaiņas netika veiktas!</h4>{% endif %}
+{% if error_code_4 %}<h4>Nodarbība jau ir beigusies, Izmaiņas netika veiktas!</h4>{% endif %}
+{% if error_code_5 %}<h4>Nodarbība sākas pēc izvēlētā datuma, Izmaiņas netika veiktas!</h4>{% endif %}
 </div>
 <div class="modal-footer">
  <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
 </form>
 </div></div></div></div>
 <!-- DateError1 Modal END -->
-
-<!-- DateError2 Modal START -->
-<div class="modal fade" id="DateError2" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
-<div class="modal-header">
- <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;&nbsp;Kļūda!</h3>
-</div>
-<div class="modal-body">
- <h4>Izvēlētais Datums ievadīts nekorektā formātā, Izmaiņas netika veiktas!</h4>
-</div>
-<div class="modal-footer">
- <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
-</form>
-</div></div></div></div>
-<!-- DateError2 Modal END -->
-
-<!-- Error3 Modal START -->
-<div class="modal fade" id="Error3" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
-<div class="modal-header">
- <h3 style="margin-top:5px; margin-bottom:5px;"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>&nbsp;&nbsp;Kļūda!</h3>
-</div>
-<div class="modal-body">
- <h4>Netika izvēlēts jaunais Treneris, Izmaiņas netika veiktas!</h4>
-</div>
-<div class="modal-footer">
- <button type="button" class="btn btn-default" data-dismiss="modal">Aizvērt</button>
-</form>
-</div></div></div></div>
-<!-- Error3 Modal END -->
 
 
 <!-- Planotajs Modal START -->
@@ -178,8 +142,7 @@ function startTimer(duration, display) {
 <tr style="background-color: rgba(210,130,240, 0.7) !important;"><td colspan="8"><center><b><p style="margin-bottom: 0px;"></p></b></center></td></tr>
 
 {% for d in dat %}
-{% if d.end_date < max_date %}<tr class="danger clickable-row" class="clickable-row">
-{% else %}<tr class="clickable-row">{% endif %}
+{% if d.start_date > today %}<tr class="success clickable-row">{% elif d.end_date < max_date %}<tr class="danger clickable-row">{% else %}<tr class="clickable-row">{% endif %}
  <td style="display:none;">{{ d.id }}</td>
  <td style="display:none;">{{ d.diena }}</td>
  <td>{{ d.laiks|date:"H:i" }}</td>

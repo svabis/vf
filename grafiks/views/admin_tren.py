@@ -13,6 +13,7 @@ from nodarb.forms import TrenerisForm, TrenerisAvatarForm
 from nodarb.models import *
 
 
+from datetime import date as date_class # to test if end_date is entered using date class test
 import datetime
 today = datetime.date.today()
 
@@ -126,14 +127,24 @@ def tren_aizv_plan( request, error=0 ):
             args['django'] = True
         args['admin'] = True
         args['max_date'] = today + datetime.timedelta(days=28+28)
+        args['today'] = today
 
        # ERROR MODAL --> show
-        if int(error) == 1:
-            args['date_error1'] = True
-        if int(error) == 2:
-            args['date_error2'] = True
-        if int(error) == 3:
-            args['date_error3'] = True
+        if int(error) == 1: # Datums pagātnē
+            args['error'] = True
+            args['error_code_1'] = True
+        if int(error) == 2: # Nekorekts datuma formāts
+            args['error'] = True
+            args['error_code_2'] = True
+        if int(error) == 3: # Nav izvēlēts Treneris
+            args['error'] = True
+            args['error_code_3'] = True
+        if int(error) == 4: # Nodarbība beigusies
+            args['error'] = True
+            args['error_code_4'] = True
+        if int(error) == 5: # datums ievadīts pirms start_date
+            args['error'] = True
+            args['error_code_5'] = True
 
 
         days = []
@@ -154,13 +165,19 @@ def tren_aizv_plan( request, error=0 ):
                      return redirect('tren_aizv_plan', error=2 )
 
                  new_tren = request.POST.get('treneris', '')
-                 if new_tren == '':
+                 if new_tren == '': # nav treneris ERROR
                      return redirect('tren_aizv_plan', error=3 )
 
                  after_month = (datetime.datetime.today() + datetime.timedelta(days=28+28)).date()
 
                  plan = Planotajs.objects.get(id=p_id)
                  treneris = Treneris.objects.get( id = int( new_tren ) )
+
+                 if isinstance(plan.end_date, date_class) == True and plan.end_date < today: # Nodarbība beigusies
+                     return redirect('tren_aizv_plan', error=4 )
+
+                 if date < plan.start_date: # Datums ir pirms nodarbības sākuma
+                     return redirect('tren_aizv_plan', error=5 )
 
                  if date < today or date > after_month: # Datums pagājis
                      return redirect('tren_aizv_plan', error=1 )

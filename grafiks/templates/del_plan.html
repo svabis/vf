@@ -65,6 +65,10 @@ function startTimer(duration, display) {
 
 {% block content %}
 
+<div class="alert alert-danger">
+  <center><strong>!!! Nodarbību izņemšana no plānotāja !!!</strong></center>
+</div>
+
 <!-- DateError1 Modal START -->
 <div class="modal fade" id="DateError1" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog modal-lg"><div class="modal-content">
 <div class="modal-header">
@@ -146,7 +150,6 @@ function startTimer(duration, display) {
 
 {% for d in dat %}
 {% if d.end_date < max_date %}<tr class="danger" class="clickable-row">
-<!-- <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#Plan{{ d.id }}">Izņemt no Plānotāja</button></td> -->
 {% else %}<tr class="clickable-row">{% endif %}
  <td style="display:none;">{{ d.id }}</td>
  <td style="display:none;">{{ d.diena }}</td>

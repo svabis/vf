@@ -112,6 +112,15 @@ function startTimer(duration, display) {
         <td>{{ k.atteikuma_reizes }}</td>
       </tr>
 {% endfor %}
+
+<script>
+var klient = [
+{% for k in klienti %}
+ ['{{ k.id }}', '{{k.vards}}', '{{k.e_pasts}}', '{{k.tel}}', '{{ k.pirmais_pieteikums|date:"d/m/Y H:i" }}', '{{ k.pedejais_pieteikums|date:"d/m/Y H:i" }}', '{{ k.pieteikuma_reizes }}', '{{ k.atteikuma_reizes }}'],
+{% endfor %}
+]
+<script>
+
     </tbody>
   </table>
 </div>
