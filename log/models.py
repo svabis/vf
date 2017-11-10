@@ -1,25 +1,20 @@
+# -*- coding: utf-8 -*-
 from django.db import models
 
-# !!!!! Dienas statistikas uzskaite !!!!!
-class Logs(models.Model):
+from django.utils import timezone
+from django.contrib.auth.models import User
+
+
+# !!!!! Log !!!!!
+class Log(models.Model):
     class Meta():
         db_table = "log"
 
-# datetime
-# USER
+    log_user = models.ForeignKey( User )
+    log_date = models.DateTimeField( default = timezone.now )
+    log_event = models.CharField( max_length = 30 )
 
-# OBJECT
-#   NAME/ID
-#   COUNT
+    log_event_data = models.CharField( max_length = 200 )
 
-# action
-#    ADD
-#    DEL
-
-
-
-#    x = models.IntegerField( default=0 )
-#    y = models.IntegerField( default=0 )
-#    def __unicode__(self):
-#        return u'%s' % (self.x)
-
+    def __unicode__(self):
+        return u'%s %s' % (self.log_event)
