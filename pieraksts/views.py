@@ -23,6 +23,7 @@ from slugify import slugify
 import datetime
 today = datetime.datetime.now() # sakot no --> shodiena + pulkstens (tagad)
 
+
 # !!!!! TRENERU LIST !!!!!
 def trener_list( n_id ):
     nod = Nodarb_tips.objects.get( slug=n_id ) # Nodarbiba

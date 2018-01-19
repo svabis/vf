@@ -12,6 +12,7 @@ from grafiks.forms import PlanotajsForm
 from nodarb.forms import Nodarb_tipsForm
 from nodarb.models import *
 
+from log import engine
 
 from datetime import date as date_class # to test if end_date is entered using date class test
 import datetime
@@ -83,6 +84,9 @@ def graf_add(request):
 # !!!!!!!!!!!!!!!!!!!!!!!!
                         new_graf = Grafiks(sakums=new_sakums, ilgums=ilgums, nodarbiba=nodarbiba, treneris=treneris, telpa=telpa, vietas=vietas)
                         new_graf.save()
+                       # !!! LOG !!!
+                        engine.LogEvent( request.user.id, 3, new_graf )
+
                         args['nodarbiba'] = new_graf	# pievienota viena nodarbība --> Modal_success
                         args['one'] = True	# Modal_success --> viena apraksts
                         args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi"
@@ -111,6 +115,8 @@ def graf_add(request):
                                # Create Grafiks Object
                                 new_graf = Grafiks(sakums = new_sakums, ilgums = ilgums, nodarbiba = nodarbiba, treneris = treneris, telpa = telpa, vietas = vietas)
                                 new_graf.save()
+                               # !!! LOG !!!
+                                engine.LogEvent( request.user.id, 3, new_graf )
                             d += datetime.timedelta(days=1)
 
                     if end_date != False: # INCLUDE END_DATE
@@ -118,6 +124,8 @@ def graf_add(request):
                     else: # WITHOUT END_DATE
                         new_plan = Planotajs(diena = diena, laiks = laiks, ilgums = ilgums, nodarbiba = nodarbiba, treneris = treneris, telpa = telpa, vietas = vietas, start_date = date)
 
+                   # !!! LOG !!!
+                    engine.LogEvent( request.user.id, 5, new_plan )
                     new_plan.save()
                     args['nodarbiba'] = new_plan	# pievienots grafikam -->
                     args['success'] = 'true'	# atverās modal ar "Pievienots sekmīgi" Plānotājam

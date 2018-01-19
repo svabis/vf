@@ -17,4 +17,4 @@ class Log(models.Model):
     log_event_data = models.CharField( max_length = 200 )
 
     def __unicode__(self):
-        return u'%s %s' % (self.log_event)
+        return u'%s' % (self.log_event)

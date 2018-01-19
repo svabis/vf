@@ -55,7 +55,7 @@ function showMe (box) {
 </div>
 
 <div class="col-md-6 col-md-offset-3">
-<form action="/reception/add/" method="post">{% csrf_token %}
+<form id="add_form" action="/reception/add/" method="post">{% csrf_token %}
 
 {% if error %}
  <div class="alert alert-danger" role="alert">
@@ -101,7 +101,12 @@ $(document).ready(function(){ var date_input=$('input[name="end_date"]');
  date_input.datepicker(options); })
 
 var countdown;
-function submit_changes() { clearInterval(countdown); document.querySelector('#yes').value = "Nodarbība tiek pievienota"; }
+function submit_changes() {
+ clearInterval(countdown);
+ document.querySelector('#yes').value = "Nodarbība tiek pievienota";
+ document.getElementById("add_form").submit();
+ $("#yes").attr('disabled','disabled');
+}
 function apply() {
   $("#yes").show(); $("#ok").hide(); var slidetime = 14,
   display = document.querySelector('#yes'); startTimer(slidetime, display);

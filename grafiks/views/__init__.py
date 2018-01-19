@@ -2,6 +2,7 @@ from hist import *
 
 from reception import *
 
+from client import *
 
 from admin import *
 from admin_plan import *

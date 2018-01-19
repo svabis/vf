@@ -1,0 +1,61 @@
+{% extends 'admin.html' %}
+{% block style %}
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {  background-color: #9b9da0; }
+{% endblock %}
+
+{% block content %}
+
+<div class="alert alert-warning">
+ <center><strong>!!! Klientu pierakstu datu sadaļa !!!</strong></center>
+</div>
+
+<div class="container-fluid">
+  <table class="table table-hover table-striped table-condensed">
+    <thead>
+      <tr style="background: #aaa;">
+ <th style="vertical-align: top;">Vārds</th>
+ <th style="vertical-align: top;">E-pasts</th>
+ <th style="vertical-align: top;">Tālrunis</th>
+ <th style="vertical-align: top;">Pirmais pieteikums</th>
+ <th style="vertical-align: top;">Pēdējais pieteikums</th>
+ <th style="vertical-align: top;">Pieteikumi</th>
+ <th style="vertical-align: top;">Atteikumi</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="display:none;">{{ k.id }}</>
+        <td>{{ klients.vards }}</td>
+        <td>{{ klients.e_pasts }}</td>
+        <td>{{ klients.tel }}</td>
+        <td>{{ klients.pirmais_pieteikums|date:"d/m/Y H:i" }}</td>
+        <td>{{ klients.pedejais_pieteikums|date:"d/m/Y H:i" }}</td>
+        <td>{{ klients.pieteikuma_reizes }}</td>
+        <td>{{ klients.atteikuma_reizes }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container">
+  <table class="table table-hover table-striped table-condensed">
+    <thead>
+      <tr style="background: #aaa;">
+ <th style="vertical-align: top;">Pierakstīšanās laiks</th>
+ <th style="vertical-align: top;">Nodarbība</th>
+      </tr>
+    </thead>
+    <tbody>
+{% for d in dati %}
+      <tr class="clickable-row">
+        <td style="display:none;">{{ d.id }}</>
+        <td>{{ d.pieraksta_laiks|date:"d/m/Y H:i" }}</td>
+        <td>{{ d.nodarbiba }}</td>
+      </tr>
+{% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+{% endblock %}

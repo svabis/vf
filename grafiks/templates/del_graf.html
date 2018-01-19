@@ -29,7 +29,11 @@ jQuery(document).ready(function($) {
 });
 
 var countdown;
-function submit_changes(mod) { clearInterval(countdown); document.querySelector("#yes"+mod).value = "Izmaiņas tiek apstiprinātas"; }
+function submit_changes(mod) {
+ clearInterval(countdown);
+ document.querySelector("#yes"+mod).innerHTML = "Izmaiņas tiek apstiprinātas";
+ $("#yes"+mod).attr('disabled','disabled');
+}
 function cancel(mod) { $("#yes"+mod).hide(); $("#ok"+mod).show(); clearInterval(countdown); }
 function apply(mod) {
   $("#yes"+mod).show(); $("#ok"+mod).hide(); var slidetime = 14,

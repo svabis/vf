@@ -32,11 +32,14 @@ urlpatterns = [
 # Reception Print
     url(r'^print_nod/(?P<d_id>\d+)/(?P<g_id>\d+)/$', 'grafiks.views.print_nod'),
 
+# ===
 # Klientu saraksts
     url(r'^klienti/(?P<search>[-\w]+)$', 'grafiks.views.klienti', name='klienti'),
     url(r'^klienti/$', 'grafiks.views.klienti', name='klienti'),
 # Klienta kartiņas edit
     url(r'^klients/$', 'grafiks.views.klients_edit'),
+# Klienta pierakstu saraksts
+    url(r'^klienti/data/(?P<k_id>\d+)$', 'grafiks.views.klients_list'),
 
 
 # -------------------------------------- SUPERUSER SADAĻA --------------------------------------------

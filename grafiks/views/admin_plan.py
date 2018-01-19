@@ -11,6 +11,8 @@ from grafiks.forms import *
 
 from main import mail
 
+from log import engine
+
 import datetime
 today = datetime.date.today()
 
@@ -87,7 +89,7 @@ def graf_cancel(request, w_id, g_id):
             args['django'] = True
         args['admin'] = True
 
-        nod_atcelshana(g_id)	# nodarbības atcelšana
+        nod_atcelshana(request, g_id)	# nodarbības atcelšana
 
        # UPDATE Relations and Nodarbības redz
         os.system('python /pieraksts/manage.py chk_rel')
@@ -145,21 +147,32 @@ def plan_list( request, error=0 ):
                  if date <= after_month:
                      days_to_remove = []
                      d = date
-# !!!!!! INSERT COUNTER --> TRIGER UPDATE Relations and Nodarbības redz
+
+                    # TRIGER UPDATE Relations and Nodarbības redz
+                     date_triger = (datetime.datetime.today() + datetime.timedelta(days=28)).date()
+                     triger = False
+
                      while d <= after_month: # veido masīvu no datumiem sākot ar izvēlēto, beidzot ar pēdējo pieraksta (ieskaitot)
                          if int(d.weekday()) == int(diena):
                              temp_date = datetime.datetime.combine(d, datetime.datetime.min.time())	# Date to DateTime
                              new_sakums = temp_date.replace(hour=laiks.hour, minute=laiks.minute)
 
                              try:
+                                # Set Triger ON
+                                 if new_sakums < date_triger:
+                                     triger = True
+
                                  temp_graf = Grafiks.objects.get(sakums = new_sakums, nodarbiba = plan.nodarbiba, treneris = plan.treneris)
-                                 nod_atcelshana( temp_graf.id )
+                                 nod_atcelshana( request, temp_graf.id )
                              except:
                                  pass
                          d += datetime.timedelta(days=1)
-                    # UPDATE Relations and Nodarbības redz
-                     os.system('python /pieraksts/manage.py chk_rel')
-                     os.system('python /pieraksts/manage.py chk_redz')
+
+                     if triger:
+                        # UPDATE Relations and Nodarbības redz
+                         os.system('python /pieraksts/manage.py chk_rel')
+                         os.system('python /pieraksts/manage.py chk_redz')
+
                  return redirect('plan_list')
 
         return render_to_response ( 'del_plan.html', args )
@@ -168,13 +181,18 @@ def plan_list( request, error=0 ):
 
 # ========================================================================================================
 # !!!!! NODARBĪBAS PIERAKSTU ATCELŠANA UN E_MAIL NOTIFICATION !!!!!
-def nod_atcelshana(g_id):
+def nod_atcelshana(request, g_id):
         nodarb = Grafiks.objects.get(id=g_id)
         klienti = nodarb.nod.all()
+       # !!! LOG !!!
+        engine.LogEvent( request.user.id, 2, nodarb )
         for k in klienti:
             try: # reception Pieraksts may not include e-mail
 #                pass
-                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
+#                mail.send_cancel(k.klients.e_pasts, nodarb.sakums, nodarb.nodarbiba.nos) #SEND CANCEL MAIL
+               # !!! LOG !!!
+                engine.LogEvent( request.user.id, 6, k )
+
             except:
                 pass
         nodarb.delete()

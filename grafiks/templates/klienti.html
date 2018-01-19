@@ -7,17 +7,19 @@
 <script>
 jQuery(document).ready(function($) {
     $(".clickable-row").click(function(e) {
+      window.location.href = "/reception/klienti/data/" + $(this).children('td')[0].innerHTML;
+
 // open modal
-        $("#Klients").modal('show');
+  //      $("#Klients").modal('show');
 // fill Form
-        document.getElementById('k_id').value=$(this).children('td')[0].innerHTML;
-        document.getElementById('vards').value=$(this).children('td')[1].innerHTML;
-        document.getElementById('e_pasts').value=$(this).children('td')[2].innerHTML;
-        document.getElementById('tel').value=$(this).children('td')[3].innerHTML;
+  //      document.getElementById('k_id').value=$(this).children('td')[0].innerHTML;
+  //      document.getElementById('vards').value=$(this).children('td')[1].innerHTML;
+  //      document.getElementById('e_pasts').value=$(this).children('td')[2].innerHTML;
+  //      document.getElementById('tel').value=$(this).children('td')[3].innerHTML;
 // fill text
-        document.getElementById('kvards').innerHTML = $(this).children('td')[1].innerHTML;
-        document.getElementById('ke_pasts').innerHTML = $(this).children('td')[2].innerHTML;
-        document.getElementById('ktel').innerHTML = $(this).children('td')[3].innerHTML;
+  //      document.getElementById('kvards').innerHTML = $(this).children('td')[1].innerHTML;
+  //      document.getElementById('ke_pasts').innerHTML = $(this).children('td')[2].innerHTML;
+  //      document.getElementById('ktel').innerHTML = $(this).children('td')[3].innerHTML;
     });
 });
 
@@ -101,7 +103,7 @@ function startTimer(duration, display) {
     </thead>
     <tbody>
 {% for k in klienti %}
-      <tr class="clickable-row"> <!-- data-href="/reception/klienti/{{ k.id }}/"> -->
+      <tr class="clickable-row">
         <td style="display:none;">{{ k.id }}</>
         <td>{{ k.vards }}</td>
         <td>{{ k.e_pasts }}</td>
@@ -112,15 +114,6 @@ function startTimer(duration, display) {
         <td>{{ k.atteikuma_reizes }}</td>
       </tr>
 {% endfor %}
-
-<script>
-var klient = [
-{% for k in klienti %}
- ['{{ k.id }}', '{{k.vards}}', '{{k.e_pasts}}', '{{k.tel}}', '{{ k.pirmais_pieteikums|date:"d/m/Y H:i" }}', '{{ k.pedejais_pieteikums|date:"d/m/Y H:i" }}', '{{ k.pieteikuma_reizes }}', '{{ k.atteikuma_reizes }}'],
-{% endfor %}
-]
-<script>
-
     </tbody>
   </table>
 </div>
