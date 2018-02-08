@@ -41,7 +41,7 @@ def send_email(recipient, nodarb, timedate, code_uuid):
 
 # Create the root message and fill in the from, to, and subject headers
     msgRoot = MIMEMultipart('related')
-    msgRoot['Subject'] = u'Pieraksta sistēma'
+    msgRoot['Subject'] = u'"Veselības Fabrika" pieraksts'
     msgRoot['From'] = strFrom
     msgRoot['To'] = strTo
     msgRoot.preamble = 'This is a multi-part message in MIME format.'
@@ -92,7 +92,7 @@ def send_cancel(recipient, datums, nos):
 
 # Create the root message and fill in the from, to, and subject headers
     msgRoot = MIMEMultipart('related')
-    msgRoot['Subject'] = u'Pieraksta sistēma'
+    msgRoot['Subject'] = u'"Veselības Fabrika" pieraksts'
     msgRoot['From'] = strFrom
     msgRoot['To'] = strTo
     msgRoot.preamble = 'This is a multi-part message in MIME format.'
@@ -145,7 +145,7 @@ def send_remind(recipient, nodarb, timedate, code_uuid):
 
 # Create the root message and fill in the from, to, and subject headers
     msgRoot = MIMEMultipart('related')
-    msgRoot['Subject'] = u'Pieraksta sistēma, Atgādinājums'
+    msgRoot['Subject'] = u'"Veselības Fabrika" atgādinājums'
     msgRoot['From'] = strFrom
     msgRoot['To'] = strTo
     msgRoot.preamble = 'This is a multi-part message in MIME format.'

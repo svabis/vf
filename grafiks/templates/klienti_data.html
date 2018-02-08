@@ -42,7 +42,7 @@
     <thead>
       <tr style="background: #aaa;">
  <th style="vertical-align: top;">Pierakstīšanās laiks</th>
- <th style="vertical-align: top;">Nodarbība</th>
+ <th colspan="2" style="vertical-align: top;">Nodarbība</th>
       </tr>
     </thead>
     <tbody>
@@ -50,7 +50,8 @@
       <tr class="clickable-row">
         <td style="display:none;">{{ d.id }}</>
         <td>{{ d.pieraksta_laiks|date:"d/m/Y H:i" }}</td>
-        <td>{{ d.nodarbiba }}</td>
+        <td>{{ d.nodarbiba.nodarbiba }}</td>
+        <td>{{ d.nodarbiba.sakums|date:"d/m/Y H:i" }}</td>
       </tr>
 {% endfor %}
     </tbody>

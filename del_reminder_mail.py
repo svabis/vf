@@ -7,12 +7,9 @@ import getpass
 import email
 import datetime
 
+last_date = datetime.datetime.now() - datetime.timedelta(days=2)
 
-start_date = datetime.datetime.now() - datetime.timedelta(days=7)
-last_date = datetime.datetime.now() - datetime.timedelta(days=9)
-
-#print start_date
-#print last_date
+print last_date
 
 # Function that processess the 'M' mailbox
 def process_mailbox(M):
@@ -30,31 +27,22 @@ def process_mailbox(M):
 
       msg = email.message_from_string(data[0][1])
 
-      date_tuple = email.utils.parsedate_tz(msg['Date'])
-      if date_tuple:
-          local_date = datetime.datetime.fromtimestamp(email.utils.mktime_tz(date_tuple))
 
-      if local_date < start_date:
-          if msg['Subject'] == '=?utf-8?q?=22Vesel=C4=ABbas_Fabrika=22_pieraksts?=':
-              print msg['Subject']
-              M.store(num, '+FLAGS', '\\Deleted')
+     # "Veselības Fabrika" atgādinājums
+      if msg['Subject'] == '=?utf-8?b?IlZlc2VsxKtiYXMgRmFicmlrYSIgYXRnxIFkaW7EgWp1bXM=?=':
+#          print msg['Subject']
+          M.store(num, '+FLAGS', '\\Deleted')
 
 #      print msg['Subject']
 
+      date_tuple = email.utils.parsedate_tz(msg['Date'])
+      if date_tuple:
+          local_date = datetime.datetime.fromtimestamp(email.utils.mktime_tz(date_tuple))
       if local_date < last_date: # if this mail is older than the last checked --> stop
           break
 
 #  print 'END'
   M.expunge()
-
-# Function that lists available mailboxes
-def listmailbox():
-  try:
-    print "Mailboxes:"
-    for box in mailboxes:
-      print box
-  except:
-    pass
 
 # ============================================================================================
 

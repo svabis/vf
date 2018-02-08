@@ -292,13 +292,39 @@ def cancel(request, id):
     except ObjectDoesNotExist:	# not existing code --> 404
         return redirect ('main')
     args = {}
+    args.update(csrf(request)) # ADD CSRF TOKEN
     args['data'] = pieraksts
     args['id'] = id
     return render_to_response( 'cancel.html', args )
 
 
-# !!!!! ATCELT-OK !!!!!
-def cancel_ok(request, id):
+# !!!!! ATCELT POST !!!!!
+def cancel_ok(request):
+    args = {}
+    if request.POST:
+        id = str(request.POST.get('cancel_id', ''))
+        try:
+            pieraksts = Pieraksti.objects.get( atteikuma_kods = id)
+        except ObjectDoesNotExist:  # not existing code --> 404
+            return redirect ('main')
+
+        args['data'] = pieraksts
+# Grafiks.vietas +=1
+        pieraksts.nodarbiba.vietas += 1
+        pieraksts.nodarbiba.save()
+# ADD Ateikumi
+        atteikums = Atteikumi( pieraksta_laiks=pieraksts.pieraksta_laiks, klients=pieraksts.klients, nodarbiba=pieraksts.nodarbiba )
+        atteikums.save()
+# Klients.atteikumi -=1
+        pieraksts.klients.atteikuma_reizes +=1
+        pieraksts.klients.save()
+# DELETE PIERAKSTS
+        pieraksts.delete()
+    return render_to_response( 'canceled.html', args )
+
+
+# !!!!! ATCELT GET !!!!!
+def old_cancel_ok(request, id):
     try:
         pieraksts = Pieraksti.objects.get( atteikuma_kods = id)
     except ObjectDoesNotExist:	# not existing code --> 404

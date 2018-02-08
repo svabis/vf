@@ -8,7 +8,8 @@ urlpatterns = [
 
 # Nodarbību atcelšanas e-pasta linki
     url(r'^atcelt/(?P<id>[-\w]+)/$', 'pieraksts.views.cancel'), # pieraksta atcelshana
-    url(r'^atcelts/(?P<id>[-\w]+)/$', 'pieraksts.views.cancel_ok'), # pieraksta atcelshana
+#    url(r'^atcelts/(?P<id>[-\w]+)/$', 'pieraksts.views.cancel_ok'), # pieraksta atcelshana
+    url(r'^atcelts/$', 'pieraksts.views.cancel_ok'), # pieraksta atcelshana
 
 # ==================================
 # From main -->  1. main,   2.select/,   3.select/any/
