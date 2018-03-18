@@ -294,6 +294,14 @@ def cancel(request, id):
     args = {}
     args.update(csrf(request)) # ADD CSRF TOKEN
     args['data'] = pieraksts
+
+   # DISABLE CANCEL 3h before
+    import pytz
+    tz = pytz.timezone('EET')
+    time_remain = ( pieraksts.nodarbiba.sakums - today.replace(tzinfo=tz) ).seconds / 3600
+    if time_remain < 3:
+        args['disable_cancel'] = True
+
     args['id'] = id
     return render_to_response( 'cancel.html', args )
 
