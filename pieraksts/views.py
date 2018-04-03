@@ -299,7 +299,7 @@ def cancel(request, id):
     import pytz
     tz = pytz.timezone('EET')
     time_remain = ( pieraksts.nodarbiba.sakums - today.replace(tzinfo=tz) ).seconds / 3600
-    if time_remain < 3:
+    if time_remain < 2:
         args['disable_cancel'] = True
 
     args['id'] = id

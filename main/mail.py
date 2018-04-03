@@ -35,7 +35,7 @@ def send_email(recipient, nodarb, timedate, code_uuid):
     strTo = recipient
 
     new_time = timedate + timedelta(hours=dst(timedate))
-    time = new_time.strftime("%d/%m/%Y %H:%M")
+    time = new_time.strftime("%Y/%m/%d %H:%M")
 
     code = 'http://pieraksts.vfabrika.lv/atcelt/' + str(code_uuid) + '/'
 
@@ -55,7 +55,7 @@ def send_email(recipient, nodarb, timedate, code_uuid):
     msgAlternative.attach(msgText)
 
 # We reference the image in the IMG SRC attribute by the ID we give it below
-    content = u'<b><p>Paldies par veikto rezervāciju uz nodarbību – <i>' + nodarb + ' , ' + time  + u'</i></b></p><br><p>Rezervācijas atcelšanai lūdzam izmantot šo saiti:<br>' + code + u'</p><br><p>Jūsu sporta klubs <b><i> “</i>Veselības Fabrika<i>”</i></b></p><img src="cid:image1">'
+    content = u'<b><p>Paldies par veikto rezervāciju uz nodarbību – <i>' + time + ', ' + nodarb + u'</i></b></p><br><p>Rezervācijas atcelšanai lūdzam izmantot šo saiti:<br>' + code + u'</p><br><p>Jūsu sporta klubs <b><i> “</i>Veselības Fabrika<i>”</i></b></p><img src="cid:image1">'
     msgText = MIMEText(content.encode('utf-8'), 'html','utf-8')
     msgAlternative.attach(msgText)
 
@@ -88,7 +88,7 @@ def send_cancel(recipient, datums, nos):
 
     new_time = datums + timedelta(hours=dst(datums))
 
-    time = new_time.strftime("%d/%m/%Y %H:%M")
+    time = new_time.strftime("%Y/%m/%d %H:%M")
 
 # Create the root message and fill in the from, to, and subject headers
     msgRoot = MIMEMultipart('related')
@@ -159,7 +159,7 @@ def send_remind(recipient, nodarb, timedate, code_uuid):
     msgAlternative.attach(msgText)
 
 # We reference the image in the IMG SRC attribute by the ID we give it below
-    content = u'<p>Sveiki! Atgādinām, ka esat pieteicies/kusies uz nodarbību (<b>' + nodarb + ', ' + time  + u'</b> ), Gaidīsim, Jūs, "Veselības Fabrikā"!</p><p>Ja tomēr pārdomāsiet, klikšķiniet uz šo saiti, lai atteiktos no nodarbības ( <b>' + code + u'</b> ).</p><p>Jūsu sporta klubs <b><i> “</i>Veselības Fabrika<i>”</i></b></p><img src="cid:image1">'
+    content = u'<p>Sveiki! Atgādinām, ka esat pieteicies/kusies uz nodarbību (<b>' + time + ', ' + nodarb + u'</b> ), Gaidīsim, Jūs, "Veselības Fabrikā"!</p><p>Ja tomēr pārdomāsiet, klikšķiniet uz šo saiti, lai atteiktos no nodarbības ( <b>' + code + u'</b> ).</p><p>Jūsu sporta klubs <b><i> “</i>Veselības Fabrika<i>”</i></b></p><img src="cid:image1">'
     msgText = MIMEText(content.encode('utf-8'), 'html','utf-8')
     msgAlternative.attach(msgText)
 
