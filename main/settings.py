@@ -20,7 +20,7 @@ SECRET_KEY = '+t%cc5jq-rg+=#9%(qzer83=dwv1$u@oplo*1@+cmc3_^*-ag4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-DEBUG = True
+#DEBUG = True
 
 #TEMPLATE_DEBUG = True
 

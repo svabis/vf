@@ -8,8 +8,8 @@ import email
 import datetime
 
 
-start_date = datetime.datetime.now() - datetime.timedelta(days=7)
-last_date = datetime.datetime.now() - datetime.timedelta(days=9)
+start_date = datetime.datetime.now() - datetime.timedelta(days=3)
+last_date = datetime.datetime.now() - datetime.timedelta(days=7)
 
 #print start_date
 #print last_date
@@ -34,12 +34,13 @@ def process_mailbox(M):
       if date_tuple:
           local_date = datetime.datetime.fromtimestamp(email.utils.mktime_tz(date_tuple))
 
-      if local_date < start_date:
-          if msg['Subject'] == '=?utf-8?q?=22Vesel=C4=ABbas_Fabrika=22_pieraksts?=':
-              print msg['Subject']
-              M.store(num, '+FLAGS', '\\Deleted')
-
 #      print msg['Subject']
+
+      if local_date < start_date:
+          if msg['Subject'] == '=?utf-8?q?=22Vesel=C4=ABbas_Fabrika=22_pieraksts?=' or msg['Subject'] == '=?utf-8?b?IlZlc2VsxKtiYXMgRmFicmlrYSIgYXRnxIFkaW7EgWp1bXM=?=':
+              print msg['Date']
+#              print msg['Subject']
+              M.store(num, '+FLAGS', '\\Deleted')
 
       if local_date < last_date: # if this mail is older than the last checked --> stop
           break
